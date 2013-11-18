@@ -11,3 +11,9 @@
 *.lai
 *.la
 *.a
+
+# Qt project files
+*.pro*
+
+# Ignore executable
+voxel
