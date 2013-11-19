@@ -8,11 +8,13 @@ Renderer::Renderer()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 	gluPerspective(90.f, 1.f, 1.f, 500.f);
+	glEnable(GL_DEPTH);
 }
 
 void Renderer::clear()
 {
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	
 	// Apply some transformations
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

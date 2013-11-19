@@ -1,5 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Renderer.hpp"
+#include "Chunk.hpp"
 
 using namespace std;
 
@@ -10,11 +12,17 @@ int main(int argc, char ** argv) {
 	
 
     sf::RenderWindow window(
-                sf::VideoMode(800, 600), "Title", sf::Style::Default, sf::ContextSettings(32));
+                sf::VideoMode(800, 600), "Title", sf::Style::Default);
 
     window.setVerticalSyncEnabled(true);
     // /* or */window.setFramerateLimit(60);
 
+	Renderer renderer;
+	renderer.lookAt(5,-5,5,0,0,0);
+	float rot=0;
+	
+	Chunk chunk;
+	chunk.update(renderer);
 
     // run the main loop
     bool running = true;
@@ -54,9 +62,18 @@ int main(int argc, char ** argv) {
             }
         }
 
-        window.clear();
-        //window.draw();
+        renderer.clear();
+		
+		renderer.translate(rot,0,0);
+		chunk.draw(renderer);
+		for(int i=0;i<10;++i){
+			renderer.translate(-Chunk::SIZE*BLOCK_SIZE,0,0);
+			chunk.draw(renderer);
+		}
+		
         window.display();
+		
+		rot+=0.01;
     }
 
     return 0;
