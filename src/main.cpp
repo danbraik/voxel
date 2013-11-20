@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Renderer.hpp"
 #include "Chunk.hpp"
+#include "Freeflycamera.h"
 
 using namespace std;
 
@@ -12,18 +13,27 @@ int main(int argc, char ** argv) {
 	
 
     sf::RenderWindow window(
-                sf::VideoMode(800, 600), "Title", sf::Style::Default);
+                sf::VideoMode(800, 600), "Title", sf::Style::Default,
+				sf::ContextSettings(24));
 
     window.setVerticalSyncEnabled(true);
     // /* or */window.setFramerateLimit(60);
 
 	Renderer renderer;
-	renderer.lookAt(5,-5,5,0,0,0);
-	float rot=0;
+	
+	
+	
+	BlockList list;
 	
 	Chunk chunk;
-	chunk.update(renderer);
+	chunk.init(4);
+	
+	chunk.update(renderer, list);
 
+	FreeFlyCamera camera;
+	
+	//avoid event when move cursor
+	bool mouseMoved =false;
     // run the main loop
     bool running = true;
     while (running) {
@@ -42,38 +52,63 @@ int main(int argc, char ** argv) {
                 } else if (event.key.code == sf::Keyboard::Down) {
                 } else if (event.key.code == sf::Keyboard::Left) {
                 } else if (event.key.code == sf::Keyboard::Right) {
-                }
+				} else if (event.key.code == sf::Keyboard::Z) {
+					camera.OnKeyboard(FreeFlyCamera::forward, true);
+				} else if (event.key.code == sf::Keyboard::Q) {
+					camera.OnKeyboard(FreeFlyCamera::strafe_left, true);
+				} else if (event.key.code == sf::Keyboard::S) {
+					camera.OnKeyboard(FreeFlyCamera::backward, true);
+				} else if (event.key.code == sf::Keyboard::D) {
+					camera.OnKeyboard(FreeFlyCamera::strafe_right, true);
+				}
             }
             else if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Up) {
                 } else if (event.key.code == sf::Keyboard::Down) {
                 } else if (event.key.code == sf::Keyboard::Left) {
                 } else if (event.key.code == sf::Keyboard::Right) {
-                }
+                } else if (event.key.code == sf::Keyboard::Z) {
+					camera.OnKeyboard(FreeFlyCamera::forward, false);
+				} else if (event.key.code == sf::Keyboard::Q) {
+					camera.OnKeyboard(FreeFlyCamera::strafe_left, false);
+				} else if (event.key.code == sf::Keyboard::S) {
+					camera.OnKeyboard(FreeFlyCamera::backward, false);
+				} else if (event.key.code == sf::Keyboard::D) {
+					camera.OnKeyboard(FreeFlyCamera::strafe_right, false);
+				}
             }
             else if (event.type == sf::Event::MouseMoved) {
                 //event.mouseMove.x
                 //event.mouseMove.y
+				if (!mouseMoved){
+					camera.OnMouseMotion(event.mouseMove.x-400, event.mouseMove.y-300);
+					sf::Mouse::setPosition(sf::Vector2i(400,300), window);
+				}
+				mouseMoved=!mouseMoved;
             }
-            else if (event.type == sf::Event::MouseButtonPressed) {
-                //event.mouseButton.button == sf::Mouse::Left
+            else if (event.type == sf::Event::MouseWheelMoved) {
+				camera.OnMouseButton(event.mouseWheel.delta > 0);	
             }
             else if (event.type == sf::Event::MouseButtonReleased) {
             }
         }
 
-        renderer.clear();
+		camera.animate(10);
 		
-		renderer.translate(rot,0,0);
+		
+        renderer.clear();
+		camera.look();
+		
 		chunk.draw(renderer);
 		for(int i=0;i<10;++i){
-			renderer.translate(-Chunk::SIZE*BLOCK_SIZE,0,0);
+			renderer.translate(-Chunk::SIZE*Block::SIZE,0,0);
 			chunk.draw(renderer);
 		}
 		
+		
+		
         window.display();
 		
-		rot+=0.01;
     }
 
     return 0;

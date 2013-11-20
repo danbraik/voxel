@@ -1,6 +1,7 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
+#include <SFML/System.hpp>
 #include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
 
@@ -17,7 +18,8 @@ class Renderer
 		void beginMesh(MeshId & id);
 		void endMesh();
 		// to compute a triangle
-		void addVertexToMesh(float x, float y, float z, float r, float g, float b);
+		void addVertexToMesh(float x, float y, float z, int r, int g, int b);
+		void addVertexToMesh(sf::Vector3f pos, int r, int g, int b);
 		void drawMesh(MeshId & id);
 };
 

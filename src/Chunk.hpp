@@ -1,9 +1,12 @@
 #ifndef CHUNK_HPP
 #define CHUNK_HPP
 
-#include "Renderer.hpp"
+#include <SFML/System.hpp>
 
-#define BLOCK_SIZE 1
+#include "Renderer.hpp"
+#include "Block.hpp"
+
+
 
 class Chunk
 {
@@ -11,14 +14,24 @@ class Chunk
 		
 	public:
 		static const int SIZE = 8;
+		static const float fSIZE = 8.f;
 		
 		Chunk();
 		
-		void update(Renderer &renderer);
+		void init(int h);
+		
+		void update(Renderer &renderer, BlockList &list);
 		void draw(Renderer &renderer);
 		
+		BlockType get(sf::Vector3i pos);
+		void set(sf::Vector3i pos, BlockType type);
+		
 	private:
+		
+		
 		MeshId mMeshId;
+		
+		BlockType mArray[SIZE][SIZE][SIZE];
 };
 
 #endif // CHUNK_HPP
