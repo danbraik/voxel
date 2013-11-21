@@ -3,6 +3,7 @@
 #include "Renderer.hpp"
 #include "Chunk.hpp"
 #include "Freeflycamera.h"
+#include "ChunkManager.hpp"
 
 using namespace std;
 
@@ -25,12 +26,14 @@ int main(int argc, char ** argv) {
 	
 	BlockList list;
 	
-	Chunk chunk;
-	chunk.init(4);
+	ChunkManager manager(list);
+	manager.init(renderer);
 	
-	chunk.update(renderer, list);
+//	Chunk chunk;
+//	chunk.init(4);
+//	chunk.update(renderer, manager);
 
-	FreeFlyCamera camera;
+	FreeFlyCamera camera(Vector3D(12,-12,12));
 	
 	//avoid event when move cursor
 	bool mouseMoved =false;
@@ -52,6 +55,8 @@ int main(int argc, char ** argv) {
                 } else if (event.key.code == sf::Keyboard::Down) {
                 } else if (event.key.code == sf::Keyboard::Left) {
                 } else if (event.key.code == sf::Keyboard::Right) {
+				} else if (event.key.code == sf::Keyboard::LShift) {
+					camera.OnKeyboard(FreeFlyCamera::boost, true);
 				} else if (event.key.code == sf::Keyboard::Z) {
 					camera.OnKeyboard(FreeFlyCamera::forward, true);
 				} else if (event.key.code == sf::Keyboard::Q) {
@@ -65,8 +70,10 @@ int main(int argc, char ** argv) {
             else if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Up) {
                 } else if (event.key.code == sf::Keyboard::Down) {
-                } else if (event.key.code == sf::Keyboard::Left) {
-                } else if (event.key.code == sf::Keyboard::Right) {
+                } else if (event.key.code == sf::Keyboard::I) {
+					manager.init(renderer);
+                } else if (event.key.code == sf::Keyboard::LShift) {
+					camera.OnKeyboard(FreeFlyCamera::boost, false);
                 } else if (event.key.code == sf::Keyboard::Z) {
 					camera.OnKeyboard(FreeFlyCamera::forward, false);
 				} else if (event.key.code == sf::Keyboard::Q) {
@@ -99,11 +106,19 @@ int main(int argc, char ** argv) {
         renderer.clear();
 		camera.look();
 		
-		chunk.draw(renderer);
-		for(int i=0;i<10;++i){
-			renderer.translate(-Chunk::SIZE*Block::SIZE,0,0);
-			chunk.draw(renderer);
-		}
+		glBegin(GL_LINES);
+			glVertex3f(0,0,0);glVertex3f(1,0,0);
+			glVertex3f(0,0,0);glVertex3f(0,1,0);
+			glVertex3f(0,0,0);glVertex3f(0,0,1);
+		glEnd();
+		
+//		chunk.draw(renderer);
+//		for(int i=0;i<10;++i){
+//			renderer.translate(-Chunk::SIZE*Block::SIZE,0,0);
+//			chunk.draw(renderer);
+//		}
+		
+		manager.draw(renderer);
 		
 		
 		

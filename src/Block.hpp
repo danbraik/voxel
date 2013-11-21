@@ -32,14 +32,14 @@ class BlockList {
 	public:
 		
 		BlockList() {
-			mList[Block::NONE].init(255,0,0,false);
+			mList[Block::NONE].init(255,0,0,true);
 			mList[Block::Air].init(240,240,244,false);
 			mList[Block::Dirt].init(64,192,64,true);
 			mList[Block::Stone].init(128,128,128,true);
 			mList[Block::Water].init(0,0,0,false);
 		}
 		
-		Block get(BlockType type) {
+		const Block & get(BlockType type) {
 			return mList[type];
 		}
 		

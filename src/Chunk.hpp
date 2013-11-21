@@ -6,7 +6,7 @@
 #include "Renderer.hpp"
 #include "Block.hpp"
 
-
+class ChunkManager;
 
 class Chunk
 {
@@ -18,15 +18,18 @@ class Chunk
 		
 		Chunk();
 		
+		
 		void init(int h);
 		
-		void update(Renderer &renderer, BlockList &list);
+		void update(Renderer &renderer, const ChunkManager & manager);
 		void draw(Renderer &renderer);
 		
 		BlockType get(sf::Vector3i pos);
 		void set(sf::Vector3i pos, BlockType type);
 		
 	private:
+		void computeOneBlock(Renderer & renderer, const ChunkManager &manager, int x, int y, 
+							 int z, sf::Vector3f ux, sf::Vector3f uy, sf::Vector3f uz);
 		
 		
 		MeshId mMeshId;
