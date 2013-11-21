@@ -17,7 +17,8 @@ SOURCES += src/main.cpp \
     src/Block.cpp \
     src/Freeflycamera.cpp \
     src/Vector3d.cpp \
-    src/ChunkManager.cpp
+    src/ChunkManager.cpp \
+    src/Mesh.cpp
 
 HEADERS += \
     src/Renderer.hpp \
@@ -25,5 +26,6 @@ HEADERS += \
     src/Block.hpp \
     src/Freeflycamera.h \
     src/Vector3d.h \
-    src/ChunkManager.hpp
+    src/ChunkManager.hpp \
+    src/Mesh.hpp
 

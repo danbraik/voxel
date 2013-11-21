@@ -1,27 +1,38 @@
 #include "ChunkManager.hpp"
 #include <iostream>
+#include "Mesh.hpp"
 
 ChunkManager::ChunkManager(BlockList &list, Renderer &renderer) : mList(list), mRenderer(renderer)
 {
 }
 
+Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) const {
+	Chunk * chunk = 0;
+	chunk = new Chunk();
+	if (chunk == 0)
+		std::cerr << "Error when allocating chunk !" << std::endl;
+	chunk->setPosition(chunkPosition);
+	return chunk;
+}
+
 void ChunkManager::init()
 {
-	for (int i=0; i< 5;++i)
-		for (int j=0; j< 5;++j)
-			mLoadedChunks[sf::Vector3i(i,j,0)] = new Chunk();
+	for (int i=0; i< 2;++i)
+		for (int j=0; j< 2;++j) 
+			loadChunk(sf::Vector3i(i,j,0));
 	
 	
 	for  (LoadedChunkMap::const_iterator it = mLoadedChunks.begin();
 		  it != mLoadedChunks.end();
 		  ++it) {
-		update(it->first, it->second);
+		it->second->init();
+		update(it->second);
 	}
 }
 
-void ChunkManager::update(const sf::Vector3i & chunkPosition, Chunk * chunk) {
-	mCurrentPositionChunk = chunkPosition;
-	chunk->update(mRenderer, *this);
+void ChunkManager::update(Chunk * chunk) {
+	mCurrentPositionChunk = chunk->getPosition();
+	chunk->update(*this);
 }
 
 const Block &ChunkManager::getBlock(BlockType type) const
@@ -110,7 +121,7 @@ void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, Block
 	
 	Chunk * chunk = getChunk(chunkPosition);
 	chunk->set(insideChunkBlockPosition, type);
-	update(chunkPosition, chunk);
+	update(chunk);
 }
 
 void ChunkManager::draw(Renderer &renderer) const
@@ -127,7 +138,7 @@ void ChunkManager::draw(Renderer &renderer) const
 					Chunk::SIZE*Block::SIZE,
 					chunkPosition.z*
 					Chunk::SIZE*Block::SIZE);
-		it->second->draw(renderer);
+		it->second->draw();
 		renderer.translate(
 					-chunkPosition.x*
 					Chunk::SIZE*Block::SIZE,
@@ -154,8 +165,8 @@ Chunk *ChunkManager::getChunk(const sf::Vector3i &chunkPosition) const
 
 void ChunkManager::loadChunk(const sf::Vector3i &chunkPosition)
 {
-	Chunk * chunk = new Chunk();
-	chunk->update(mRenderer, *this);
+	Chunk * chunk = createEmptyChunk(chunkPosition);
+	chunk->update(*this);
 	mLoadedChunks[chunkPosition] = chunk;
 }
 

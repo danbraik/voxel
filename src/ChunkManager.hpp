@@ -20,6 +20,8 @@ class ChunkManager
 		
 		void init();
 		
+		Chunk * createEmptyChunk(const sf::Vector3i & chunkPosition) const;
+		
 		const Block & getBlock(BlockType type) const;
 		const Block & getBlock(const sf::Vector3i & absoluteBlockPosition) const;
 		const Block & getRelativeBlock(const sf::Vector3i &relativeBlockPosition) const;
@@ -29,7 +31,7 @@ class ChunkManager
 		void draw(Renderer & renderer) const;
 		
 	private:
-		void update(const sf::Vector3i & chunkPosition, Chunk * chunk);
+		void update(Chunk * chunk);
 
 		sf::Vector3i getChkPosByAbsBkPos(const sf::Vector3i & absoluteBlockPosition) const;
 		sf::Vector3i getChkPosByRelBkPos(const sf::Vector3i & fromChunkPosition,

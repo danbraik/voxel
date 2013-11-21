@@ -2,16 +2,16 @@
 #include "Chunk.hpp"
 #include "ChunkManager.hpp"
 #include <iostream>
+#include <vector>
 
-Chunk::Chunk() : mMeshId(0)
+Chunk::Chunk() :  mPosition(), mMesh(), mArray()
 {
-	int r = rand()%(SIZE-4)+2;
-	//std::cout << "random " << r << std::endl;
-	init(r);
 }
 
-void Chunk::init(int h)
+void Chunk::init()
 {
+	int h = random()%(SIZE-4)+2;
+	
 	if (h < 0) h = 0;
 	if (h > SIZE) h = SIZE;
 	
@@ -24,50 +24,71 @@ void Chunk::init(int h)
 	}
 	
 	if (h+1 < SIZE) {
-	for (int x=0;x < SIZE; ++x) {
-		for (int y=0;y < SIZE;++y){
-			if (std::rand() % 5 == 0)
-				set(sf::Vector3i(x,y,h), Block::Dirt);
-			else
-				set(sf::Vector3i(x,y,h), Block::Air);
+		for (int x=0;x < SIZE; ++x) {
+			for (int y=0;y < SIZE;++y){
+				if (std::rand() % 5 == 0)
+					set(sf::Vector3i(x,y,h), Block::Dirt);
+				else
+					set(sf::Vector3i(x,y,h), Block::Air);
+			}
 		}
-	}
-	
-	for (int z=h+1;z<SIZE;++z) {
-	for (int x=0;x < SIZE; ++x) {
-		for (int y=0;y < SIZE;++y){
-			set(sf::Vector3i(x,y,z), Block::Air);
+		
+		for (int z=h+1;z<SIZE;++z) {
+		for (int x=0;x < SIZE; ++x) {
+			for (int y=0;y < SIZE;++y){
+				set(sf::Vector3i(x,y,z), Block::Air);
+			}
 		}
-	}
-	}
+		}
 	}
 }
 
-void Chunk::update(Renderer & renderer, const ChunkManager &manager)
+const sf::Vector3i &Chunk::getPosition() const
 {
-	renderer.clear();
-	renderer.beginMesh(mMeshId);
+	return mPosition;
+}
 
+void Chunk::setPosition(const sf::Vector3i &position)
+{
+	mPosition = position;
+}
+
+void Chunk::update(const ChunkManager &manager)
+{
+	std::vector<MeshFloat> data;
+	data.reserve(SIZE*SIZE);
+	int vertexCount = 0;
 	
 	sf::Vector3f ux(Block::SIZE,0,0);
 	sf::Vector3f uy(0,Block::SIZE,0);
 	sf::Vector3f uz(0,0,Block::SIZE);
 	
-	
-	// inside
 	for (int x=0;x < SIZE; ++x) {
 		for (int y=0;y < SIZE;++y){
 			for (int z=0;z<SIZE;++z) {
-				computeOneBlock(renderer, manager, x, y, z, ux, uy, uz);				
+				computeOneBlock(data, vertexCount, manager, x, y, z, ux, uy, uz);
 			}
 		}
 	}
 	
-	
-	renderer.endMesh();
+	mMesh.setData(&data[0], vertexCount);
 }
 
-void Chunk::computeOneBlock(Renderer & renderer, const ChunkManager & manager, int x, int y, int z
+void addNormalToMesh(std::vector<MeshFloat> & data, sf::Vector3f pos) {
+	
+}
+
+void addVertexToMesh(std::vector<MeshFloat> & data, int & vertexCount, sf::Vector3f pos, float r, float g, float b) {
+	data.push_back(pos.x);
+	data.push_back(pos.y);
+	data.push_back(pos.z);
+	data.push_back(r);
+	data.push_back(g);
+	data.push_back(b);
+	vertexCount++;
+}
+
+void Chunk::computeOneBlock(std::vector<MeshFloat> & data, int & vertexCount, const ChunkManager & manager, int x, int y, int z
 			, sf::Vector3f ux, sf::Vector3f uy, sf::Vector3f uz) {
 	
 	BlockType type = get(sf::Vector3i(x,y,z));
@@ -79,76 +100,76 @@ void Chunk::computeOneBlock(Renderer & renderer, const ChunkManager & manager, i
 		
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y-1,z)).filled){
 		// front
-			renderer.addNormalToMesh(pos-uy);
-			renderer.addVertexToMesh(pos,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux+uz,block.r, block.g,block.b);
+			addNormalToMesh(data, pos-uy);
+			addVertexToMesh(data, vertexCount,  pos,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux+uz,block.r, block.g,block.b);
 			
-			renderer.addVertexToMesh(pos,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux+uz,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uz,block.r, block.g,block.b);
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x+1,y,z)).filled){	
 			// right
-			renderer.addNormalToMesh(pos+ux);
-			renderer.addVertexToMesh(pos+ux,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux+uy,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux+uy+uz,block.r, block.g,block.b);
+			addNormalToMesh(data, pos+ux);
+			addVertexToMesh(data, vertexCount,  pos+ux,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux+uy+uz,block.r, block.g,block.b);
 			
-			renderer.addVertexToMesh(pos+ux,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux+uy+uz,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux+uy+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux+uz,block.r, block.g,block.b);
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y+1,z)).filled){
 			// behind
-			renderer.addNormalToMesh(pos+uy);
-			renderer.addVertexToMesh(pos+ux+uy,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uy,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uy+uz,block.r, block.g,block.b);
+			addNormalToMesh(data, pos+uy);
+			addVertexToMesh(data, vertexCount,  pos+ux+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uy+uz,block.r, block.g,block.b);
 			
-			renderer.addVertexToMesh(pos+ux+uy,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uy+uz,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux+uy+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uy+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux+uy+uz,block.r, block.g,block.b);
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x-1,y,z)).filled){
 			// left
-			renderer.addNormalToMesh(pos-ux);
-			renderer.addVertexToMesh(pos+uy,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uz,block.r, block.g,block.b);
+			addNormalToMesh(data, pos-ux);
+			addVertexToMesh(data, vertexCount,  pos+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uz,block.r, block.g,block.b);
 			
-			renderer.addVertexToMesh(pos+uy,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uz,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uy+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uy+uz,block.r, block.g,block.b);
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y,z+1)).filled){
 			// top
-			renderer.addNormalToMesh(pos+uz);
-			renderer.addVertexToMesh(pos+uz,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uz+ux,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uz+ux+uy,block.r, block.g,block.b);
+			addNormalToMesh(data, pos+uz);
+			addVertexToMesh(data, vertexCount,  pos+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uz+ux,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uz+ux+uy,block.r, block.g,block.b);
 			
-			renderer.addVertexToMesh(pos+uz,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uz+ux+uy,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uz+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uz,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uz+ux+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uz+uy,block.r, block.g,block.b);
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y,z-1)).filled){
 			// bottom
-			renderer.addNormalToMesh(pos-uz);
-			renderer.addVertexToMesh(pos,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uy,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uy+ux,block.r, block.g,block.b);
+			addNormalToMesh(data, pos-uz);
+			addVertexToMesh(data, vertexCount,  pos,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uy,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uy+ux,block.r, block.g,block.b);
 			
-			renderer.addVertexToMesh(pos,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+uy+ux,block.r, block.g,block.b);
-			renderer.addVertexToMesh(pos+ux,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+uy+ux,block.r, block.g,block.b);
+			addVertexToMesh(data, vertexCount,  pos+ux,block.r, block.g,block.b);
 		}
 	}
 }
 
-void Chunk::draw(Renderer & renderer)
+void Chunk::draw() const
 {
-	renderer.drawMesh(mMeshId);
+	mMesh.draw();
 }
 
 inline BlockType Chunk::get(sf::Vector3i pos)

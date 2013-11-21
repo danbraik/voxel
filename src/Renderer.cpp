@@ -107,7 +107,7 @@ void Renderer::lookAt(float eyeX, float eyeY, float eyeZ,
 	gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, 0, 0, 1.0);
 }
 
-void Renderer::beginMesh(MeshId &id)
+void Renderer::beginMesh(int &id)
 {
 	id = glGenLists(1);
 	glNewList(id, GL_COMPILE);
@@ -138,7 +138,7 @@ void Renderer::addVertexToMesh(sf::Vector3f pos, int r, int g, int b)
 	addVertexToMesh(pos.x,pos.y,pos.z,r,g,b);
 }
 
-void Renderer::drawMesh(MeshId &id)
+void Renderer::drawMesh(int &id)
 {
 	glCallList(id);
 }

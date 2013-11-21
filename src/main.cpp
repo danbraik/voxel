@@ -143,8 +143,6 @@ int main(int argc, char ** argv) {
 		
 		manager.draw(renderer);
 		
-		
-		
         window.display();
 		
     }
