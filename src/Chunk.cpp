@@ -45,6 +45,7 @@ void Chunk::init(int h)
 
 void Chunk::update(Renderer & renderer, const ChunkManager &manager)
 {
+	renderer.clear();
 	renderer.beginMesh(mMeshId);
 
 	
@@ -78,6 +79,7 @@ void Chunk::computeOneBlock(Renderer & renderer, const ChunkManager & manager, i
 		
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y-1,z)).filled){
 		// front
+			renderer.addNormalToMesh(pos-uy);
 			renderer.addVertexToMesh(pos,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+ux,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+ux+uz,block.r, block.g,block.b);
@@ -88,6 +90,7 @@ void Chunk::computeOneBlock(Renderer & renderer, const ChunkManager & manager, i
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x+1,y,z)).filled){	
 			// right
+			renderer.addNormalToMesh(pos+ux);
 			renderer.addVertexToMesh(pos+ux,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+ux+uy,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+ux+uy+uz,block.r, block.g,block.b);
@@ -98,6 +101,7 @@ void Chunk::computeOneBlock(Renderer & renderer, const ChunkManager & manager, i
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y+1,z)).filled){
 			// behind
+			renderer.addNormalToMesh(pos+uy);
 			renderer.addVertexToMesh(pos+ux+uy,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+uy,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+uy+uz,block.r, block.g,block.b);
@@ -108,6 +112,7 @@ void Chunk::computeOneBlock(Renderer & renderer, const ChunkManager & manager, i
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x-1,y,z)).filled){
 			// left
+			renderer.addNormalToMesh(pos-ux);
 			renderer.addVertexToMesh(pos+uy,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+uz,block.r, block.g,block.b);
@@ -118,6 +123,7 @@ void Chunk::computeOneBlock(Renderer & renderer, const ChunkManager & manager, i
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y,z+1)).filled){
 			// top
+			renderer.addNormalToMesh(pos+uz);
 			renderer.addVertexToMesh(pos+uz,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+uz+ux,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+uz+ux+uy,block.r, block.g,block.b);
@@ -128,6 +134,7 @@ void Chunk::computeOneBlock(Renderer & renderer, const ChunkManager & manager, i
 		}
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y,z-1)).filled){
 			// bottom
+			renderer.addNormalToMesh(pos-uz);
 			renderer.addVertexToMesh(pos,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+uy,block.r, block.g,block.b);
 			renderer.addVertexToMesh(pos+uy+ux,block.r, block.g,block.b);
@@ -153,7 +160,7 @@ inline BlockType Chunk::get(sf::Vector3i pos)
 	return Block::NONE;
 }
 
-inline void Chunk::set(sf::Vector3i pos, BlockType type)
+inline void Chunk::set(const sf::Vector3i & pos, BlockType type)
 {
 	if (pos.x >=0&&pos.x<SIZE&&pos.y>=0&&pos.y<SIZE&&pos.z>=0&&pos.z<SIZE)
 		mArray[pos.x][pos.y][pos.z] = type;

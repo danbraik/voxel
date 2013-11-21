@@ -13,8 +13,8 @@ class Chunk
 	
 		
 	public:
-		static const int SIZE = 8;
-		static const float fSIZE = 8.f;
+		static const int SIZE = 16;
+		static const float fSIZE = 16.f;
 		
 		Chunk();
 		
@@ -25,7 +25,7 @@ class Chunk
 		void draw(Renderer &renderer);
 		
 		BlockType get(sf::Vector3i pos);
-		void set(sf::Vector3i pos, BlockType type);
+		void set(const sf::Vector3i &pos, BlockType type);
 		
 	private:
 		void computeOneBlock(Renderer & renderer, const ChunkManager &manager, int x, int y, 
@@ -34,7 +34,7 @@ class Chunk
 		
 		MeshId mMeshId;
 		
-		BlockType mArray[SIZE][SIZE][SIZE];
+		BlockType mArray[SIZE][SIZE][SIZE]; 
 };
 
 #endif // CHUNK_HPP

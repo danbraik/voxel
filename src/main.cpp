@@ -26,8 +26,11 @@ int main(int argc, char ** argv) {
 	
 	BlockList list;
 	
-	ChunkManager manager(list);
-	manager.init(renderer);
+	ChunkManager manager(list, renderer);
+	manager.init();
+	
+	
+	
 	
 //	Chunk chunk;
 //	chunk.init(4);
@@ -71,7 +74,7 @@ int main(int argc, char ** argv) {
                 if (event.key.code == sf::Keyboard::Up) {
                 } else if (event.key.code == sf::Keyboard::Down) {
                 } else if (event.key.code == sf::Keyboard::I) {
-					manager.init(renderer);
+					manager.init();
                 } else if (event.key.code == sf::Keyboard::LShift) {
 					camera.OnKeyboard(FreeFlyCamera::boost, false);
                 } else if (event.key.code == sf::Keyboard::Z) {
@@ -97,6 +100,26 @@ int main(int argc, char ** argv) {
 				camera.OnMouseButton(event.mouseWheel.delta > 0);	
             }
             else if (event.type == sf::Event::MouseButtonReleased) {
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					
+					const Vector3D & tpos = camera.getTargetPosition();
+					sf::Vector3i bpos( tpos.X / Block::SIZE,
+									   tpos.Y / Block::SIZE,
+									   tpos.Z / Block::SIZE);
+					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
+					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
+					manager.setBlockType(bpos, Block::Dirt);
+				} else if (event.mouseButton.button == sf::Mouse::Right) {
+					
+					const Vector3D & tpos = camera.getTargetPosition();
+					sf::Vector3i bpos( tpos.X / Block::SIZE,
+									   tpos.Y / Block::SIZE,
+									   tpos.Z / Block::SIZE);
+					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
+					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
+					manager.setBlockType(bpos, Block::Air);
+				} 
+						
             }
         }
 

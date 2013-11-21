@@ -1,23 +1,27 @@
 #include "ChunkManager.hpp"
 #include <iostream>
 
-ChunkManager::ChunkManager(BlockList &list) : mList(list)
+ChunkManager::ChunkManager(BlockList &list, Renderer &renderer) : mList(list), mRenderer(renderer)
 {
 }
 
-void ChunkManager::init(Renderer & renderer)
+void ChunkManager::init()
 {
-	mLoadedChunks[sf::Vector3i(2,2,0)] = new Chunk();
-	mLoadedChunks[sf::Vector3i(3,2,0)] = new Chunk();
-	mLoadedChunks[sf::Vector3i(2,3,0)] = new Chunk();
+	for (int i=0; i< 5;++i)
+		for (int j=0; j< 5;++j)
+			mLoadedChunks[sf::Vector3i(i,j,0)] = new Chunk();
+	
 	
 	for  (LoadedChunkMap::const_iterator it = mLoadedChunks.begin();
 		  it != mLoadedChunks.end();
 		  ++it) {
-		mCurrentPositionChunk = it->first;
-		it->second->update(renderer, *this);
-		
+		update(it->first, it->second);
 	}
+}
+
+void ChunkManager::update(const sf::Vector3i & chunkPosition, Chunk * chunk) {
+	mCurrentPositionChunk = chunkPosition;
+	chunk->update(mRenderer, *this);
 }
 
 const Block &ChunkManager::getBlock(BlockType type) const
@@ -25,41 +29,88 @@ const Block &ChunkManager::getBlock(BlockType type) const
 	return mList.get(type);
 }
 
-const Block &ChunkManager::getBlock(sf::Vector3i blockPosition) const
+
+
+inline sf::Vector3i ChunkManager::getChkPosByAbsBkPos(const sf::Vector3i &absoluteBlockPosition) const
 {
-	sf::Vector3i chunkPosition = 
-			blockPosition /= Chunk::SIZE;
-	
-	if (!isChunkLoaded(chunkPosition)) {
-		return mList.get(Block::NONE);
-	}
-	
-	sf::Vector3i relativeBlockPosition =
-			blockPosition - chunkPosition * Chunk::SIZE;
-	
-	Chunk * chunk = getChunk(chunkPosition);
-	return mList.get( chunk->get(relativeBlockPosition) );
+	return absoluteBlockPosition / Chunk::SIZE;
 }
 
-const Block &ChunkManager::getRelativeBlock(sf::Vector3i blockPosition) const
+inline sf::Vector3i ChunkManager::getChkPosByRelBkPos(const sf::Vector3i & fromChunkPosition, const sf::Vector3i &relativeBlockPosition) const
 {
-	sf::Vector3i chunkPosition = 
-			(mCurrentPositionChunk * Chunk::SIZE +
-			blockPosition) / Chunk::SIZE;
+	return 
+		(fromChunkPosition * Chunk::SIZE + relativeBlockPosition) 
+			/ Chunk::SIZE;
+}
+
+inline sf::Vector3i ChunkManager::getInsideBkPosByAbsBkPos(const sf::Vector3i &toChunkPosition, 
+														   const sf::Vector3i &absoluteBlockPosition) const
+{
+	return 
+			absoluteBlockPosition
+			 -
+			(toChunkPosition ) * Chunk::SIZE;
+}
+
+inline sf::Vector3i ChunkManager::getInsideBkPosByRelBkPos(const sf::Vector3i & fromChunkPosition, 
+														   const sf::Vector3i & toChunkPosition,
+														   const sf::Vector3i & relativeBlockPosition) const
+{
+	return 
+			relativeBlockPosition -
+			(toChunkPosition - fromChunkPosition) * Chunk::SIZE;
+}
+
+const Block &ChunkManager::getBlock(const sf::Vector3i & absoluteBlockPosition) const
+{
+	sf::Vector3i chunkPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
 	
 	if (!isChunkLoaded(chunkPosition)) {
 		return mList.get(Block::NONE);
 	}
 	
-	
-	sf::Vector3i relativeBlockPosition =
-			
-			blockPosition -
+	sf::Vector3i insideChunkBlockPosition =
+			absoluteBlockPosition -
 			(chunkPosition - mCurrentPositionChunk) * Chunk::SIZE;
-			 
 	
 	Chunk * chunk = getChunk(chunkPosition);
-	return mList.get( chunk->get(relativeBlockPosition) );
+	return mList.get( chunk->get(insideChunkBlockPosition) );
+}
+
+const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & relativeBlockPosition) const
+{
+	sf::Vector3i chunkPosition = 
+			getChkPosByRelBkPos(mCurrentPositionChunk, relativeBlockPosition);
+	
+	if (!isChunkLoaded(chunkPosition)) {
+		return mList.get(Block::NONE);
+	}
+	
+	sf::Vector3i insideChunkBlockPosition = getInsideBkPosByRelBkPos(mCurrentPositionChunk, 
+																	 chunkPosition, 
+																	 relativeBlockPosition);
+	Chunk * chunk = getChunk(chunkPosition);
+	return mList.get( chunk->get(insideChunkBlockPosition) );
+}
+
+void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, BlockType type)
+{
+	sf::Vector3i chunkPosition = 
+			getChkPosByAbsBkPos(absoluteBlockPosition);
+	
+	if (!isChunkLoaded(chunkPosition)) {
+		loadChunk(chunkPosition);
+		// add chunk to toBeLoad list
+		// add cube change to toBeTreat list
+	}
+	
+	sf::Vector3i insideChunkBlockPosition =
+			getInsideBkPosByAbsBkPos(chunkPosition, absoluteBlockPosition);
+			
+	
+	Chunk * chunk = getChunk(chunkPosition);
+	chunk->set(insideChunkBlockPosition, type);
+	update(chunkPosition, chunk);
 }
 
 void ChunkManager::draw(Renderer &renderer) const
@@ -88,6 +139,8 @@ void ChunkManager::draw(Renderer &renderer) const
 	}
 }
 
+
+
 bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition) const
 {
 	LoadedChunkMap::const_iterator it = mLoadedChunks.find(chunkPosition);
@@ -97,5 +150,12 @@ bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition) const
 Chunk *ChunkManager::getChunk(const sf::Vector3i &chunkPosition) const
 {
 	return mLoadedChunks.find(chunkPosition)->second;
+}
+
+void ChunkManager::loadChunk(const sf::Vector3i &chunkPosition)
+{
+	Chunk * chunk = new Chunk();
+	chunk->update(mRenderer, *this);
+	mLoadedChunks[chunkPosition] = chunk;
 }
 

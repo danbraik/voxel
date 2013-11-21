@@ -86,7 +86,12 @@ void FreeFlyCamera::setSensivity(double sensivity)
 void FreeFlyCamera::setPosition(const Vector3D & position)
 {
     _position = position;
-    _target = _position + _forward;
+	_target = _position + _forward;
+}
+
+const Vector3D &FreeFlyCamera::getTargetPosition()
+{
+	return _target;
 }
 
 void FreeFlyCamera::VectorsFromAngles()
