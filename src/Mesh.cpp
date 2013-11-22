@@ -1,7 +1,7 @@
 #include "Mesh.hpp"
 #include <iostream>
 
-#define PROPS 6
+#define PROPS 9
 
 Mesh::Mesh() : mVboId(0), mVertexCount(0)
 {
@@ -10,16 +10,16 @@ Mesh::Mesh() : mVboId(0), mVertexCount(0)
 
 void Mesh::setData(MeshFloat *data, int vertexCount)
 {
-	std::cout << "Set data" << std::endl;
+	// std::cout << "Set data" << std::endl;
 	
 	if (mVboId == 0) { // init
 		glGenBuffers(1, &mVboId);
-		std::cout << "VboId " << mVboId << std::endl;
+		// std::cout << "VboId " << mVboId << std::endl;
 	}
 	
-	// float [x y z r g b]
+	// float [x y z r g b n n n]
 	GLsizei sizeDataInBytes = vertexCount * PROPS * sizeof(MeshFloat);
-	std::cout << "estimate data size " << sizeDataInBytes << std::endl;
+	// std::cout << "estimate data size " << sizeDataInBytes << std::endl;
 	mVertexCount = vertexCount ;
 	
 	//Make the new VBO active
@@ -52,9 +52,13 @@ void Mesh::draw() const
 	glColorPointer(3, GL_FLOAT, PROPS*sizeof(MeshFloat), 
 				   static_cast<GLvoid*>(static_cast<GLvoid*>(0) + 3*sizeof(MeshFloat)));
 	
+	glNormalPointer(GL_FLOAT, PROPS*sizeof(MeshFloat),
+					static_cast<GLvoid*>(static_cast<GLvoid*>(0) + 6*sizeof(MeshFloat)));
+	
 	//Establish array contains vertices (not normals, colours, texture coords etc)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 	 
 	//Actually draw the triangle, giving the number of vertices provided
 	glDrawArrays(GL_TRIANGLES, 0, mVertexCount);
@@ -63,6 +67,8 @@ void Mesh::draw() const
 	// maybe useful
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);	
+	glDisableClientState(GL_NORMAL_ARRAY);	
+	
 	glBindBuffer(GL_ARRAY_BUFFER, -1);
 	
 	//Force display to be drawn now

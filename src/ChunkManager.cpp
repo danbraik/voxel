@@ -17,8 +17,8 @@ Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) {
 
 void ChunkManager::init()
 {
-	for (int i=0; i< 2;++i)
-		for (int j=0; j< 2;++j) 
+	for (int i=0; i< 20;++i)
+		for (int j=0; j< 20;++j) 
 			reqLoadChunk(sf::Vector3i(i,j,0));
 }
 
@@ -129,16 +129,20 @@ void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, Block
 
 void ChunkManager::update()
 {
-	//int maxLoad = 2;
+	int maxLoad = 5;
+	int maxRebuild = 5;
 	
 	// -- Load chunks
-	//int chunksLoaded = 0;
+	int chunksLoaded = 0;
 	if (mPositionChunksToLoad.size() > 0) {
 		Chunk * nearChunk = 0;
 		for(Vec3iList::iterator it = mPositionChunksToLoad.begin();
-			it != mPositionChunksToLoad.end() /*&& chunksLoaded < maxLoad*/; ++it) {
+			it != mPositionChunksToLoad.end() && chunksLoaded < maxLoad; ++it) {
+			++chunksLoaded;
 			
 			const sf::Vector3i & chunkPosition = *it;
+			
+			
 			
 			Chunk * chunk = createEmptyChunk(chunkPosition);
 			chunk->init(); // load data
@@ -157,20 +161,29 @@ void ChunkManager::update()
 			if (isChunkLoaded(chunkPosition + EZ, nearChunk))
 				mChunksToRebuild.push_back(nearChunk);
 			if (isChunkLoaded(chunkPosition - EZ, nearChunk))
-				mChunksToRebuild.push_back(nearChunk);	
+				mChunksToRebuild.push_back(nearChunk);
+			
+			
+			// remove task
+			it = mPositionChunksToLoad.erase(it);
 		}
-		mPositionChunksToLoad.clear();
+		//mPositionChunksToLoad.clear();
 	}
 	// -- end
 	
 	
 	// -- Rebuild chunks
+	int chunkRebuild = 0;
 	if (mChunksToRebuild.size() > 0) {
 		for(ChunkList::iterator it = mChunksToRebuild.begin();
-			it != mChunksToRebuild.end(); ++it) {
+			it != mChunksToRebuild.end() && chunkRebuild < maxRebuild; ++it) {
+			++chunkRebuild;
 			(*it)->rebuild(*this);
+			
+			// rm task
+			it = mChunksToRebuild.erase(it);
 		}
-		mChunksToRebuild.clear();
+		//mChunksToRebuild.clear();
 	}
 	// -- end
 	

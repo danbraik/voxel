@@ -16,7 +16,7 @@ Renderer::Renderer()
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  
 
 	
-		//glEnable( GL_LIGHTING );
+		glEnable( GL_LIGHTING );
 	
 		// Set up a material
 		GLfloat ambient_mtrl[] = { 1.0f, 0.0f, 1.0f, 1.0f };
@@ -26,7 +26,7 @@ Renderer::Renderer()
 	
 	    // Set light 0 to be a pure white directional light
 	    GLfloat diffuse_light0[]  = { 1.0f, 1.0f,  1.0f, 1.0f };
-	    GLfloat specular_light0[] = { 1.0f, .0f,  1.0f, 1.0f };
+	    GLfloat specular_light0[] = { .0f, .0f,  .0f, 1.0f };
 	    GLfloat position_light0[] = { -5.0f, 5.0f, 10.0f, 0.0f };
 	    glLightfv( GL_LIGHT0, GL_DIFFUSE, diffuse_light0 );
 	    glLightfv( GL_LIGHT0, GL_SPECULAR, specular_light0 );
@@ -35,7 +35,7 @@ Renderer::Renderer()
 	
 	    // Enable some dim, grey ambient lighting so objects that are not lit 
 	    // by the other lights are not completely black.
-		GLfloat ambient_lightModel[] = { 0.7f, 0.7f, 0.7f, 1.f };
+		GLfloat ambient_lightModel[] = { 0.5f, 0.5f, 0.6f, 1.f };
 		glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambient_lightModel );
 	
 	   

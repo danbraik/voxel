@@ -56,7 +56,7 @@ class ChunkManager
 		void reqRebuildChunk(Chunk * chunk);
 		
 		// internal (used to satisfy requests)
-		void update(Chunk * chunk);
+		//...
 	
 		// Chunk pool
 		Chunk * getFreeChunk();
