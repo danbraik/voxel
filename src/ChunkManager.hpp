@@ -1,6 +1,7 @@
 #ifndef CHUNKMANAGER_HPP
 #define CHUNKMANAGER_HPP
 
+#include <list>
 #define _GLIBCXX_PERMIT_BACKWARD_HASH 0
 #include <hash_map>
 #include "Chunk.hpp"
@@ -19,8 +20,9 @@ class ChunkManager
 		ChunkManager(BlockList & list, Renderer & renderer);
 		
 		void init();
+		void reinit();
 		
-		Chunk * createEmptyChunk(const sf::Vector3i & chunkPosition) const;
+		Chunk * createEmptyChunk(const sf::Vector3i & chunkPosition);
 		
 		const Block & getBlock(BlockType type) const;
 		const Block & getBlock(const sf::Vector3i & absoluteBlockPosition) const;
@@ -28,10 +30,13 @@ class ChunkManager
 		
 		void setBlockType(const sf::Vector3i & absoluteBlockPosition, BlockType type);
 		
+		
+		void rebuildChunk(); // pseudo asynchronous update
+		
 		void draw(Renderer & renderer) const;
 		
 	private:
-		void update(Chunk * chunk);
+		
 
 		sf::Vector3i getChkPosByAbsBkPos(const sf::Vector3i & absoluteBlockPosition) const;
 		sf::Vector3i getChkPosByRelBkPos(const sf::Vector3i & fromChunkPosition,
@@ -42,17 +47,37 @@ class ChunkManager
 											  const sf::Vector3i & toChunkPosition,
 											  const sf::Vector3i & relativeBlockPosition) const;
 		
-		bool isChunkLoaded(const sf::Vector3i & chunkPosition) const;
+		bool isChunkLoaded(const sf::Vector3i & chunkPosition, Chunk* &chunk) const;
 		Chunk * getChunk(const sf::Vector3i & chunkPosition) const;
-		void loadChunk(const sf::Vector3i & chunkPosition);
+		
+		// asynchronous requests
+		void reqLoadChunk(const sf::Vector3i & chunkPosition);
+		void reqRebuildChunk(Chunk * chunk);
+		
+		// internal (used to satisfy requests)
+		void rebuildChunk(Chunk * chunk);
 	
-		sf::Vector3i mCurrentPositionChunk;
+		// Chunk pool
+		Chunk * getFreeChunk();
+		void giveBackChunk(Chunk* & chunk);
+		
 		
 		BlockList & mList;
 		
-		typedef __gnu_cxx::hash_map<const sf::Vector3i, Chunk*, HashConfiguration> LoadedChunkMap;
-		LoadedChunkMap mLoadedChunks;
+		typedef __gnu_cxx::hash_map<const sf::Vector3i, Chunk*, HashConfiguration> ChunkMap;
+		ChunkMap mLoadedChunks;
 		
+		
+		typedef std::list<sf::Vector3i> Vec3iList;
+		Vec3iList mPositionChunksToLoad;
+		
+		typedef std::list<Chunk*> ChunkList;
+		ChunkList mChunksToRebuild;
+		
+		
+		sf::Vector3i mCurrentPositionChunk;
+		
+		const sf::Vector3i EX, EY, EZ;
 		
 		//tmp
 		Renderer & mRenderer;

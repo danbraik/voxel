@@ -88,7 +88,7 @@ int main(int argc, char ** argv) {
                 if (event.key.code == sf::Keyboard::Up) {
                 } else if (event.key.code == sf::Keyboard::Down) {
                 } else if (event.key.code == sf::Keyboard::I) {
-					manager.init();
+					manager.reinit();
                 } else if (event.key.code == sf::Keyboard::LShift) {
 					camera.OnKeyboard(FreeFlyCamera::boost, false);
                 } else if (event.key.code == sf::Keyboard::Z) {
@@ -137,6 +137,9 @@ int main(int argc, char ** argv) {
             }
         }
 
+		
+		manager.rebuildChunk();
+		
 		camera.animate(10);
 		
 		

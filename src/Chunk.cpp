@@ -53,7 +53,7 @@ void Chunk::setPosition(const sf::Vector3i &position)
 	mPosition = position;
 }
 
-void Chunk::update(const ChunkManager &manager)
+void Chunk::rebuild(const ChunkManager &manager)
 {
 	std::vector<MeshFloat> data;
 	// 6144 is reserved by vector

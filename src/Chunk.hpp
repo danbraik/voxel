@@ -24,7 +24,7 @@ class Chunk
 		const sf::Vector3i & getPosition() const;
 		void setPosition(const sf::Vector3i & position);
 		
-		void update(const ChunkManager & manager);
+		void rebuild(const ChunkManager & manager);
 		void draw() const;
 		
 		BlockType get(sf::Vector3i pos);
