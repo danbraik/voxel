@@ -19,10 +19,10 @@ class Block
 
 	public:	
 		Block();
-		void init(int rr,int gg,int bb, bool f) {
+		void init(float rr,float gg,float bb, bool f) {
 			r=rr;g=gg;b=bb;filled=f;
 		}
-		int r,g,b;
+		float r,g,b;
 		bool filled;
 };
 
@@ -32,10 +32,10 @@ class BlockList {
 	public:
 		
 		BlockList() {
-			mList[Block::NONE].init(255,0,0,true);
-			mList[Block::Air].init(240,240,244,false);
-			mList[Block::Dirt].init(64,192,64,true);
-			mList[Block::Stone].init(128,128,128,true);
+			mList[Block::NONE].init(1.f,0,0,true);
+			mList[Block::Air].init(.9,.9,.9,false);
+			mList[Block::Dirt].init(.25,.75,.25,true);
+			mList[Block::Stone].init(.5,.5,.5,true);
 			mList[Block::Water].init(0,0,0,false);
 		}
 		

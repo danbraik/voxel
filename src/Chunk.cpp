@@ -56,7 +56,9 @@ void Chunk::setPosition(const sf::Vector3i &position)
 void Chunk::update(const ChunkManager &manager)
 {
 	std::vector<MeshFloat> data;
-	data.reserve(SIZE*SIZE);
+	// 6144 is reserved by vector
+	// average 4000 floats
+	data.reserve(SIZE*SIZE*SIZE*12);
 	int vertexCount = 0;
 	
 	sf::Vector3f ux(Block::SIZE,0,0);
@@ -71,24 +73,30 @@ void Chunk::update(const ChunkManager &manager)
 		}
 	}
 	
-	mMesh.setData(&data[0], vertexCount);
+	//std::cout << "Capacity " << data.size() << " / " << SIZE*SIZE*SIZE*12 << "; capacit " << data.capacity() <<  std::endl;
+	mMesh.setData(data.data(), vertexCount);
 }
 
 void addNormalToMesh(std::vector<MeshFloat> & data, sf::Vector3f pos) {
 	
 }
 
-void addVertexToMesh(std::vector<MeshFloat> & data, int & vertexCount, sf::Vector3f pos, float r, float g, float b) {
+void addVertexToMesh(std::vector<MeshFloat> & data, 
+					 int & vertexCount,
+					 sf::Vector3f pos, float r, float g, float b) {
 	data.push_back(pos.x);
 	data.push_back(pos.y);
 	data.push_back(pos.z);
 	data.push_back(r);
 	data.push_back(g);
 	data.push_back(b);
+	
+	//std::cout << "block r("<<r<<") g("<<g<<") b("<<b<<")"<<std::endl;
+	
 	vertexCount++;
 }
 
-void Chunk::computeOneBlock(std::vector<MeshFloat> & data, int & vertexCount, const ChunkManager & manager, int x, int y, int z
+void Chunk::computeOneBlock(std::vector<MeshFloat> &data, int & vertexCount, const ChunkManager & manager, int x, int y, int z
 			, sf::Vector3f ux, sf::Vector3f uy, sf::Vector3f uz) {
 	
 	BlockType type = get(sf::Vector3i(x,y,z));
@@ -97,6 +105,8 @@ void Chunk::computeOneBlock(std::vector<MeshFloat> & data, int & vertexCount, co
 	
 	if (block.filled) {
 		sf::Vector3f pos(x*Block::SIZE, y*Block::SIZE, z*Block::SIZE);
+		
+//		std::cout << "block r("<<block.r<<") g("<<block.g<<") "<<std::endl;
 		
 		if (!manager.getRelativeBlock(sf::Vector3i(x,y-1,z)).filled){
 		// front

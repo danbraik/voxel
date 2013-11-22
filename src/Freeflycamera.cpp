@@ -7,7 +7,7 @@ FreeFlyCamera::FreeFlyCamera(const Vector3D & position)
 {
     _position = position;
     _phi = 0;
-    _theta = 0;
+    _theta = 90;
     VectorsFromAngles();
 
     _speed = 0.01;

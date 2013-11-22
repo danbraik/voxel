@@ -22,14 +22,27 @@ int main(int argc, char ** argv) {
 
 	Renderer renderer;
 	
+	Mesh mesh;
+	MeshFloat data[] = {0, 0.0, 0.0,   1.,0,0,
+						1, 0.0, .0,    1.,.6,0,
+					  1.0, 1.0, 0.0,   1.,0,0,
+					  
+					   0, 0 , 0 ,  0,1.,0,
+					  0-1, 0 , 0 , 0,1.,.2,
+					  0-1, 1 , 0 ,  0,1.,0,
+			 
+					    0  , 0  , 2 ,  0,0,1.,
+					   0-1 , 0 ,2  ,  0,.25,0,
+					   0-1 , 1 ,2  ,  0,0,1.,
+					   };
+	std::cout << "data size " << sizeof(data) << endl;
 	
+	mesh.setData(data, 9);
 	
 	BlockList list;
 	
 	ChunkManager manager(list, renderer);
 	manager.init();
-	
-	
 	
 	
 //	Chunk chunk;
@@ -39,7 +52,8 @@ int main(int argc, char ** argv) {
 	FreeFlyCamera camera(Vector3D(12,-12,12));
 	
 	//avoid event when move cursor
-	bool mouseMoved =false;
+	bool mouseMoved = true;
+	sf::Mouse::setPosition(sf::Vector2i(400,600), window);
     // run the main loop
     bool running = true;
     while (running) {
@@ -142,6 +156,11 @@ int main(int argc, char ** argv) {
 //		}
 		
 		manager.draw(renderer);
+		mesh.draw();
+		renderer.translate(0,-2,0);
+		mesh.draw();
+		renderer.translate(6,6,6);
+		mesh.draw();
 		
         window.display();
 		

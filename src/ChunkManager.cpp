@@ -26,6 +26,12 @@ void ChunkManager::init()
 		  it != mLoadedChunks.end();
 		  ++it) {
 		it->second->init();
+	}
+	
+	// need to be updated after neighboors was initialised
+	for  (LoadedChunkMap::const_iterator it = mLoadedChunks.begin();
+		  it != mLoadedChunks.end();
+		  ++it) {
 		update(it->second);
 	}
 }
