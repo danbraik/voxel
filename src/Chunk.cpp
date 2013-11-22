@@ -108,7 +108,7 @@ void Chunk::computeOneBlock(std::vector<MeshFloat> &data, int & vertexCount, con
 		
 //		std::cout << "block r("<<block.r<<") g("<<block.g<<") "<<std::endl;
 		
-		if (!manager.getRelativeBlock(sf::Vector3i(x,y-1,z)).filled){
+		if (!manager.getRelativeBlock(getPosition(), sf::Vector3i(x,y-1,z)).filled){
 		// front
 			addNormalToMesh(data, pos-uy);
 			addVertexToMesh(data, vertexCount,  pos,block.r, block.g,block.b);
@@ -119,7 +119,7 @@ void Chunk::computeOneBlock(std::vector<MeshFloat> &data, int & vertexCount, con
 			addVertexToMesh(data, vertexCount,  pos+ux+uz,block.r, block.g,block.b);
 			addVertexToMesh(data, vertexCount,  pos+uz,block.r, block.g,block.b);
 		}
-		if (!manager.getRelativeBlock(sf::Vector3i(x+1,y,z)).filled){	
+		if (!manager.getRelativeBlock(getPosition(), sf::Vector3i(x+1,y,z)).filled){	
 			// right
 			addNormalToMesh(data, pos+ux);
 			addVertexToMesh(data, vertexCount,  pos+ux,block.r, block.g,block.b);
@@ -130,7 +130,7 @@ void Chunk::computeOneBlock(std::vector<MeshFloat> &data, int & vertexCount, con
 			addVertexToMesh(data, vertexCount,  pos+ux+uy+uz,block.r, block.g,block.b);
 			addVertexToMesh(data, vertexCount,  pos+ux+uz,block.r, block.g,block.b);
 		}
-		if (!manager.getRelativeBlock(sf::Vector3i(x,y+1,z)).filled){
+		if (!manager.getRelativeBlock(getPosition(), sf::Vector3i(x,y+1,z)).filled){
 			// behind
 			addNormalToMesh(data, pos+uy);
 			addVertexToMesh(data, vertexCount,  pos+ux+uy,block.r, block.g,block.b);
@@ -141,7 +141,7 @@ void Chunk::computeOneBlock(std::vector<MeshFloat> &data, int & vertexCount, con
 			addVertexToMesh(data, vertexCount,  pos+uy+uz,block.r, block.g,block.b);
 			addVertexToMesh(data, vertexCount,  pos+ux+uy+uz,block.r, block.g,block.b);
 		}
-		if (!manager.getRelativeBlock(sf::Vector3i(x-1,y,z)).filled){
+		if (!manager.getRelativeBlock(getPosition(), sf::Vector3i(x-1,y,z)).filled){
 			// left
 			addNormalToMesh(data, pos-ux);
 			addVertexToMesh(data, vertexCount,  pos+uy,block.r, block.g,block.b);
@@ -152,7 +152,7 @@ void Chunk::computeOneBlock(std::vector<MeshFloat> &data, int & vertexCount, con
 			addVertexToMesh(data, vertexCount,  pos+uz,block.r, block.g,block.b);
 			addVertexToMesh(data, vertexCount,  pos+uy+uz,block.r, block.g,block.b);
 		}
-		if (!manager.getRelativeBlock(sf::Vector3i(x,y,z+1)).filled){
+		if (!manager.getRelativeBlock(getPosition(), sf::Vector3i(x,y,z+1)).filled){
 			// top
 			addNormalToMesh(data, pos+uz);
 			addVertexToMesh(data, vertexCount,  pos+uz,block.r, block.g,block.b);
@@ -163,7 +163,7 @@ void Chunk::computeOneBlock(std::vector<MeshFloat> &data, int & vertexCount, con
 			addVertexToMesh(data, vertexCount,  pos+uz+ux+uy,block.r, block.g,block.b);
 			addVertexToMesh(data, vertexCount,  pos+uz+uy,block.r, block.g,block.b);
 		}
-		if (!manager.getRelativeBlock(sf::Vector3i(x,y,z-1)).filled){
+		if (!manager.getRelativeBlock(getPosition(), sf::Vector3i(x,y,z-1)).filled){
 			// bottom
 			addNormalToMesh(data, pos-uz);
 			addVertexToMesh(data, vertexCount,  pos,block.r, block.g,block.b);

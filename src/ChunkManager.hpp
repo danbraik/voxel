@@ -26,12 +26,13 @@ class ChunkManager
 		
 		const Block & getBlock(BlockType type) const;
 		const Block & getBlock(const sf::Vector3i & absoluteBlockPosition) const;
-		const Block & getRelativeBlock(const sf::Vector3i &relativeBlockPosition) const;
+		const Block & getRelativeBlock(const sf::Vector3i & fromChunkPosition,
+									   const sf::Vector3i & relativeBlockPosition) const;
 		
 		void setBlockType(const sf::Vector3i & absoluteBlockPosition, BlockType type);
 		
 		
-		void rebuildChunk(); // pseudo asynchronous update
+		void update(); // pseudo asynchronous update
 		
 		void draw(Renderer & renderer) const;
 		
@@ -55,7 +56,7 @@ class ChunkManager
 		void reqRebuildChunk(Chunk * chunk);
 		
 		// internal (used to satisfy requests)
-		void rebuildChunk(Chunk * chunk);
+		void update(Chunk * chunk);
 	
 		// Chunk pool
 		Chunk * getFreeChunk();
@@ -75,8 +76,8 @@ class ChunkManager
 		ChunkList mChunksToRebuild;
 		
 		
-		sf::Vector3i mCurrentPositionChunk;
 		
+		// use it to compute near positions
 		const sf::Vector3i EX, EY, EZ;
 		
 		//tmp

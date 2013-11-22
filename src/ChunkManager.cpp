@@ -33,10 +33,6 @@ void ChunkManager::reinit()
 
 
 
-void ChunkManager::rebuildChunk(Chunk * chunk) {
-	mCurrentPositionChunk = chunk->getPosition();
-	chunk->rebuild(*this);
-}
 
 const Block &ChunkManager::getBlock(BlockType type) const
 {
@@ -86,15 +82,17 @@ const Block &ChunkManager::getBlock(const sf::Vector3i & absoluteBlockPosition) 
 	
 	sf::Vector3i insideChunkBlockPosition =
 			absoluteBlockPosition -
-			(chunkPosition - mCurrentPositionChunk) * Chunk::SIZE;
+			(chunkPosition) * Chunk::SIZE;
 	
 	return mList.get( chunk->get(insideChunkBlockPosition) );
 }
 
-const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & relativeBlockPosition) const
+const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & fromChunkPosition,
+											const sf::Vector3i & relativeBlockPosition) const
 {
+	
 	sf::Vector3i chunkPosition = 
-			getChkPosByRelBkPos(mCurrentPositionChunk, relativeBlockPosition);
+			getChkPosByRelBkPos(fromChunkPosition, relativeBlockPosition);
 	
 	Chunk * chunk = 0;
 	
@@ -102,7 +100,7 @@ const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & relativeBlockPo
 		return mList.get(Block::NONE);
 	}
 	
-	sf::Vector3i insideChunkBlockPosition = getInsideBkPosByRelBkPos(mCurrentPositionChunk, 
+	sf::Vector3i insideChunkBlockPosition = getInsideBkPosByRelBkPos(fromChunkPosition, 
 																	 chunkPosition, 
 																	 relativeBlockPosition);
 	return mList.get( chunk->get(insideChunkBlockPosition) );
@@ -129,7 +127,7 @@ void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, Block
 	reqRebuildChunk(chunk);
 }
 
-void ChunkManager::rebuildChunk()
+void ChunkManager::update()
 {
 	//int maxLoad = 2;
 	
@@ -170,7 +168,7 @@ void ChunkManager::rebuildChunk()
 	if (mChunksToRebuild.size() > 0) {
 		for(ChunkList::iterator it = mChunksToRebuild.begin();
 			it != mChunksToRebuild.end(); ++it) {
-			rebuildChunk(*it);
+			(*it)->rebuild(*this);
 		}
 		mChunksToRebuild.clear();
 	}

@@ -138,7 +138,7 @@ int main(int argc, char ** argv) {
         }
 
 		
-		manager.rebuildChunk();
+		manager.update();
 		
 		camera.animate(10);
 		
