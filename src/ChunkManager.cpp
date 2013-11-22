@@ -5,8 +5,12 @@
 ChunkManager::ChunkManager(BlockList &list, Renderer &renderer) : 
 	mList(list), mRenderer(renderer), 
 	mPositionChunksToLoad(), mChunksToRebuild(),
+	mFreeChunks(),
 	EX(1,0,0),EY(0,1,0),EZ(0,0,1)
 {
+	// init pool
+	for (int i=0;i<100;++i)
+		mFreeChunks.push(new Chunk);
 }
 
 Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) {
@@ -251,15 +255,33 @@ void ChunkManager::reqRebuildChunk(Chunk *chunk)
 // Pool of chunk
 Chunk *ChunkManager::getFreeChunk()
 {
-	Chunk * chunk = new Chunk;
-	if (chunk == 0)
-		std::cerr << "Error when allocating chunk !" << std::endl;
+	Chunk * chunk = 0;
+	
+	if (mFreeChunks.empty()) {
+		chunk = new Chunk;
+		if (chunk == 0)
+			std::cerr << "Error when allocating chunk !" << std::endl;
+	} else {
+		chunk = mFreeChunks.top();
+		mFreeChunks.pop();
+	}
+	std::cout << "ChunkPool (n) : " << mFreeChunks.size() << " free chunk(s)" << std::endl;
 	return chunk;
 }
 
 void ChunkManager::giveBackChunk(Chunk* & chunk)
 {
-	delete chunk;
-	chunk = 0;
+	mFreeChunks.push(chunk);
+	std::cout << "ChunkPool (d) : " << mFreeChunks.size() << " free chunk(s)" << std::endl;
 }
 
+
+ChunkManager::~ChunkManager() {
+	// delete pool
+	Chunk * chunk;
+	while (!mFreeChunks.empty()) {
+		chunk = mFreeChunks.top();
+		mFreeChunks.pop();
+		delete chunk;
+	}
+}

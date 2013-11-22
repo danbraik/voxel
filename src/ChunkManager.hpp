@@ -2,6 +2,7 @@
 #define CHUNKMANAGER_HPP
 
 #include <list>
+#include <stack>
 #define _GLIBCXX_PERMIT_BACKWARD_HASH 0
 #include <hash_map>
 #include "Chunk.hpp"
@@ -36,6 +37,8 @@ class ChunkManager
 		
 		void draw(Renderer & renderer) const;
 		
+		~ChunkManager();
+		
 	private:
 		
 
@@ -58,9 +61,7 @@ class ChunkManager
 		// internal (used to satisfy requests)
 		//...
 	
-		// Chunk pool
-		Chunk * getFreeChunk();
-		void giveBackChunk(Chunk* & chunk);
+		
 		
 		
 		BlockList & mList;
@@ -75,6 +76,11 @@ class ChunkManager
 		typedef std::list<Chunk*> ChunkList;
 		ChunkList mChunksToRebuild;
 		
+		// Chunk pool
+		Chunk * getFreeChunk();
+		void giveBackChunk(Chunk* & chunk);
+		typedef std::stack<Chunk*> ChunkStack;
+		ChunkStack mFreeChunks;
 		
 		
 		// use it to compute near positions
