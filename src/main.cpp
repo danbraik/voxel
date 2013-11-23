@@ -71,7 +71,14 @@ int main(int argc, char ** argv) {
             }
             else if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Up) {
-                } else if (event.key.code == sf::Keyboard::Down) {
+                } else if (event.key.code == sf::Keyboard::U) {
+					const Vector3D & tpos = camera.getTargetPosition();
+					sf::Vector3i bpos( tpos.X / Block::SIZE,
+									   tpos.Y / Block::SIZE,
+									   tpos.Z / Block::SIZE);
+					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
+					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
+					manager.deleteChunk(bpos);
                 } else if (event.key.code == sf::Keyboard::I) {
 					manager.reinit();
                 } else if (event.key.code == sf::Keyboard::LShift) {

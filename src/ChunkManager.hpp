@@ -20,8 +20,10 @@ class ChunkManager
 	public:
 		ChunkManager(BlockList & list, Renderer & renderer);
 		
+		// tests
 		void init();
 		void reinit();
+		void deleteChunk(sf::Vector3i & absBkPos);
 		
 		Chunk * createEmptyChunk(const sf::Vector3i & chunkPosition);
 		
@@ -41,7 +43,6 @@ class ChunkManager
 		
 	private:
 		
-
 		sf::Vector3i getChkPosByAbsBkPos(const sf::Vector3i & absoluteBlockPosition) const;
 		sf::Vector3i getChkPosByRelBkPos(const sf::Vector3i & fromChunkPosition,
 										 const sf::Vector3i & relativeBlockPosition) const;
@@ -56,7 +57,8 @@ class ChunkManager
 		
 		// asynchronous requests
 		void reqLoadChunk(const sf::Vector3i & chunkPosition);
-		void reqRebuildChunk(Chunk * chunk);
+		void reqRebuildChunk(Chunk* & chunk);
+		void reqUnloadChunk(Chunk* & chunk);
 		
 		// internal (used to satisfy requests)
 		//...
@@ -75,6 +77,7 @@ class ChunkManager
 		
 		typedef std::list<Chunk*> ChunkList;
 		ChunkList mChunksToRebuild;
+		ChunkList mChunksToUnload;
 		
 		// Chunk pool
 		Chunk * getFreeChunk();

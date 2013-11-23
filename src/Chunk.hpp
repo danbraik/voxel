@@ -15,7 +15,7 @@ class Chunk
 	
 		
 	public:
-		static const int SIZE = 8;
+		static const int SIZE = 16;
 		
 		Chunk();
 		

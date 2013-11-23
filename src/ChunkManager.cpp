@@ -5,24 +5,26 @@
 ChunkManager::ChunkManager(BlockList &list, Renderer &renderer) : 
 	mList(list), mRenderer(renderer), 
 	mPositionChunksToLoad(), mChunksToRebuild(),
+	mChunksToUnload(),
 	mFreeChunks(),
 	EX(1,0,0),EY(0,1,0),EZ(0,0,1)
 {
 	// init pool
-	for (int i=0;i<100;++i)
+	for (int i=0;i<10;++i)
 		mFreeChunks.push(new Chunk);
 }
 
 Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) {
 	Chunk * chunk = getFreeChunk();
+	
 	chunk->setPosition(chunkPosition);
 	return chunk;
 }
 
 void ChunkManager::init()
 {
-	for (int i=0; i< 20;++i)
-		for (int j=0; j< 20;++j) 
+	for (int i=0; i< 6;++i)
+		for (int j=0; j< 6;++j) 
 			reqLoadChunk(sf::Vector3i(i,j,0));
 }
 
@@ -32,6 +34,16 @@ void ChunkManager::reinit()
 		it != mLoadedChunks.end(); ++it) {
 		it->second->init();
 		mChunksToRebuild.push_back(it->second);
+	}
+}
+
+void ChunkManager::deleteChunk(sf::Vector3i &absBkPos)
+{
+	sf::Vector3i cp = getChkPosByAbsBkPos(absBkPos);
+	
+	Chunk * chunk;
+	if (isChunkLoaded(cp,chunk)) {
+		reqUnloadChunk(chunk);
 	}
 }
 
@@ -135,6 +147,7 @@ void ChunkManager::update()
 {
 	int maxLoad = 5;
 	int maxRebuild = 5;
+	int maxUnload = 1;
 	
 	// -- Load chunks
 	int chunksLoaded = 0;
@@ -192,6 +205,26 @@ void ChunkManager::update()
 	// -- end
 	
 	
+	
+	// -- Unload chunks
+	int chunkUnload = 0;
+	if (mChunksToUnload.size() > 0) {
+		for(ChunkList::iterator it = mChunksToUnload.begin();
+			it != mChunksToUnload.end() && chunkUnload < maxUnload; ++it) {
+			++chunkUnload;
+			
+			// save to disk
+			//..
+			giveBackChunk(*it);			
+			
+			// rm task
+			it = mChunksToUnload.erase(it);
+		}
+		//mChunksToUnload.clear();
+	}
+	// -- end
+	
+	
 }
 
 void ChunkManager::draw(Renderer &renderer) const
@@ -245,11 +278,17 @@ void ChunkManager::reqLoadChunk(const sf::Vector3i &chunkPosition)
 	mPositionChunksToLoad.push_back(chunkPosition);
 }
 
-void ChunkManager::reqRebuildChunk(Chunk *chunk)
+void ChunkManager::reqRebuildChunk(Chunk* & chunk)
 {
 	mChunksToRebuild.push_back(chunk);
 }
 
+void ChunkManager::reqUnloadChunk(Chunk* & chunk)
+{
+	// avoid to use this chunk in computation
+	mLoadedChunks.erase(chunk->getPosition());
+	mChunksToUnload.push_back(chunk);
+}
 
 
 // Pool of chunk
@@ -258,6 +297,8 @@ Chunk *ChunkManager::getFreeChunk()
 	Chunk * chunk = 0;
 	
 	if (mFreeChunks.empty()) {
+//test
+//return 0;
 		chunk = new Chunk;
 		if (chunk == 0)
 			std::cerr << "Error when allocating chunk !" << std::endl;
