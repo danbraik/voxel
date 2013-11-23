@@ -20,6 +20,7 @@ public:
     virtual void setSensivity(double sensivity);
 
     virtual void setPosition(const Vector3D & position);
+	virtual const Vector3D & getPosition();
 	virtual const Vector3D & getTargetPosition();
 
     virtual void look();

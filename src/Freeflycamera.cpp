@@ -89,6 +89,11 @@ void FreeFlyCamera::setPosition(const Vector3D & position)
 	_target = _position + _forward;
 }
 
+const Vector3D &FreeFlyCamera::getPosition()
+{
+	return _position;
+}
+
 const Vector3D &FreeFlyCamera::getTargetPosition()
 {
 	return _target;
