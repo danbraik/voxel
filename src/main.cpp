@@ -4,6 +4,7 @@
 #include "Chunk.hpp"
 #include "Freeflycamera.h"
 #include "ChunkManager.hpp"
+#include "WorldGenerator.hpp"
 
 using namespace std;
 
@@ -27,7 +28,9 @@ int main(int argc, char ** argv) {
 	BlockList list;
 	
 	ChunkManager manager(list, renderer);
-	manager.init();
+	//manager.init();
+	WorldGenerator worldGenerator;
+	worldGenerator.generate(manager, 8,8,8);
 	
 	
 //	Chunk chunk;
