@@ -11,7 +11,7 @@ class Mesh
 	public:
 		Mesh();
 		
-		// data contains all verticies and colors
+		// data contains all vertices and colors
 		// [x y z r g b], [x y z r g b]...
 		void setData(MeshFloat *data, int vertexCount);
 		void draw() const;

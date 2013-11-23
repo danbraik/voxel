@@ -33,6 +33,8 @@ void Mesh::setData(MeshFloat *data, int vertexCount)
 
 void Mesh::draw() const
 {
+	if (mVertexCount == 0)
+		return;
 	
 	//Make the new VBO active. Repeat here incase changed since initialisation
 	glBindBuffer(GL_ARRAY_BUFFER, mVboId);
@@ -72,5 +74,5 @@ void Mesh::draw() const
 	glBindBuffer(GL_ARRAY_BUFFER, -1);
 	
 	//Force display to be drawn now
-	glFlush();
+	//glFlush();
 }
