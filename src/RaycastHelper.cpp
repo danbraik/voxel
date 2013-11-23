@@ -42,10 +42,10 @@ bool RaycastHelper::raycast(ChunkManager &manager,
 							sf::Vector3i &nextNorm)
 {
 	
-	// Cube containing origin point.
-         int x = int(origin.x);
-         int y = int(origin.y);
-         int z = int(origin.z);
+		 // Cube containing origin point.
+         float x = int(origin.x);
+         float y = int(origin.y);
+         float z = int(origin.z);
          // Break out direction vector.
          float dx = direction.x;
          float dy = direction.y;
@@ -56,9 +56,9 @@ bool RaycastHelper::raycast(ChunkManager &manager,
          float stepZ = signum(dz);
          // See description above. The initial values depend on the fractional
          // part of the origin.
-         int tMaxX = intbound(origin.x, dx);
-         int tMaxY = intbound(origin.y, dy);
-         int tMaxZ = intbound(origin.z, dz);
+         float tMaxX = intbound(origin.x, dx);
+         float tMaxY = intbound(origin.y, dy);
+         float tMaxZ = intbound(origin.z, dz);
          // The change in t when taking a step (always positive).
          float tDeltaX = stepX/dx;
          float tDeltaY = stepY/dy;
@@ -85,11 +85,11 @@ bool RaycastHelper::raycast(ChunkManager &manager,
              //if (callback(x, y, z, blocks[x*wy*wz + y*wz + z], face))
                //break;
 			 BlockType type = manager.getBlockType(sf::Vector3i(x,y,z));
-			 std::cout << "BT " << type << std::endl;
+			 //std::cout << "BT " << type << std::endl;
 			 if (type > Block::Air) {
 				 selectCube = sf::Vector3i(x,y,z);
 				 nextNorm = face;
-				 std::cout << "--" << std::endl;
+				 //std::cout << "--" << std::endl;
 				 return true;
 			 }
            
