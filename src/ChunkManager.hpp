@@ -21,7 +21,7 @@ class ChunkManager
 {
 	public:
 		
-		ChunkManager(const BlockList & list, Renderer & renderer);
+		ChunkManager(const BlockList & list);
 		
 		// tests
 		void init();

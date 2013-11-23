@@ -9,7 +9,7 @@ class RaycastHelper
 	public:
 		RaycastHelper();
 		bool raycast(ChunkManager & manager, sf::Vector3f & source, sf::Vector3f dir,
-					 sf::Vector3i & selectCube, sf::Vector3i & nextCube);
+					 sf::Vector3i & selectCube, sf::Vector3i & nextNorm);
 };
 
 #endif // RAYCASTHELPER_HPP

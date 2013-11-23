@@ -9,8 +9,8 @@
 
 using namespace std;
 
-#define SCREEN_WIDTH 400
-#define SCREEN_HEIGHT 300
+#define SCREEN_WIDTH 600
+#define SCREEN_HEIGHT 400
 
 int main(int argc, char ** argv) {
 
@@ -31,7 +31,7 @@ int main(int argc, char ** argv) {
 	
 	BlockList list;
 	
-	ChunkManager manager(list, renderer);
+	ChunkManager manager(list);
 	//manager.init();
 	WorldGenerator worldGenerator;
 	worldGenerator.generate(manager, 8,8,8);
@@ -108,17 +108,7 @@ int main(int argc, char ** argv) {
 										 event.mouseMove.y-SCREEN_HEIGHT/2);
 					sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2,SCREEN_HEIGHT/2), window);
 					
-					const Vector3D & pos = camera.getPosition();
-					const Vector3D & forw = camera.getForward();
 					
-					sf::Vector3i sel, next; 
-					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
-					RaycastHelper rh;
-					
-					if (rh.raycast(manager,src,dir,sel,next)) {
-						manager.setBlockType(sel, Block::Air);
-						cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
-					}
 				}
 				mouseMoved=!mouseMoved;
             }
@@ -136,6 +126,18 @@ int main(int argc, char ** argv) {
 //					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;					
 //					manager.setBlockType(bpos, Block::Dirt);
 					
+					
+					const Vector3D & pos = camera.getPosition();
+					const Vector3D & forw = camera.getForward();
+					
+					sf::Vector3i sel, next; 
+					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
+					RaycastHelper rh;
+					
+					if (rh.raycast(manager,src,dir,sel,next)) {
+						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+						manager.setBlockType(next, Block::Dirt);		
+					}
 					
 					
 				} else if (event.mouseButton.button == sf::Mouse::Right) {
@@ -173,6 +175,18 @@ int main(int argc, char ** argv) {
 		manager.update();
 		
 		camera.animate(10);
+		
+		const Vector3D & pos = camera.getPosition();
+		const Vector3D & forw = camera.getForward();
+		//cout << "Forward " << forw.X << " "<< forw.Y << " " << forw.Z<<endl;
+		sf::Vector3i sel, next; 
+		sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
+		RaycastHelper rh;
+		
+		if (rh.raycast(manager,src,dir,sel,next)) {
+			cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+			cout << " Next "<< next.x <<" "<<next.y<<" "<<next.z<<endl;
+		}
 		
 		
 		

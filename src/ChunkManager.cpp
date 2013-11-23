@@ -3,7 +3,7 @@
 #include "Mesh.hpp"
 #include "VectorTools.hpp"
 
-ChunkManager::ChunkManager(const BlockList &list, Renderer &renderer) : 
+ChunkManager::ChunkManager(const BlockList &list) : 
 	mList(list),
 	mPositionChunksToLoad(), mChunksToRebuild(),
 	mChunksToUnload()	, mPool(*this)

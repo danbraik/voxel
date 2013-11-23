@@ -1,3 +1,4 @@
+#include <iostream>
 #include "RaycastHelper.hpp"
 
 RaycastHelper::RaycastHelper()
@@ -8,7 +9,7 @@ bool RaycastHelper::raycast(ChunkManager &manager,
 							sf::Vector3f &source, 
 							sf::Vector3f dir, 
 							sf::Vector3i &selectCube, 
-							sf::Vector3i &nextCube)
+							sf::Vector3i &nextNorm)
 {
 	const float CX = Block::SIZE, CY = Block::SIZE, CZ = Block::SIZE;// -> const : taille cases
 	const float Max_Dist_carre = 250;// -> const : distance max à regarder au carré
@@ -34,9 +35,13 @@ bool RaycastHelper::raycast(ChunkManager &manager,
 	float DeltaZ = DeltaZy*DeltaZy + DeltaZx*DeltaZx;
 	
 //	-- si on regarde à droite on avance etc. ...
-	float Sx = dx > 0 ? 1 : -1;
-	float Sy = dy > 0 ? 1 : -1;
-	float Sz = dz > 0 ? 1 : -1;
+// !!
+	float Sx = dx > 0 ? 1 : dx < 0 ? -1 : 0;
+	float Sy = dy > 0 ? 1 : dy < 0 ? -1 : 0;
+	float Sz = dz > 0 ? 1 : dz < 0 ? -1 : 0;
+	
+	if (dx == 0 && dy == 0 && dz == 0)
+		return false;
 	
 	//-- coordonnées entières !
 	int Px = int(x/CX);
@@ -61,7 +66,7 @@ bool RaycastHelper::raycast(ChunkManager &manager,
 	
 	
 	
-	while (Pfx + Pfy + Pfz < Max_Dist_carre)// -- faux … plutôt ( (Pfx + (x*CX)^2) < Max_Dist_carre et … )
+	while ( Pfx + (x*CX)*(x*CX) < Max_Dist_carre)// et … )
 	{
 		if (Pfx < Pfy && Pfx < Pfz) { //le plus petit
 			Pfx += DeltaX;
@@ -76,14 +81,18 @@ bool RaycastHelper::raycast(ChunkManager &manager,
 			Pz += Sz;
 		}
 		
-		if (manager.getBlockType(sf::Vector3i(Px,Py,Pz)) == Block::Air) {
+		BlockType type = manager.getBlockType(sf::Vector3i(Px,Py,Pz));
+		std::cout << "BT "<<type<<std::endl;
+		
+		if (type > Block::Air) {
+			
 			selectCube.x = Px;
 			selectCube.y = Py;
 			selectCube.z = Pz;
 			
-			nextCube.x = -Sx;
-			nextCube.y = -Sy;
-			nextCube.z = -Sz;
+			nextNorm.x = -Sx;
+			nextNorm.y = -Sy;
+			nextNorm.z = -Sz;
 			
 			return true;
 		}
