@@ -150,6 +150,13 @@ int main(int argc, char ** argv) {
 		
 		camera.animate(10);
 		
+		{
+		const Vector3D & pos = camera.getPosition();
+		sf::Vector3i bpos( pos.X / Chunk::SIZE,
+						   pos.Y / Chunk::SIZE,
+						   pos.Z / Chunk::SIZE);
+		//manager.visible(bpos);
+		}
 		
 		
         renderer.clear();

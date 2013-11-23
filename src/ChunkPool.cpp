@@ -3,8 +3,8 @@
 #include "ChunkManager.hpp"
 
 
-#define MAX_TOTAL_CHUNKS 500
-#define INIT_CHUNKS 40
+#define MAX_TOTAL_CHUNKS 5000
+#define INIT_CHUNKS 4000
 //#define DEBUG_POOL
 
 ChunkPool::ChunkPool(const ChunkManager &manager) :

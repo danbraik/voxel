@@ -7,6 +7,8 @@
 #include <sstream>
 #include "Chunk.hpp"
 
+//#define DEBUG
+
 ChunkPersistence::ChunkPersistence() : mChunkPositions()
 {
 }
@@ -30,10 +32,12 @@ bool ChunkPersistence::loadChunk(Chunk *chunk)
 	
 	const sf::Vector3i & chunkPosition = chunk->getPosition();
 	
+#ifdef DEBUG
 	std::cout << "Persist : load (" << chunkPosition.x<<" "
 			  <<chunkPosition.y<< " "
 			 << chunkPosition.z<<")";
-	
+#endif	
+
 	// optimize : change container to find faster
 	for(PositionVector::iterator it = mChunkPositions.begin();
 		it != mChunkPositions.end();
@@ -44,13 +48,16 @@ bool ChunkPersistence::loadChunk(Chunk *chunk)
 				<< "." << chunkPosition.y
 				<< "." << chunkPosition.z
 				<< ".chunk";
-			
+#ifdef DEBUG			
 			std::cout << " OK" << std::endl;
+#endif
 			loadData(chunk, oss.str());
 			return true;
 		}
 	}
+#ifdef DEBUG
 	std::cout << " no"<<std::endl;
+#endif
 	return false;
 }
 
@@ -60,11 +67,12 @@ void ChunkPersistence::saveChunk(Chunk *chunk)
 		return;
 	
 	const sf::Vector3i & chunkPosition = chunk->getPosition();
-	
+
+#ifdef DEBUG	
 	std::cout << "Persist : Save (" << chunkPosition.x<<" "
 			  <<chunkPosition.y<< " "
 			 << chunkPosition.z<<")";
-	
+#endif
 	// change container to avoid double item
 	bool found = false;
 	for(PositionVector::iterator it = mChunkPositions.begin();
@@ -77,10 +85,13 @@ void ChunkPersistence::saveChunk(Chunk *chunk)
 	}
 	if (!found) {
 		mChunkPositions.push_back(chunkPosition);
+#ifdef DEBUG
 		std::cout << " New"	;
+#endif
 	}
+#ifdef DEBUG
 	std::cout << std::endl;
-	
+#endif
 	std::ostringstream oss;
 	oss <<  mDirectory << "/" << chunkPosition.x 
 		<< "." << chunkPosition.y
@@ -111,14 +122,9 @@ ChunkPersistence::~ChunkPersistence()
 	file.write((char*)&nbChunks,sizeof(sf::Int32));
 	
 	for(PositionVector::iterator it = mChunkPositions.begin();
-		it != mChunkPositions.end();
-		++it) {
-		
-		file.write((char*)&(*it),3*sizeof(int));
-		
+		it != mChunkPositions.end(); ++it) {
+		file.write((char*)&(*it),3*sizeof(int));		
 	}
-	
-	
 	
 	file.close();
 	
@@ -161,7 +167,9 @@ void ChunkPersistence::loadIndex()
 	sf::Vector3i pos;
 	for (int i = 0; i < nbChunks; ++i) {
 		file.read((char*)&pos, sizeof(int)*3);
+#ifdef DEBUG
 		std::cout << "Persist : Pos "<<pos.x <<" "<<pos.y<<" "<<pos.z <<std::endl;
+#endif
 		mChunkPositions.push_back(pos);
 	}	
 	

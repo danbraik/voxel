@@ -15,7 +15,7 @@ ChunkManager::ChunkManager(const BlockList &list, ChunkPersistence &persistence)
 Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) {
 	Chunk * chunk = mPool.getFreeChunk();
 	if (chunk != 0)
-	chunk->setPosition(chunkPosition);
+		chunk->setPosition(chunkPosition);
 	return chunk;
 }
 
@@ -154,9 +154,9 @@ void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, Block
 
 void ChunkManager::update()
 {
-	const int maxLoad = 5;
-	const int maxRebuild = 10;
-	const int maxUnload = 1;
+	const int maxLoad = 500;
+	const int maxRebuild = 1000;
+	const int maxUnload = 100;
 	
 	// -- Load chunks
 	int chunksLoaded = 0;
@@ -172,17 +172,24 @@ void ChunkManager::update()
 				chunk = createEmptyChunk(chunkPosition);	
 				if (chunk == 0)
 					break;
-				
+				//*				
 				if (!mPersistence.loadChunk(chunk))
-					chunk->init(); // load data
-				
-				mLoadedChunks[chunkPosition] = chunk;
+					chunk->init(); // new chunk
+				mLoadedChunks[chunkPosition] = chunk;//*/
+				/*
+				if (mPersistence.loadChunk(chunk))
+					mLoadedChunks[chunkPosition] = chunk;
+				else {
+					mPool.giveBackChunk(chunk);
+					continue;
+				}
+				//*/
 				
 				rebuildWithNeighbours(chunk, chunkPosition);
 			}
 		}
 		//mPositionChunksToLoad.clear();
-		std::cout << "CMup: (l) " << chunksLoaded << " loaded." << std::endl;
+		//std::cout << "CMup: (l) " << chunksLoaded << " loaded." << std::endl;
 	}
 	// -- end
 	
@@ -221,7 +228,7 @@ void ChunkManager::update()
 			
 		}
 		//mChunksToUnload.clear();
-		std::cout << "CMup: (u) " << chunkUnload << " Unloaded." << std::endl;
+		//std::cout << "CMup: (u) " << chunkUnload << " Unloaded." << std::endl;
 	}
 	// -- end
 	
