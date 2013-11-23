@@ -61,14 +61,16 @@ void Chunk::rebuild(const ChunkManager &manager)
 	data.reserve(SIZE*SIZE*SIZE*12);
 	int vertexCount = 0;
 	
-	sf::Vector3f ux(Block::SIZE,0,0);
-	sf::Vector3f uy(0,Block::SIZE,0);
-	sf::Vector3f uz(0,0,Block::SIZE);
+	const sf::Vector3f ux(Block::SIZE,0,0);
+	const sf::Vector3f uy(0,Block::SIZE,0);
+	const sf::Vector3f uz(0,0,Block::SIZE);
+	
+	const LocalChunkSystem local(manager, getPosition());
 	
 	for (int x=0;x < SIZE; ++x) {
 		for (int y=0;y < SIZE;++y){
 			for (int z=0;z<SIZE;++z) {
-				computeOneBlock(data, vertexCount, manager, x, y, z, ux, uy, uz);
+				computeOneBlock(data, vertexCount, local, x, y, z, ux, uy, uz);
 			}
 		}
 	}
@@ -105,8 +107,11 @@ void addVertexToMesh(std::vector<MeshFloat> & data,
 
 
 
-void Chunk::computeOneBlock(std::vector<MeshFloat> &data, int & vertexCount, const ChunkManager & manager, int x, int y, int z
-			, sf::Vector3f ux, sf::Vector3f uy, sf::Vector3f uz) {
+void Chunk::computeOneBlock(std::vector<MeshFloat> &data, 
+							int & vertexCount, 
+							const LocalChunkSystem &manager,
+							int x, int y, int z
+			, const sf::Vector3f & ux, const sf::Vector3f& uy, const sf::Vector3f& uz) {
 	
 	BlockType type = get(sf::Vector3i(x,y,z));
 	Block block = manager.getBlock(type);
@@ -192,7 +197,7 @@ void Chunk::draw() const
 	mMesh.draw();
 }
 
-inline BlockType Chunk::get(sf::Vector3i pos)
+inline BlockType Chunk::get(const sf::Vector3i &pos) const
 {
 	if (   pos.x >= 0 && pos.x < SIZE 
 		&& pos.y >= 0 && pos.y < SIZE

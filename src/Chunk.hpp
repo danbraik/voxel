@@ -7,6 +7,7 @@
 #include "Renderer.hpp"
 #include "Block.hpp"
 #include "Mesh.hpp"
+#include "LocalChunkSystem.hpp"
 
 class ChunkManager;
 
@@ -27,12 +28,17 @@ class Chunk
 		void rebuild(const ChunkManager & manager);
 		void draw() const;
 		
-		BlockType get(sf::Vector3i pos);
-		void set(const sf::Vector3i &pos, BlockType type);
+		BlockType get(const sf::Vector3i & pos) const;
+		void set(const sf::Vector3i & pos, BlockType type);
 		
 	private:
-		void computeOneBlock(std::vector<MeshFloat> & data, int &vertexCount, const ChunkManager &manager, int x, int y
-					, int z, sf::Vector3f ux, sf::Vector3f uy, sf::Vector3f uz);
+		void computeOneBlock(std::vector<MeshFloat> & data, 
+							 int &vertexCount, 
+							 const LocalChunkSystem & manager,
+							 int x, int y, int z, 
+							 const sf::Vector3f &ux,
+							 const sf::Vector3f &uy, 
+							 const sf::Vector3f &uz);
 		
 		sf::Vector3i mPosition;
 		

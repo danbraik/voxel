@@ -132,7 +132,7 @@ int main(int argc, char ** argv) {
 		sf::Vector3i bpos( tpos.X / Chunk::SIZE,
 						   tpos.Y / Chunk::SIZE,
 						   tpos.Z / Chunk::SIZE);
-		manager.visible(bpos);
+		//manager.visible(bpos);
 		
 		manager.update();
 		
