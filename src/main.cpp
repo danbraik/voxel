@@ -5,6 +5,7 @@
 #include "Freeflycamera.h"
 #include "ChunkManager.hpp"
 #include "WorldGenerator.hpp"
+#include "ChunkPersistence.hpp"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ int main(int argc, char ** argv) {
 	
 
     sf::RenderWindow window(
-                sf::VideoMode(800, 600), "Title", sf::Style::Default,
+                sf::VideoMode(600, 600), "Title", sf::Style::Default,
 				sf::ContextSettings(24));
 
     window.setVerticalSyncEnabled(true);
@@ -23,14 +24,22 @@ int main(int argc, char ** argv) {
 
 	Renderer renderer;
 	
+	ChunkPersistence persistence;
+	persistence.setDirectory("/home/daniel/projects/c_cpp/voxel/world");
 	
+//	Chunk c;
+//	c.setPosition(sf::Vector3i(0,1,2));
+//	persistence.loadChunk(&c);
+//	c.init();
+//	persistence.saveChunk(&c);
+//	return 0;
 	
 	BlockList list;
 	
-	ChunkManager manager(list, renderer);
-	//manager.init();
-	WorldGenerator worldGenerator;
-	worldGenerator.generate(manager, 8,8,8);
+	ChunkManager manager(list, persistence);
+	manager.init();
+	//WorldGenerator worldGenerator;
+	//worldGenerator.generate(manager, 8,8,8);
 	
 	
 //	Chunk chunk;
@@ -116,7 +125,7 @@ int main(int argc, char ** argv) {
 									   tpos.Y / Block::SIZE,
 									   tpos.Z / Block::SIZE);
 					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
-					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
+					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
 					manager.setBlockType(bpos, Block::Dirt);
 				} else if (event.mouseButton.button == sf::Mouse::Right) {
 					
@@ -124,8 +133,8 @@ int main(int argc, char ** argv) {
 					sf::Vector3i bpos( tpos.X / Block::SIZE,
 									   tpos.Y / Block::SIZE,
 									   tpos.Z / Block::SIZE);
-					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
-					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
+					//std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
+					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
 					manager.setBlockType(bpos, Block::Air);
 				} 
 						

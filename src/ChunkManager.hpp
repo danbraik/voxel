@@ -9,6 +9,7 @@
 #include <hash_map>
 #include "Chunk.hpp"
 #include "ChunkPool.hpp"
+#include "ChunkPersistence.hpp"
 
 struct HashConfiguration{
    size_t operator()(const sf::Vector3i & v) const {
@@ -21,7 +22,7 @@ class ChunkManager
 {
 	public:
 		
-		ChunkManager(const BlockList & list);
+		ChunkManager(const BlockList & list, ChunkPersistence & persistence);
 		
 		// tests
 		void init();
@@ -93,6 +94,9 @@ class ChunkManager
 		
 		// Pool : (de)allocate chunk
 		ChunkPool mPool;
+		
+		// Save to and load from disk
+		ChunkPersistence & mPersistence;
 		
 };
 

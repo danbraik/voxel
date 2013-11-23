@@ -10,6 +10,7 @@
 
 class LocalChunkSystem;
 class ChunkManager;
+class ChunkPersistence;
 
 class Chunk
 {
@@ -42,6 +43,8 @@ class Chunk
 							 const sf::Vector3f &ux,
 							 const sf::Vector3f &uy, 
 							 const sf::Vector3f &uz);
+		
+		friend class ChunkPersistence;
 		
 		sf::Vector3i mPosition;
 		

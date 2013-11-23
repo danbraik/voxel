@@ -11,9 +11,12 @@
 class Chunk;
 class ChunkManager;
 
+
 typedef std::stack<Chunk*> ChunkStack;
 typedef std::queue<Chunk*> ChunkQueue;
 typedef std::vector<Chunk*> ChunkVector;
+
+
 
 class ChunkPool
 {

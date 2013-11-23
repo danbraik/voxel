@@ -2,11 +2,12 @@
 #include "ChunkManager.hpp"
 #include "Mesh.hpp"
 #include "VectorTools.hpp"
+#include <algorithm>
 
-ChunkManager::ChunkManager(const BlockList &list, Renderer &renderer) : 
+ChunkManager::ChunkManager(const BlockList &list, ChunkPersistence &persistence) : 
 	mList(list),
 	mPositionChunksToLoad(), mChunksToRebuild(),
-	mChunksToUnload()	, mPool(*this)
+	mChunksToUnload()	, mPool(*this),mPersistence(persistence)
 {
 	
 }
@@ -20,9 +21,10 @@ Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) {
 
 void ChunkManager::init()
 {
-	for (int i=0; i< 6;++i)
-		for (int j=0; j< 6;++j) 
-			reqLoadChunk(sf::Vector3i(i,j,0));
+	const PositionVector & exis = mPersistence.getExistingPositions();
+	for(PositionVector::const_iterator it = exis.begin();
+		it != exis.end(); ++it)
+			reqLoadChunk(*it);
 }
 
 void ChunkManager::reinit()
@@ -171,7 +173,9 @@ void ChunkManager::update()
 				if (chunk == 0)
 					break;
 				
-				chunk->init(); // load data
+				if (!mPersistence.loadChunk(chunk))
+					chunk->init(); // load data
+				
 				mLoadedChunks[chunkPosition] = chunk;
 				
 				rebuildWithNeighbours(chunk, chunkPosition);
@@ -195,7 +199,7 @@ void ChunkManager::update()
 			(*it)->rebuild(*this);
 		}
 		//mChunksToRebuild.clear();
-		std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
+		//std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
 	}
 	//std::cout << "CMup: (a) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
 	//std::cout << std::endl;
@@ -211,7 +215,7 @@ void ChunkManager::update()
 			it = mChunksToUnload.erase(it), ++chunkUnload) {
 			
 			// save to disk
-			//..
+			mPersistence.saveChunk(*it);
 			mPool.giveBackChunk(*it);			
 			
 			
@@ -324,7 +328,7 @@ ChunkManager::~ChunkManager() {
 	for(ChunkMap::iterator it = mLoadedChunks.begin();
 		it != mLoadedChunks.end(); ++it) {
 		// unload (save to disk)
-		//...		
+		mPersistence.saveChunk(it->second);		
 		mPool.giveBackChunk(it->second);
 	}
 }
