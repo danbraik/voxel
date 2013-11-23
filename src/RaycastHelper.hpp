@@ -8,7 +8,7 @@ class RaycastHelper
 {
 	public:
 		RaycastHelper();
-		bool raycast(ChunkManager & manager, sf::Vector3f & source, sf::Vector3f dir,
+		bool raycast(ChunkManager & manager, sf::Vector3f & source, sf::Vector3f &direction,
 					 sf::Vector3i & selectCube, sf::Vector3i & nextNorm);
 };
 

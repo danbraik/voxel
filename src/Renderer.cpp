@@ -52,6 +52,13 @@ Renderer::Renderer()
 	 glClearColor(0.0, 0.0, 0.0, 1.0);
 }
 
+void Renderer::screen(int width, int height)
+{
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	gluPerspective(90.f, static_cast<float>(width)/height, 0.5f, 5000.f);
+}
+
 void Renderer::clear()
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);

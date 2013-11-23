@@ -26,6 +26,7 @@ int main(int argc, char ** argv) {
 	//window.setFramerateLimit(10);
 
 	Renderer renderer;
+	renderer.screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	
 	
@@ -42,6 +43,8 @@ int main(int argc, char ** argv) {
 //	chunk.update(renderer, manager);
 
 	FreeFlyCamera camera(Vector3D(12,-12,12));
+	
+	RaycastHelper rh;
 	
 	//avoid event when move cursor
 	bool mouseMoved = true;
@@ -132,11 +135,10 @@ int main(int argc, char ** argv) {
 					
 					sf::Vector3i sel, next; 
 					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
-					RaycastHelper rh;
 					
 					if (rh.raycast(manager,src,dir,sel,next)) {
 						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
-						manager.setBlockType(next, Block::Dirt);		
+						manager.setBlockType(sel+next, Block::Dirt);		
 					}
 					
 					
@@ -155,7 +157,7 @@ int main(int argc, char ** argv) {
 					
 					sf::Vector3i sel, next; 
 					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
-					RaycastHelper rh;
+				
 					
 					if (rh.raycast(manager,src,dir,sel,next)) {
 						manager.setBlockType(sel, Block::Air);
@@ -176,16 +178,21 @@ int main(int argc, char ** argv) {
 		
 		camera.animate(10);
 		
+		
+		sf::Vector3i selectedBlock;
+		{
 		const Vector3D & pos = camera.getPosition();
 		const Vector3D & forw = camera.getForward();
 		//cout << "Forward " << forw.X << " "<< forw.Y << " " << forw.Z<<endl;
 		sf::Vector3i sel, next; 
 		sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
-		RaycastHelper rh;
+		
 		
 		if (rh.raycast(manager,src,dir,sel,next)) {
 			cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
 			cout << " Next "<< next.x <<" "<<next.y<<" "<<next.z<<endl;
+			selectedBlock = sel;
+		}
 		}
 		
 		
@@ -194,20 +201,45 @@ int main(int argc, char ** argv) {
 		camera.look();
 		
 		glBegin(GL_LINES);
+			glColor3f(1,1,1);
 			glVertex3f(0,0,0);glVertex3f(1,0,0);
 			glVertex3f(0,0,0);glVertex3f(0,1,0);
 			glVertex3f(0,0,0);glVertex3f(0,0,1);
 		glEnd();
 		
-//		chunk.draw(renderer);
-//		for(int i=0;i<10;++i){
-//			renderer.translate(-Chunk::SIZE*Block::SIZE,0,0);
-//			chunk.draw(renderer);
-//		}
+		glPushMatrix();
+		
 		
 		manager.draw(renderer);
 		
+		glPopMatrix();
 		
+
+		// render selected block		
+		renderer.translate(selectedBlock.x,
+						   selectedBlock.y,
+						   selectedBlock.z);
+		glLineWidth(3);
+		//glDisable(GL_DEPTH_TEST);
+		glBegin(GL_LINES);
+			glColor3f(1,0,0);
+			glVertex3f(0,0,0);glVertex3f(1,0,0);
+			glVertex3f(0,0,0);glVertex3f(0,1,0);
+			glVertex3f(0,0,0);glVertex3f(0,0,1);
+			
+			glVertex3f(1,1,1);glVertex3f(1,0,1);
+			glVertex3f(1,1,1);glVertex3f(0,1,1);
+			glVertex3f(1,1,1);glVertex3f(1,1,0);
+			
+			glVertex3f(1,0,0);glVertex3f(1,1,0);
+			glVertex3f(1,0,0);glVertex3f(1,0,1);
+			glVertex3f(1,0,1);glVertex3f(0,0,1);
+			
+			glVertex3f(0,1,0);glVertex3f(1,1,0);
+			glVertex3f(0,1,0);glVertex3f(0,1,1);
+			glVertex3f(0,1,1);glVertex3f(0,0,1);
+		glEnd();
+		glEnable(GL_DEPTH_TEST);
 		
         window.display();
 		
