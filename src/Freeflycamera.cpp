@@ -99,6 +99,11 @@ const Vector3D &FreeFlyCamera::getTargetPosition()
 	return _target;
 }
 
+const Vector3D &FreeFlyCamera::getForward()
+{
+	return _forward;
+}
+
 void FreeFlyCamera::VectorsFromAngles()
 {
     static const Vector3D up(0,0,1);

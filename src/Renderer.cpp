@@ -52,6 +52,13 @@ Renderer::Renderer()
 	 glClearColor(0.0, 0.0, 0.0, 1.0);
 }
 
+void Renderer::screen(int width, int height)
+{
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	gluPerspective(90.f, static_cast<float>(width)/height, 0.5f, 5000.f);
+}
+
 void Renderer::clear()
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -71,38 +78,3 @@ void Renderer::lookAt(float eyeX, float eyeY, float eyeZ,
 	gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, 0, 0, 1.0);
 }
 
-void Renderer::beginMesh(int &id)
-{
-	//id = glGenLists(1);
-	//glNewList(id, GL_COMPILE);
-	//glBegin(GL_TRIANGLES);
-}
-
-void Renderer::addNormalToMesh(const sf::Vector3f & norm)
-{
-	//float l = norm.x*norm.x+norm.y*norm.y*norm.z*norm.z;
-	//l /= 2;
-	//glNormal3f(norm.x/l, norm.y/l, norm.z/l);
-}
-
-void Renderer::endMesh()
-{
-	//glEnd();
-	//glEndList();
-}
-
-void Renderer::addVertexToMesh(float x, float y, float z, int r, int g, int b)
-{
-	//glColor4ub(r,g,b, 255);
-	//glVertex3f(x, y, z);
-}
-
-void Renderer::addVertexToMesh(sf::Vector3f pos, int r, int g, int b)
-{
-	//addVertexToMesh(pos.x,pos.y,pos.z,r,g,b);
-}
-
-void Renderer::drawMesh(int &id)
-{
-	//glCallList(id);
-}

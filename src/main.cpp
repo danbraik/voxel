@@ -6,8 +6,12 @@
 #include "ChunkManager.hpp"
 #include "WorldGenerator.hpp"
 #include "ChunkPersistence.hpp"
+#include "RaycastHelper.hpp"
 
 using namespace std;
+
+#define SCREEN_WIDTH 600
+#define SCREEN_HEIGHT 400
 
 int main(int argc, char ** argv) {
 
@@ -16,30 +20,25 @@ int main(int argc, char ** argv) {
 	
 
     sf::RenderWindow window(
-                sf::VideoMode(600, 600), "Title", sf::Style::Default,
+                sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Title", sf::Style::Default,
 				sf::ContextSettings(24));
 
     window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(10);
 
 	Renderer renderer;
+	renderer.screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	ChunkPersistence persistence;
 	persistence.setDirectory("/home/daniel/projects/c_cpp/voxel/world");
 	
-//	Chunk c;
-//	c.setPosition(sf::Vector3i(0,1,2));
-//	persistence.loadChunk(&c);
-//	c.init();
-//	persistence.saveChunk(&c);
-//	return 0;
 	
 	BlockList list;
 	
 	ChunkManager manager(list, persistence);
-	manager.init();
-	//WorldGenerator worldGenerator;
-	//worldGenerator.generate(manager, 8,8,8);
+	//manager.init();
+	WorldGenerator worldGenerator;
+	worldGenerator.generate(manager, 8,8,8);
 	
 	
 //	Chunk chunk;
@@ -48,9 +47,11 @@ int main(int argc, char ** argv) {
 
 	FreeFlyCamera camera(Vector3D(12,-12,12));
 	
+	RaycastHelper rh;
+	
 	//avoid event when move cursor
 	bool mouseMoved = true;
-	sf::Mouse::setPosition(sf::Vector2i(400,600), window);
+	sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), window);
     // run the main loop
     bool running = true;
     while (running) {
@@ -109,8 +110,11 @@ int main(int argc, char ** argv) {
                 //event.mouseMove.x
                 //event.mouseMove.y
 				if (!mouseMoved){
-					camera.OnMouseMotion(event.mouseMove.x-400, event.mouseMove.y-300);
-					sf::Mouse::setPosition(sf::Vector2i(400,300), window);
+					camera.OnMouseMotion(event.mouseMove.x-SCREEN_WIDTH/2,
+										 event.mouseMove.y-SCREEN_HEIGHT/2);
+					sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2,SCREEN_HEIGHT/2), window);
+					
+					
 				}
 				mouseMoved=!mouseMoved;
             }
@@ -120,22 +124,49 @@ int main(int argc, char ** argv) {
             else if (event.type == sf::Event::MouseButtonReleased) {
 				if (event.mouseButton.button == sf::Mouse::Left) {
 					
-					const Vector3D & tpos = camera.getTargetPosition();
-					sf::Vector3i bpos( tpos.X / Block::SIZE,
-									   tpos.Y / Block::SIZE,
-									   tpos.Z / Block::SIZE);
-					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
+//					const Vector3D & tpos = camera.getTargetPosition();
+//					sf::Vector3i bpos( tpos.X / Block::SIZE,
+//									   tpos.Y / Block::SIZE,
+//									   tpos.Z / Block::SIZE);
+//					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
 					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
-					manager.setBlockType(bpos, Block::Dirt);
+//					manager.setBlockType(bpos, Block::Dirt);
+					
+					
+					const Vector3D & pos = camera.getPosition();
+					const Vector3D & forw = camera.getForward();
+					
+					sf::Vector3i sel, next; 
+					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
+					
+					if (rh.raycast(manager,src,dir,sel,next)) {
+						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+						manager.setBlockType(sel+next, Block::Dirt);		
+					}
+					
+					
 				} else if (event.mouseButton.button == sf::Mouse::Right) {
 					
-					const Vector3D & tpos = camera.getTargetPosition();
-					sf::Vector3i bpos( tpos.X / Block::SIZE,
-									   tpos.Y / Block::SIZE,
-									   tpos.Z / Block::SIZE);
+//					const Vector3D & tpos = camera.getTargetPosition();
+//					sf::Vector3i bpos( tpos.X / Block::SIZE,
+//									   tpos.Y / Block::SIZE,
+//									   tpos.Z / Block::SIZE);
 					//std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
 					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
-					manager.setBlockType(bpos, Block::Air);
+//					manager.setBlockType(bpos, Block::Air);
+					
+					const Vector3D & pos = camera.getPosition();
+					const Vector3D & forw = camera.getForward();
+					
+					sf::Vector3i sel, next; 
+					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
+				
+					
+					if (rh.raycast(manager,src,dir,sel,next)) {
+						manager.setBlockType(sel, Block::Air);
+						cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+					}
+					
 				} 
 						
             }
@@ -150,33 +181,68 @@ int main(int argc, char ** argv) {
 		
 		camera.animate(10);
 		
+		
+		sf::Vector3i selectedBlock;
 		{
 		const Vector3D & pos = camera.getPosition();
-		sf::Vector3i bpos( pos.X / Chunk::SIZE,
-						   pos.Y / Chunk::SIZE,
-						   pos.Z / Chunk::SIZE);
-		//manager.visible(bpos);
+		const Vector3D & forw = camera.getForward();
+		//cout << "Forward " << forw.X << " "<< forw.Y << " " << forw.Z<<endl;
+		sf::Vector3i sel, next; 
+		sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
+		
+		
+		if (rh.raycast(manager,src,dir,sel,next)) {
+			cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+			cout << " Next "<< next.x <<" "<<next.y<<" "<<next.z<<endl;
+			selectedBlock = sel;
 		}
+		}
+		
 		
 		
         renderer.clear();
 		camera.look();
 		
 		glBegin(GL_LINES);
+			glColor3f(1,1,1);
 			glVertex3f(0,0,0);glVertex3f(1,0,0);
 			glVertex3f(0,0,0);glVertex3f(0,1,0);
 			glVertex3f(0,0,0);glVertex3f(0,0,1);
 		glEnd();
 		
-//		chunk.draw(renderer);
-//		for(int i=0;i<10;++i){
-//			renderer.translate(-Chunk::SIZE*Block::SIZE,0,0);
-//			chunk.draw(renderer);
-//		}
+		glPushMatrix();
+		
 		
 		manager.draw(renderer);
 		
+		glPopMatrix();
 		
+
+		// render selected block		
+		renderer.translate(selectedBlock.x,
+						   selectedBlock.y,
+						   selectedBlock.z);
+		glLineWidth(3);
+		//glDisable(GL_DEPTH_TEST);
+		glBegin(GL_LINES);
+			glColor3f(1,0,0);
+			glVertex3f(0,0,0);glVertex3f(1,0,0);
+			glVertex3f(0,0,0);glVertex3f(0,1,0);
+			glVertex3f(0,0,0);glVertex3f(0,0,1);
+			
+			glVertex3f(1,1,1);glVertex3f(1,0,1);
+			glVertex3f(1,1,1);glVertex3f(0,1,1);
+			glVertex3f(1,1,1);glVertex3f(1,1,0);
+			
+			glVertex3f(1,0,0);glVertex3f(1,1,0);
+			glVertex3f(1,0,0);glVertex3f(1,0,1);
+			glVertex3f(1,0,1);glVertex3f(0,0,1);
+			
+			glVertex3f(0,1,0);glVertex3f(1,1,0);
+			glVertex3f(0,1,0);glVertex3f(0,1,1);
+			glVertex3f(0,1,1);glVertex3f(0,0,1);
+		glEnd();
+		glEnable(GL_DEPTH_TEST);
 		
         window.display();
 		

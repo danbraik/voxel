@@ -22,6 +22,7 @@ public:
     virtual void setPosition(const Vector3D & position);
 	virtual const Vector3D & getPosition();
 	virtual const Vector3D & getTargetPosition();
+	virtual const Vector3D & getForward();
 
     virtual void look();
 

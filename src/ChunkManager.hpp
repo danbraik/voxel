@@ -34,6 +34,7 @@ class ChunkManager
 		
 		const Block & getBlock(BlockType type) const;
 		const Block & getBlock(const sf::Vector3i & absoluteBlockPosition) const;
+		BlockType getBlockType(const sf::Vector3i & absoluteBlockPosition) const;
 		const Block & getRelativeBlock(const sf::Vector3i & fromChunkPosition,
 									   const sf::Vector3i & relativeBlockPosition) const;
 		
