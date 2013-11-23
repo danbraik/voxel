@@ -166,15 +166,14 @@ void ChunkManager::update()
 	int chunksLoaded = 0;
 	if (mPositionChunksToLoad.size() > 0) {
 		for(Vec3iList::iterator it = mPositionChunksToLoad.begin();
-			it != mPositionChunksToLoad.end() && chunksLoaded < maxLoad; ++it) {
-			++chunksLoaded;
+			it != mPositionChunksToLoad.end() && chunksLoaded < maxLoad;
+			it = mPositionChunksToLoad.erase(it), ++chunksLoaded) {
 			
 			const sf::Vector3i & chunkPosition = *it;
 			Chunk * chunk = 0;
 			
 			if(!isChunkLoaded(chunkPosition, chunk)) {
-				chunk = createEmptyChunk(chunkPosition);
-				
+				chunk = createEmptyChunk(chunkPosition);	
 				if (chunk == 0)
 					break;
 				
@@ -183,31 +182,29 @@ void ChunkManager::update()
 				
 				rebuildWithNeighbours(chunk, chunkPosition);
 			}
-			
-			// remove task
-			it = mPositionChunksToLoad.erase(it);
 		}
 		//mPositionChunksToLoad.clear();
+		std::cout << "CMup: (l) " << chunksLoaded << " loaded." << std::endl;
 	}
 	// -- end
 	
 	
 	// -- Rebuild chunks
-	std::cout << "CMup: (b) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
+	//std::cout << "CMup: (b) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
 	int chunkRebuild = 0;
 	if (mChunksToRebuild.size() > 0) {
 		for(ChunkList::iterator it = mChunksToRebuild.begin();
 			it != mChunksToRebuild.end() && chunkRebuild < maxRebuild;
-			it = mChunksToRebuild.erase(it++), ++chunkRebuild) {
+			it = mChunksToRebuild.erase(it), ++chunkRebuild) {
 			
 			
 			(*it)->rebuild(*this);
 		}
 		//mChunksToRebuild.clear();
+		std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
 	}
-	std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
-	std::cout << "CMup: (a) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
-	std::cout << std::endl;
+	//std::cout << "CMup: (a) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
+	//std::cout << std::endl;
 	// -- end
 	
 	
@@ -216,17 +213,17 @@ void ChunkManager::update()
 	int chunkUnload = 0;
 	if (mChunksToUnload.size() > 0) {
 		for(ChunkList::iterator it = mChunksToUnload.begin();
-			it != mChunksToUnload.end() && chunkUnload < maxUnload; ++it) {
-			++chunkUnload;
+			it != mChunksToUnload.end() && chunkUnload < maxUnload; 
+			it = mChunksToUnload.erase(it), ++chunkUnload) {
 			
 			// save to disk
 			//..
 			giveBackChunk(*it);			
 			
-			// rm task
-			it = mChunksToUnload.erase(it);
+			
 		}
 		//mChunksToUnload.clear();
+		std::cout << "CMup: (u) " << chunkUnload << " Unloaded." << std::endl;
 	}
 	// -- end
 	
@@ -280,7 +277,7 @@ bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition, const Chunk 
 		chunk = c;
 		return true;
 	}
-	return false;	
+	return false;
 }
 
 Chunk *ChunkManager::getChunk(const sf::Vector3i &chunkPosition) const
