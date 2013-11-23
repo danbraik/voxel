@@ -18,7 +18,7 @@ int main(int argc, char ** argv) {
 				sf::ContextSettings(24));
 
     window.setVerticalSyncEnabled(true);
-    // /* or */window.setFramerateLimit(60);
+	window.setFramerateLimit(10);
 
 	Renderer renderer;
 	

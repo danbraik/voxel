@@ -20,7 +20,8 @@ struct HashConfiguration{
 class ChunkManager
 {
 	public:
-		ChunkManager(BlockList & list, Renderer & renderer);
+		
+		ChunkManager(const BlockList & list, Renderer & renderer);
 		
 		// tests
 		void init();
@@ -28,7 +29,7 @@ class ChunkManager
 		void deleteChunk(sf::Vector3i & absBkPos);
 		void visible(const sf::Vector3i & absBkPos);
 		
-		Chunk * createEmptyChunk(const sf::Vector3i & chunkPosition);
+		
 		
 		const Block & getBlock(BlockType type) const;
 		const Block & getBlock(const sf::Vector3i & absoluteBlockPosition) const;
@@ -44,8 +45,8 @@ class ChunkManager
 		
 		~ChunkManager();
 		
-	private:
 		
+	private:	
 		sf::Vector3i getChkPosByAbsBkPos(const sf::Vector3i & absoluteBlockPosition) const;
 		sf::Vector3i getChkPosByRelBkPos(const sf::Vector3i & fromChunkPosition,
 										 const sf::Vector3i & relativeBlockPosition) const;
@@ -55,21 +56,26 @@ class ChunkManager
 											  const sf::Vector3i & toChunkPosition,
 											  const sf::Vector3i & relativeBlockPosition) const;
 		
+		
 		bool isChunkLoaded(const sf::Vector3i & chunkPosition, Chunk* &chunk) const;
+		bool isChunkLoaded(const sf::Vector3i & chunkPosition, const Chunk* &chunk) const;
+		Chunk * createEmptyChunk(const sf::Vector3i & chunkPosition);
 		Chunk * getChunk(const sf::Vector3i & chunkPosition) const;
+		
+		void rebuildWithNeighbours(Chunk* chunk, const sf::Vector3i & chunkPosition);
 		
 		// asynchronous requests
 		void reqLoadChunk(const sf::Vector3i & chunkPosition);
 		void reqRebuildChunk(Chunk* & chunk);
 		void reqUnloadChunk(Chunk* & chunk);
 		
+		
 		// internal (used to satisfy requests)
 		//...
-	
 		
+		friend class LocalChunkSystem;
 		
-		
-		BlockList & mList;
+		const BlockList & mList;
 		
 		typedef __gnu_cxx::hash_map<const sf::Vector3i, Chunk*, HashConfiguration> ChunkMap;
 		ChunkMap mLoadedChunks;
@@ -93,8 +99,6 @@ class ChunkManager
 		ChunkVector mPoolChunks;
 		
 		
-		// use it to compute near positions
-		const sf::Vector3i EX, EY, EZ;
 		
 		//tmp
 		Renderer & mRenderer;

@@ -1,13 +1,13 @@
-#include "ChunkManager.hpp"
 #include <iostream>
+#include "ChunkManager.hpp"
 #include "Mesh.hpp"
+#include "VectorTools.hpp"
 
-ChunkManager::ChunkManager(BlockList &list, Renderer &renderer) : 
+ChunkManager::ChunkManager(const BlockList &list, Renderer &renderer) : 
 	mList(list), mRenderer(renderer), 
 	mPositionChunksToLoad(), mChunksToRebuild(),
 	mChunksToUnload(),
-	mFreeChunks(),
-	EX(1,0,0),EY(0,1,0),EZ(0,0,1)
+	mFreeChunks()
 {
 	// init pool
 	for (int i=0;i<20;++i) {
@@ -58,7 +58,7 @@ void ChunkManager::visible(const sf::Vector3i &absBkPos)
 
 
 
-const Block &ChunkManager::getBlock(BlockType type) const
+const Block & ChunkManager::getBlock(BlockType type) const
 {
 	return mList.get(type);
 }
@@ -148,19 +148,23 @@ void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, Block
 			getInsideBkPosByAbsBkPos(chunkPosition, absoluteBlockPosition);
 	
 	chunk->set(insideChunkBlockPosition, type);
-	reqRebuildChunk(chunk);
+	
+	// todo : optimise again, select neighbours
+	if (Chunk::isStrictelyInside(insideChunkBlockPosition))
+		reqRebuildChunk(chunk);
+	else
+		rebuildWithNeighbours(chunk, chunkPosition);
 }
 
 void ChunkManager::update()
 {
-	int maxLoad = 5;
-	int maxRebuild = 5;
-	int maxUnload = 1;
+	const int maxLoad = 5;
+	const int maxRebuild = 10;
+	const int maxUnload = 1;
 	
 	// -- Load chunks
 	int chunksLoaded = 0;
 	if (mPositionChunksToLoad.size() > 0) {
-		Chunk * nearChunk = 0;
 		for(Vec3iList::iterator it = mPositionChunksToLoad.begin();
 			it != mPositionChunksToLoad.end() && chunksLoaded < maxLoad; ++it) {
 			++chunksLoaded;
@@ -177,20 +181,7 @@ void ChunkManager::update()
 				chunk->init(); // load data
 				mLoadedChunks[chunkPosition] = chunk;
 				
-				mChunksToRebuild.push_back(chunk);
-				
-				if (isChunkLoaded(chunkPosition + EX, nearChunk))
-					mChunksToRebuild.push_back(nearChunk);
-				if (isChunkLoaded(chunkPosition - EX, nearChunk))
-					mChunksToRebuild.push_back(nearChunk);
-				if (isChunkLoaded(chunkPosition + EY, nearChunk))
-					mChunksToRebuild.push_back(nearChunk);
-				if (isChunkLoaded(chunkPosition - EY, nearChunk))
-					mChunksToRebuild.push_back(nearChunk);
-				if (isChunkLoaded(chunkPosition + EZ, nearChunk))
-					mChunksToRebuild.push_back(nearChunk);
-				if (isChunkLoaded(chunkPosition - EZ, nearChunk))
-					mChunksToRebuild.push_back(nearChunk);
+				rebuildWithNeighbours(chunk, chunkPosition);
 			}
 			
 			// remove task
@@ -202,18 +193,21 @@ void ChunkManager::update()
 	
 	
 	// -- Rebuild chunks
+	std::cout << "CMup: (b) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
 	int chunkRebuild = 0;
 	if (mChunksToRebuild.size() > 0) {
 		for(ChunkList::iterator it = mChunksToRebuild.begin();
-			it != mChunksToRebuild.end() && chunkRebuild < maxRebuild; ++it) {
-			++chunkRebuild;
-			(*it)->rebuild(*this);
+			it != mChunksToRebuild.end() && chunkRebuild < maxRebuild;
+			it = mChunksToRebuild.erase(it++), ++chunkRebuild) {
 			
-			// rm task
-			it = mChunksToRebuild.erase(it);
+			
+			(*it)->rebuild(*this);
 		}
 		//mChunksToRebuild.clear();
 	}
+	std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
+	std::cout << "CMup: (a) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
+	std::cout << std::endl;
 	// -- end
 	
 	
@@ -235,7 +229,6 @@ void ChunkManager::update()
 		//mChunksToUnload.clear();
 	}
 	// -- end
-	
 	
 }
 
@@ -280,9 +273,41 @@ bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition, Chunk* & chu
 	return true;
 }
 
+bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition, const Chunk *& chunk) const
+{
+	Chunk * c;
+	if (isChunkLoaded(chunkPosition, c)) {
+		chunk = c;
+		return true;
+	}
+	return false;	
+}
+
 Chunk *ChunkManager::getChunk(const sf::Vector3i &chunkPosition) const
 {
 	return mLoadedChunks.find(chunkPosition)->second;
+}
+
+void ChunkManager::rebuildWithNeighbours(Chunk *chunk, const sf::Vector3i &chunkPosition)
+{
+	mChunksToRebuild.push_back(chunk);
+	
+	Chunk * nearChunk = 0;
+	if (isChunkLoaded(chunkPosition + VectorTools::EX, nearChunk))
+		mChunksToRebuild.push_back(nearChunk);
+	if (isChunkLoaded(chunkPosition - VectorTools::EX, nearChunk))
+		mChunksToRebuild.push_back(nearChunk);
+	if (isChunkLoaded(chunkPosition + VectorTools::EY, nearChunk))
+		mChunksToRebuild.push_back(nearChunk);
+	if (isChunkLoaded(chunkPosition - VectorTools::EY, nearChunk))
+		mChunksToRebuild.push_back(nearChunk);
+	if (isChunkLoaded(chunkPosition + VectorTools::EZ, nearChunk))
+		mChunksToRebuild.push_back(nearChunk);
+	if (isChunkLoaded(chunkPosition - VectorTools::EZ, nearChunk))
+		mChunksToRebuild.push_back(nearChunk);
+	
+	// need to rebuild others too (think about torches)
+	// ...
 }
 
 void ChunkManager::reqLoadChunk(const sf::Vector3i &chunkPosition)

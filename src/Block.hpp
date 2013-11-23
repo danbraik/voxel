@@ -20,10 +20,27 @@ class Block
 	public:	
 		Block();
 		void init(float rr,float gg,float bb, bool f) {
-			r=rr;g=gg;b=bb;filled=f;
+			mR=rr;mG=gg;mB=bb;mFilled=f;
 		}
-		float r,g,b;
-		bool filled;
+		
+		bool isFilled() const {
+			return mFilled;
+		}
+		
+		float r() const {
+			return mR;
+		}
+		float g() const {
+			return mG;
+		}
+		float b() const {
+			return mB;
+		}
+		
+	private:
+		float mR,mG,mB;
+		bool mFilled;
+		
 };
 
 
@@ -39,12 +56,12 @@ class BlockList {
 			mList[Block::Water].init(0,0,0,false);
 		}
 		
-		const Block & get(BlockType type) {
+		const Block & get(BlockType type) const {
 			return mList[type];
 		}
 		
 	private:
-		Block mList[10];
+		Block mList[5];
 	
 };
 

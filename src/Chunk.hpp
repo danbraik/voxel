@@ -7,8 +7,8 @@
 #include "Renderer.hpp"
 #include "Block.hpp"
 #include "Mesh.hpp"
-#include "LocalChunkSystem.hpp"
 
+class LocalChunkSystem;
 class ChunkManager;
 
 class Chunk
@@ -17,6 +17,9 @@ class Chunk
 		
 	public:
 		static const int SIZE = 8;
+		static const int SIZE_1 = SIZE - 1;
+		
+		static bool isStrictelyInside(const sf::Vector3i & blockPosition);
 		
 		Chunk();
 		
