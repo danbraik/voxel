@@ -20,7 +20,8 @@ SOURCES += src/main.cpp \
     src/ChunkManager.cpp \
     src/Mesh.cpp \
     src/LocalChunkSystem.cpp \
-    src/VectorTools.cpp
+    src/VectorTools.cpp \
+    src/ChunkPool.cpp
 
 HEADERS += \
     src/Renderer.hpp \
@@ -31,5 +32,6 @@ HEADERS += \
     src/Mesh.hpp \
     src/LocalChunkSystem.hpp \
     src/VectorTools.hpp \
-    src/ChunkManager.hpp
+    src/ChunkManager.hpp \
+    src/ChunkPool.hpp
 

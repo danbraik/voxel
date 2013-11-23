@@ -6,19 +6,13 @@
 ChunkManager::ChunkManager(const BlockList &list, Renderer &renderer) : 
 	mList(list), mRenderer(renderer), 
 	mPositionChunksToLoad(), mChunksToRebuild(),
-	mChunksToUnload(),
-	mFreeChunks()
+	mChunksToUnload()	, mPool(*this)
 {
-	// init pool
-	for (int i=0;i<20;++i) {
-		Chunk * const chunk = new Chunk;
-		mPoolChunks.push_back(chunk);
-		mFreeChunks.push(chunk);
-	}
+	
 }
 
 Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) {
-	Chunk * chunk = getFreeChunk();
+	Chunk * chunk = mPool.getFreeChunk();
 	if (chunk != 0)
 	chunk->setPosition(chunkPosition);
 	return chunk;
@@ -218,7 +212,7 @@ void ChunkManager::update()
 			
 			// save to disk
 			//..
-			giveBackChunk(*it);			
+			mPool.giveBackChunk(*it);			
 			
 			
 		}
@@ -324,68 +318,13 @@ void ChunkManager::reqUnloadChunk(Chunk* & chunk)
 	mChunksToUnload.push_back(chunk);
 }
 
-//#define DEBUG_POOL
-
-// Pool of chunk
-Chunk *ChunkManager::getFreeChunk()
-{
-	Chunk * chunk = 0;
-	
-	if (mFreeChunks.empty()) {
-		if (mPoolChunks.size() > 50 /*limit*/) {
-			if (mUsedChunks.size())
-				reqUnloadChunk(mUsedChunks.front());
-			return 0;
-		} // else
-		chunk = new Chunk;
-		mPoolChunks.push_back(chunk);
-#ifdef DEBUG_POOL
-		std::cout << "ChunkPool (n) : +1 chunk (=" << mPoolChunks.size() << ")" << std::endl;
-#endif
-		if (chunk == 0)
-			std::cerr << "Error when allocating chunk !" << std::endl;
-	} else {
-		chunk = mFreeChunks.top();
-		mFreeChunks.pop();
-#ifdef DEBUG_POOL
-		std::cout << "ChunkPool (n) : " << mFreeChunks.size() << " free chunk(s)" << std::endl;
-#endif
-	}
-	mUsedChunks.push(chunk);
-	
-	return chunk;
-}
-
-void ChunkManager::giveBackChunk(Chunk* & chunk)
-{
-	if (mUsedChunks.size() == 0)
-		std::cerr << "No used chunk but you want to give back one" << std::endl;
-	mFreeChunks.push(chunk);
-	while(mUsedChunks.front() != chunk) {
-		mUsedChunks.push(mUsedChunks.front());
-		mUsedChunks.pop();
-	}
-	mUsedChunks.pop();
-#ifdef DEBUG_POOL
-	std::cout << "ChunkPool (d) : " << mFreeChunks.size() << " free chunk(s)" << std::endl;
-#endif
-}
 
 
 ChunkManager::~ChunkManager() {
 	for(ChunkMap::iterator it = mLoadedChunks.begin();
 		it != mLoadedChunks.end(); ++it) {
-		giveBackChunk(it->second);
-	}
-	
-	
-	// delete pool
-	if (mFreeChunks.size() != mPoolChunks.size())
-		std::cerr << "ChunkPool, some chunk were not given back !" << std::endl;
-	Chunk * chunk;
-	while (!mFreeChunks.empty()) {
-		chunk = mFreeChunks.top();
-		mFreeChunks.pop();
-		delete chunk;
+		// unload (save to disk)
+		//...		
+		mPool.giveBackChunk(it->second);
 	}
 }

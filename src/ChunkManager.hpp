@@ -8,7 +8,7 @@
 #define _GLIBCXX_PERMIT_BACKWARD_HASH 0
 #include <hash_map>
 #include "Chunk.hpp"
-
+#include "ChunkPool.hpp"
 
 struct HashConfiguration{
    size_t operator()(const sf::Vector3i & v) const {
@@ -88,17 +88,8 @@ class ChunkManager
 		ChunkList mChunksToRebuild;
 		ChunkList mChunksToUnload;
 		
-		// Chunk pool
-		Chunk * getFreeChunk();
-		void giveBackChunk(Chunk* & chunk);
-		typedef std::stack<Chunk*> ChunkStack;
-		ChunkStack mFreeChunks;
-		typedef std::queue<Chunk*> ChunkQueue;
-		ChunkQueue mUsedChunks;
-		typedef std::vector<Chunk*> ChunkVector;
-		ChunkVector mPoolChunks;
-		
-		
+		friend class ChunkPool;
+		ChunkPool mPool;
 		
 		//tmp
 		Renderer & mRenderer;
