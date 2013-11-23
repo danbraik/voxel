@@ -10,13 +10,16 @@ ChunkManager::ChunkManager(BlockList &list, Renderer &renderer) :
 	EX(1,0,0),EY(0,1,0),EZ(0,0,1)
 {
 	// init pool
-	for (int i=0;i<10;++i)
-		mFreeChunks.push(new Chunk);
+	for (int i=0;i<20;++i) {
+		Chunk * const chunk = new Chunk;
+		mPoolChunks.push_back(chunk);
+		mFreeChunks.push(chunk);
+	}
 }
 
 Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) {
 	Chunk * chunk = getFreeChunk();
-	
+	if (chunk != 0)
 	chunk->setPosition(chunkPosition);
 	return chunk;
 }
@@ -45,6 +48,11 @@ void ChunkManager::deleteChunk(sf::Vector3i &absBkPos)
 	if (isChunkLoaded(cp,chunk)) {
 		reqUnloadChunk(chunk);
 	}
+}
+
+void ChunkManager::visible(const sf::Vector3i &absBkPos)
+{
+	reqLoadChunk(absBkPos);
 }
 
 
@@ -158,28 +166,32 @@ void ChunkManager::update()
 			++chunksLoaded;
 			
 			const sf::Vector3i & chunkPosition = *it;
+			Chunk * chunk = 0;
 			
-			
-			
-			Chunk * chunk = createEmptyChunk(chunkPosition);
-			chunk->init(); // load data
-			mLoadedChunks[chunkPosition] = chunk;
-			
-			mChunksToRebuild.push_back(chunk);
-			
-			if (isChunkLoaded(chunkPosition + EX, nearChunk))
-				mChunksToRebuild.push_back(nearChunk);
-			if (isChunkLoaded(chunkPosition - EX, nearChunk))
-				mChunksToRebuild.push_back(nearChunk);
-			if (isChunkLoaded(chunkPosition + EY, nearChunk))
-				mChunksToRebuild.push_back(nearChunk);
-			if (isChunkLoaded(chunkPosition - EY, nearChunk))
-				mChunksToRebuild.push_back(nearChunk);
-			if (isChunkLoaded(chunkPosition + EZ, nearChunk))
-				mChunksToRebuild.push_back(nearChunk);
-			if (isChunkLoaded(chunkPosition - EZ, nearChunk))
-				mChunksToRebuild.push_back(nearChunk);
-			
+			if(!isChunkLoaded(chunkPosition, chunk)) {
+				chunk = createEmptyChunk(chunkPosition);
+				
+				if (chunk == 0)
+					break;
+				
+				chunk->init(); // load data
+				mLoadedChunks[chunkPosition] = chunk;
+				
+				mChunksToRebuild.push_back(chunk);
+				
+				if (isChunkLoaded(chunkPosition + EX, nearChunk))
+					mChunksToRebuild.push_back(nearChunk);
+				if (isChunkLoaded(chunkPosition - EX, nearChunk))
+					mChunksToRebuild.push_back(nearChunk);
+				if (isChunkLoaded(chunkPosition + EY, nearChunk))
+					mChunksToRebuild.push_back(nearChunk);
+				if (isChunkLoaded(chunkPosition - EY, nearChunk))
+					mChunksToRebuild.push_back(nearChunk);
+				if (isChunkLoaded(chunkPosition + EZ, nearChunk))
+					mChunksToRebuild.push_back(nearChunk);
+				if (isChunkLoaded(chunkPosition - EZ, nearChunk))
+					mChunksToRebuild.push_back(nearChunk);
+			}
 			
 			// remove task
 			it = mPositionChunksToLoad.erase(it);
@@ -298,13 +310,16 @@ Chunk *ChunkManager::getFreeChunk()
 	
 	if (mFreeChunks.empty()) {
 //test
-//return 0;
+		if (mUsedChunks.size())
+		reqUnloadChunk(mUsedChunks.front());
+return 0;
 		chunk = new Chunk;
 		if (chunk == 0)
 			std::cerr << "Error when allocating chunk !" << std::endl;
 	} else {
 		chunk = mFreeChunks.top();
 		mFreeChunks.pop();
+		mUsedChunks.push(chunk);
 	}
 	std::cout << "ChunkPool (n) : " << mFreeChunks.size() << " free chunk(s)" << std::endl;
 	return chunk;
@@ -312,13 +327,22 @@ Chunk *ChunkManager::getFreeChunk()
 
 void ChunkManager::giveBackChunk(Chunk* & chunk)
 {
+	if (mUsedChunks.size() == 0)
+		std::cerr << "No used chunk but you want to give back one" << std::endl;
 	mFreeChunks.push(chunk);
+	while(mUsedChunks.front() != chunk) {
+		mUsedChunks.push(mUsedChunks.front());
+		mUsedChunks.pop();
+	}
+	mUsedChunks.pop();
 	std::cout << "ChunkPool (d) : " << mFreeChunks.size() << " free chunk(s)" << std::endl;
 }
 
 
 ChunkManager::~ChunkManager() {
 	// delete pool
+	if (mFreeChunks.size() != mPoolChunks.size())
+		std::cerr << "ChunkPool, some chunk were not given back !" << std::endl;
 	Chunk * chunk;
 	while (!mFreeChunks.empty()) {
 		chunk = mFreeChunks.top();

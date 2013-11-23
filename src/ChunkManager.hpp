@@ -3,6 +3,8 @@
 
 #include <list>
 #include <stack>
+#include <vector>
+#include <queue>
 #define _GLIBCXX_PERMIT_BACKWARD_HASH 0
 #include <hash_map>
 #include "Chunk.hpp"
@@ -24,6 +26,7 @@ class ChunkManager
 		void init();
 		void reinit();
 		void deleteChunk(sf::Vector3i & absBkPos);
+		void visible(const sf::Vector3i & absBkPos);
 		
 		Chunk * createEmptyChunk(const sf::Vector3i & chunkPosition);
 		
@@ -84,6 +87,10 @@ class ChunkManager
 		void giveBackChunk(Chunk* & chunk);
 		typedef std::stack<Chunk*> ChunkStack;
 		ChunkStack mFreeChunks;
+		typedef std::queue<Chunk*> ChunkQueue;
+		ChunkQueue mUsedChunks;
+		typedef std::vector<Chunk*> ChunkVector;
+		ChunkVector mPoolChunks;
 		
 		
 		// use it to compute near positions

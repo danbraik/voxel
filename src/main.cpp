@@ -76,7 +76,7 @@ int main(int argc, char ** argv) {
 					sf::Vector3i bpos( tpos.X / Block::SIZE,
 									   tpos.Y / Block::SIZE,
 									   tpos.Z / Block::SIZE);
-					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
+					//std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
 					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
 					manager.deleteChunk(bpos);
                 } else if (event.key.code == sf::Keyboard::I) {
@@ -128,11 +128,16 @@ int main(int argc, char ** argv) {
 						
             }
         }
-
+		const Vector3D & tpos = camera.getPosition();
+		sf::Vector3i bpos( tpos.X / Chunk::SIZE,
+						   tpos.Y / Chunk::SIZE,
+						   tpos.Z / Chunk::SIZE);
+		manager.visible(bpos);
 		
 		manager.update();
 		
 		camera.animate(10);
+		
 		
 		
         renderer.clear();
