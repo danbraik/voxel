@@ -23,7 +23,7 @@ class Chunk
 		
 		Chunk();
 		
-		void init();
+		void init();//test
 		
 		const sf::Vector3i & getPosition() const;
 		void setPosition(const sf::Vector3i & position);
@@ -49,5 +49,22 @@ class Chunk
 		
 		BlockType mArray[SIZE][SIZE][SIZE]; 
 };
+
+
+
+inline BlockType Chunk::get(const sf::Vector3i &pos) const
+{
+	if (   pos.x >= 0 && pos.x < SIZE 
+		&& pos.y >= 0 && pos.y < SIZE
+		&& pos.z >= 0 && pos.z < SIZE)
+		return mArray[pos.x][pos.y][pos.z];
+	return Block::NONE;
+}
+
+inline void Chunk::set(const sf::Vector3i & pos, BlockType type)
+{
+	if (pos.x >=0&&pos.x<SIZE&&pos.y>=0&&pos.y<SIZE&&pos.z>=0&&pos.z<SIZE)
+		mArray[pos.x][pos.y][pos.z] = type;
+}
 
 #endif // CHUNK_HPP

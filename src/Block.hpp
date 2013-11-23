@@ -56,13 +56,16 @@ class BlockList {
 			mList[Block::Water].init(0,0,0,false);
 		}
 		
-		const Block & get(BlockType type) const {
-			return mList[type];
-		}
+		const Block & get(BlockType type) const;
 		
 	private:
 		Block mList[5];
 	
 };
+
+
+inline const Block & BlockList::get(BlockType type) const {
+	return mList[type];
+}
 
 #endif // BLOCK_HPP

@@ -4,7 +4,7 @@
 #include "VectorTools.hpp"
 
 ChunkManager::ChunkManager(const BlockList &list, Renderer &renderer) : 
-	mList(list), mRenderer(renderer), 
+	mList(list),
 	mPositionChunksToLoad(), mChunksToRebuild(),
 	mChunksToUnload()	, mPool(*this)
 {

@@ -74,25 +74,26 @@ class ChunkManager
 		//...
 		
 		friend class LocalChunkSystem;
-		
-		const BlockList & mList;
+		friend class ChunkPool;
 		
 		typedef __gnu_cxx::hash_map<const sf::Vector3i, Chunk*, HashConfiguration> ChunkMap;
+		typedef std::list<sf::Vector3i> Vec3iList;
+		typedef std::list<Chunk*> ChunkList;
+		
+		// Dictionnary of blocks
+		const BlockList & mList;
+		
+		// All chunks
 		ChunkMap mLoadedChunks;
 		
-		
-		typedef std::list<sf::Vector3i> Vec3iList;
+		// Task lists
 		Vec3iList mPositionChunksToLoad;
-		
-		typedef std::list<Chunk*> ChunkList;
 		ChunkList mChunksToRebuild;
 		ChunkList mChunksToUnload;
 		
-		friend class ChunkPool;
+		// Pool : (de)allocate chunk
 		ChunkPool mPool;
 		
-		//tmp
-		Renderer & mRenderer;
 };
 
 #endif // CHUNKMANAGER_HPP

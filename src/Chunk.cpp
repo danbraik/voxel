@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <cstring>
 
 #include <iostream>
 #include <vector>
@@ -20,39 +21,44 @@ Chunk::Chunk() :  mPosition(), mMesh(), mArray()
 {
 }
 
-void Chunk::init()
-{
-	int h = random()%(SIZE-4)+2;
+void Chunk::init() {
 	
-	if (h < 0) h = 0;
-	if (h > SIZE) h = SIZE;
+	for(int x=0;x<SIZE;++x)
+		for(int y=0;y<SIZE;++y)
+			for(int z=0;z<SIZE;++z)
+				mArray[x][y][z] = Block::Air;
 	
-	for (int z=0;z<h;++z) {
-	for (int x=0;x < SIZE; ++x) {
-		for (int y=0;y < SIZE;++y){
-			set(sf::Vector3i(x,y,z), Block::Stone);
-		}
-	}
-	}
+//	int h = random()%(SIZE-4)+2;
 	
-	if (h+1 < SIZE) {
-		for (int x=0;x < SIZE; ++x) {
-			for (int y=0;y < SIZE;++y){
-				if (std::rand() % 5 == 0)
-					set(sf::Vector3i(x,y,h), Block::Dirt);
-				else
-					set(sf::Vector3i(x,y,h), Block::Air);
-			}
-		}
+//	if (h < 0) h = 0;
+//	if (h > SIZE) h = SIZE;
+	
+//	for (int z=0;z<h;++z) {
+//	for (int x=0;x < SIZE; ++x) {
+//		for (int y=0;y < SIZE;++y){
+//			set(sf::Vector3i(x,y,z), Block::Stone);
+//		}
+//	}
+//	}
+	
+//	if (h+1 < SIZE) {
+//		for (int x=0;x < SIZE; ++x) {
+//			for (int y=0;y < SIZE;++y){
+//				if (std::rand() % 5 == 0)
+//					set(sf::Vector3i(x,y,h), Block::Dirt);
+//				else
+//					set(sf::Vector3i(x,y,h), Block::Air);
+//			}
+//		}
 		
-		for (int z=h+1;z<SIZE;++z) {
-		for (int x=0;x < SIZE; ++x) {
-			for (int y=0;y < SIZE;++y){
-				set(sf::Vector3i(x,y,z), Block::Air);
-			}
-		}
-		}
-	}
+//		for (int z=h+1;z<SIZE;++z) {
+//		for (int x=0;x < SIZE; ++x) {
+//			for (int y=0;y < SIZE;++y){
+//				set(sf::Vector3i(x,y,z), Block::Air);
+//			}
+//		}
+//		}
+//	}
 }
 
 const sf::Vector3i &Chunk::getPosition() const
@@ -89,10 +95,6 @@ void Chunk::rebuild(const ChunkManager &manager)
 	
 	//std::cout << "Capacity " << data.size() << " / " << SIZE*SIZE*SIZE*12 << "; capacit " << data.capacity() <<  std::endl;
 	mMesh.setData(data.data(), vertexCount);
-}
-
-void addNormalToMesh(std::vector<MeshFloat> & data, sf::Vector3f pos) {
-	
 }
 
 void addVertexToMesh(std::vector<MeshFloat> & data, 
@@ -209,17 +211,5 @@ void Chunk::draw() const
 	mMesh.draw();
 }
 
-inline BlockType Chunk::get(const sf::Vector3i &pos) const
-{
-	if (   pos.x >= 0 && pos.x < SIZE 
-		&& pos.y >= 0 && pos.y < SIZE
-		&& pos.z >= 0 && pos.z < SIZE)
-		return mArray[pos.x][pos.y][pos.z];
-	return Block::NONE;
-}
 
-inline void Chunk::set(const sf::Vector3i & pos, BlockType type)
-{
-	if (pos.x >=0&&pos.x<SIZE&&pos.y>=0&&pos.y<SIZE&&pos.z>=0&&pos.z<SIZE)
-		mArray[pos.x][pos.y][pos.z] = type;
-}
+
