@@ -22,7 +22,8 @@ SOURCES += src/main.cpp \
     src/LocalChunkSystem.cpp \
     src/VectorTools.cpp \
     src/ChunkPool.cpp \
-    src/WorldGenerator.cpp
+    src/WorldGenerator.cpp \
+    src/RaycastHelper.cpp
 
 HEADERS += \
     src/Renderer.hpp \
@@ -35,5 +36,6 @@ HEADERS += \
     src/VectorTools.hpp \
     src/ChunkManager.hpp \
     src/ChunkPool.hpp \
-    src/WorldGenerator.hpp
+    src/WorldGenerator.hpp \
+    src/RaycastHelper.hpp
 

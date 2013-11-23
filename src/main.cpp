@@ -5,8 +5,12 @@
 #include "Freeflycamera.h"
 #include "ChunkManager.hpp"
 #include "WorldGenerator.hpp"
+#include "RaycastHelper.hpp"
 
 using namespace std;
+
+#define SCREEN_WIDTH 400
+#define SCREEN_HEIGHT 300
 
 int main(int argc, char ** argv) {
 
@@ -15,7 +19,7 @@ int main(int argc, char ** argv) {
 	
 
     sf::RenderWindow window(
-                sf::VideoMode(800, 600), "Title", sf::Style::Default,
+                sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Title", sf::Style::Default,
 				sf::ContextSettings(24));
 
     window.setVerticalSyncEnabled(true);
@@ -41,7 +45,7 @@ int main(int argc, char ** argv) {
 	
 	//avoid event when move cursor
 	bool mouseMoved = true;
-	sf::Mouse::setPosition(sf::Vector2i(400,600), window);
+	sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), window);
     // run the main loop
     bool running = true;
     while (running) {
@@ -100,8 +104,21 @@ int main(int argc, char ** argv) {
                 //event.mouseMove.x
                 //event.mouseMove.y
 				if (!mouseMoved){
-					camera.OnMouseMotion(event.mouseMove.x-400, event.mouseMove.y-300);
-					sf::Mouse::setPosition(sf::Vector2i(400,300), window);
+					camera.OnMouseMotion(event.mouseMove.x-SCREEN_WIDTH/2,
+										 event.mouseMove.y-SCREEN_HEIGHT/2);
+					sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2,SCREEN_HEIGHT/2), window);
+					
+					const Vector3D & pos = camera.getPosition();
+					const Vector3D & forw = camera.getForward();
+					
+					sf::Vector3i sel, next; 
+					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
+					RaycastHelper rh;
+					
+					if (rh.raycast(manager,src,dir,sel,next)) {
+						manager.setBlockType(sel, Block::Air);
+						cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+					}
 				}
 				mouseMoved=!mouseMoved;
             }
@@ -111,22 +128,38 @@ int main(int argc, char ** argv) {
             else if (event.type == sf::Event::MouseButtonReleased) {
 				if (event.mouseButton.button == sf::Mouse::Left) {
 					
-					const Vector3D & tpos = camera.getTargetPosition();
-					sf::Vector3i bpos( tpos.X / Block::SIZE,
-									   tpos.Y / Block::SIZE,
-									   tpos.Z / Block::SIZE);
-					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
-					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
-					manager.setBlockType(bpos, Block::Dirt);
+//					const Vector3D & tpos = camera.getTargetPosition();
+//					sf::Vector3i bpos( tpos.X / Block::SIZE,
+//									   tpos.Y / Block::SIZE,
+//									   tpos.Z / Block::SIZE);
+//					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
+//					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;					
+//					manager.setBlockType(bpos, Block::Dirt);
+					
+					
+					
 				} else if (event.mouseButton.button == sf::Mouse::Right) {
 					
-					const Vector3D & tpos = camera.getTargetPosition();
-					sf::Vector3i bpos( tpos.X / Block::SIZE,
-									   tpos.Y / Block::SIZE,
-									   tpos.Z / Block::SIZE);
-					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
-					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
-					manager.setBlockType(bpos, Block::Air);
+//					const Vector3D & tpos = camera.getTargetPosition();
+//					sf::Vector3i bpos( tpos.X / Block::SIZE,
+//									   tpos.Y / Block::SIZE,
+//									   tpos.Z / Block::SIZE);
+//					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
+//					cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
+//					manager.setBlockType(bpos, Block::Air);
+					
+					const Vector3D & pos = camera.getPosition();
+					const Vector3D & forw = camera.getForward();
+					
+					sf::Vector3i sel, next; 
+					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
+					RaycastHelper rh;
+					
+					if (rh.raycast(manager,src,dir,sel,next)) {
+						manager.setBlockType(sel, Block::Air);
+						cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+					}
+					
 				} 
 						
             }

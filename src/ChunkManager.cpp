@@ -91,18 +91,23 @@ inline sf::Vector3i ChunkManager::getInsideBkPosByRelBkPos(const sf::Vector3i & 
 
 const Block &ChunkManager::getBlock(const sf::Vector3i & absoluteBlockPosition) const
 {
+	return mList.get( getBlockType(absoluteBlockPosition) );
+}
+
+BlockType ChunkManager::getBlockType(const sf::Vector3i &absoluteBlockPosition) const
+{
 	sf::Vector3i chunkPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
 	Chunk * chunk = 0;
 	
 	if (!isChunkLoaded(chunkPosition, chunk)) {
-		return mList.get(Block::NONE);
+		return Block::NONE;
 	}
 	
 	sf::Vector3i insideChunkBlockPosition =
 			absoluteBlockPosition -
 			(chunkPosition) * Chunk::SIZE;
 	
-	return mList.get( chunk->get(insideChunkBlockPosition) );
+	return chunk->get(insideChunkBlockPosition);
 }
 
 const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & fromChunkPosition,
@@ -195,7 +200,7 @@ void ChunkManager::update()
 			(*it)->rebuild(*this);
 		}
 		//mChunksToRebuild.clear();
-		std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
+		//std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
 	}
 	//std::cout << "CMup: (a) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
 	//std::cout << std::endl;
