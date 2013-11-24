@@ -24,7 +24,7 @@ class ChunkPool
 		ChunkPool(const ChunkManager & manager);
 		
 		Chunk * getFreeChunk();
-		void giveBackChunk(Chunk* & chunk);
+		void giveBackChunk(Chunk *chunk);
 		
 		~ChunkPool();		
 		

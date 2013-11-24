@@ -38,6 +38,8 @@ class Chunk
 		void setModified(bool modified = true);
 		bool isModified();
 		
+		int todo;
+		
 	private:
 		void computeOneBlock(std::vector<MeshFloat> & data, 
 							 int &vertexCount, 

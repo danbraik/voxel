@@ -67,7 +67,7 @@ void ChunkPersistence::saveChunk(Chunk *chunk)
 	if (chunk==0)
 		return;
 	
-	if (chunk->isModified())
+	if (!chunk->isModified())
 		return;
 	
 	const sf::Vector3i & chunkPosition = chunk->getPosition();

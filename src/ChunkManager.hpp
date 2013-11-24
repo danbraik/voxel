@@ -7,6 +7,7 @@
 #include <queue>
 #define _GLIBCXX_PERMIT_BACKWARD_HASH 0
 #include <hash_map>
+#include <hash_set>
 #include "Chunk.hpp"
 #include "ChunkPool.hpp"
 #include "ChunkPersistence.hpp"
@@ -15,6 +16,12 @@
 struct HashConfiguration{
    size_t operator()(const sf::Vector3i & v) const {
 	   return v.x + 256*v.y+ 256*256*v.z;
+   }
+};
+
+struct HashChunkPtr{
+   size_t operator()(Chunk*const& c) const {
+	   return (long)c;
    }
 };
 
@@ -31,6 +38,7 @@ class ChunkManager
 		void deleteChunk(sf::Vector3i & absBkPos);
 		void loadChunk(const sf::Vector3i & absBkPos);
 		void visible(const sf::Vector3i & absBkPos);
+		void resetChunk(const sf::Vector3i & absBkPos);
 		
 		
 		
@@ -81,7 +89,9 @@ class ChunkManager
 		friend class ChunkPool;
 		
 		typedef __gnu_cxx::hash_map<const sf::Vector3i, Chunk*, HashConfiguration> ChunkMap;
+		typedef __gnu_cxx::hash_set<Chunk*, HashChunkPtr> ChunkSet;
 		typedef std::list<sf::Vector3i> Vec3iList;
+		typedef __gnu_cxx::hash_set<sf::Vector3i, HashConfiguration> PositionSet;
 		typedef std::list<Chunk*> ChunkList;
 		
 		// Dictionnary of blocks
@@ -91,9 +101,9 @@ class ChunkManager
 		ChunkMap mLoadedChunks;
 		
 		// Task lists
-		Vec3iList mPositionChunksToLoad;
-		ChunkList mChunksToRebuild;
-		ChunkList mChunksToUnload;
+		PositionSet mPositionChunksToLoad;
+		ChunkSet mChunksToRebuild;
+		ChunkSet mChunksToUnload;
 		
 		// Pool : (de)allocate chunk
 		ChunkPool mPool;

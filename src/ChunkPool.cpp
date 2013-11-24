@@ -50,7 +50,7 @@ Chunk *ChunkPool::getFreeChunk()
 	return chunk;
 }
 
-void ChunkPool::giveBackChunk(Chunk *&chunk)
+void ChunkPool::giveBackChunk(Chunk * chunk)
 {
 	if (mUsedChunks.size() == 0)
 		std::cerr << "No used chunk but you want to give back one" << std::endl;

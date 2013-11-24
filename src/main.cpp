@@ -36,7 +36,7 @@ int main(int argc, char ** argv) {
 	BlockList list;
 	
 	ChunkManager manager(list, persistence);
-	//manager.init();
+	manager.init();
 	WorldGenerator worldGenerator;
 	//worldGenerator.generate(manager, 8,8,8);
 	
@@ -98,7 +98,9 @@ int main(int argc, char ** argv) {
 					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
 					manager.deleteChunk(bpos);
                 } else if (event.key.code == sf::Keyboard::I) {
-					manager.reinit();
+					const Vector3D & tpos = camera.getTargetPosition();
+					sf::Vector3i bpos( tpos.X, tpos.Y,tpos.Z);
+					manager.resetChunk(bpos);
                 } else if (event.key.code == sf::Keyboard::LShift) {
 					camera.OnKeyboard(FreeFlyCamera::boost, false);
                 } else if (event.key.code == sf::Keyboard::Z) {

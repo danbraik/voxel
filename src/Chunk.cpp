@@ -17,7 +17,7 @@ bool Chunk::isStrictelyInside(const sf::Vector3i & blockPosition)
 
 
 
-Chunk::Chunk() :  mPosition(), mMesh(), mArray(), mIsModified(false)
+Chunk::Chunk() :  mPosition(), mMesh(), mArray(), mIsModified(false), todo(0)
 {
 }
 
