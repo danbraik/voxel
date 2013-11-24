@@ -24,7 +24,7 @@ class Chunk
 		
 		Chunk();
 		
-		void init();//test
+		void reset();//test
 		
 		const sf::Vector3i & getPosition() const;
 		void setPosition(const sf::Vector3i & position);
@@ -34,6 +34,9 @@ class Chunk
 		
 		BlockType get(const sf::Vector3i & pos) const;
 		void set(const sf::Vector3i & pos, BlockType type);
+		
+		void setModified(bool modified = true);
+		bool isModified();
 		
 	private:
 		void computeOneBlock(std::vector<MeshFloat> & data, 
@@ -51,6 +54,8 @@ class Chunk
 		Mesh mMesh;
 		
 		BlockType mArray[SIZE][SIZE][SIZE]; 
+		
+		bool mIsModified;
 };
 
 
@@ -69,5 +74,7 @@ inline void Chunk::set(const sf::Vector3i & pos, BlockType type)
 	if (pos.x >=0&&pos.x<SIZE&&pos.y>=0&&pos.y<SIZE&&pos.z>=0&&pos.z<SIZE)
 		mArray[pos.x][pos.y][pos.z] = type;
 }
+
+
 
 #endif // CHUNK_HPP

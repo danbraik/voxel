@@ -10,6 +10,7 @@
 #include "Chunk.hpp"
 #include "ChunkPool.hpp"
 #include "ChunkPersistence.hpp"
+#include "WorldGenerator.hpp"
 
 struct HashConfiguration{
    size_t operator()(const sf::Vector3i & v) const {
@@ -28,6 +29,7 @@ class ChunkManager
 		void init();
 		void reinit();
 		void deleteChunk(sf::Vector3i & absBkPos);
+		void loadChunk(const sf::Vector3i & absBkPos);
 		void visible(const sf::Vector3i & absBkPos);
 		
 		
@@ -98,6 +100,10 @@ class ChunkManager
 		
 		// Save to and load from disk
 		ChunkPersistence & mPersistence;
+		
+		
+		// test
+		WorldGenerator mWorldGen;
 		
 };
 

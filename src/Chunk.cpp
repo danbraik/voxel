@@ -17,11 +17,15 @@ bool Chunk::isStrictelyInside(const sf::Vector3i & blockPosition)
 
 
 
-Chunk::Chunk() :  mPosition(), mMesh(), mArray()
+Chunk::Chunk() :  mPosition(), mMesh(), mArray(), mIsModified(false)
 {
 }
 
-void Chunk::init() {
+void Chunk::reset() {
+	
+	// reset data
+	
+	mIsModified = false;
 	
 	for(int x=0;x<SIZE;++x)
 		for(int y=0;y<SIZE;++y)
@@ -209,6 +213,17 @@ void Chunk::computeOneBlock(std::vector<MeshFloat> &data,
 void Chunk::draw() const
 {
 	mMesh.draw();
+}
+
+
+void Chunk::setModified(bool modified)
+{
+	mIsModified = modified;
+}
+
+bool Chunk::isModified()
+{
+	return mIsModified;
 }
 
 

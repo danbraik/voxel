@@ -10,8 +10,8 @@
 
 using namespace std;
 
-#define SCREEN_WIDTH 600
-#define SCREEN_HEIGHT 400
+#define SCREEN_WIDTH 600 //1366
+#define SCREEN_HEIGHT 400//768
 
 int main(int argc, char ** argv) {
 
@@ -38,7 +38,7 @@ int main(int argc, char ** argv) {
 	ChunkManager manager(list, persistence);
 	//manager.init();
 	WorldGenerator worldGenerator;
-	worldGenerator.generate(manager, 8,8,8);
+	//worldGenerator.generate(manager, 8,8,8);
 	
 	
 //	Chunk chunk;
@@ -84,11 +84,16 @@ int main(int argc, char ** argv) {
             }
             else if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Up) {
+                } else if (event.key.code == sf::Keyboard::L) {
+					const Vector3D & tpos = camera.getPosition();
+					sf::Vector3i bpos( tpos.X,tpos.Y,tpos.Z);
+					manager.loadChunk(bpos);
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+						manager.visible(bpos);
+					}
                 } else if (event.key.code == sf::Keyboard::U) {
 					const Vector3D & tpos = camera.getTargetPosition();
-					sf::Vector3i bpos( tpos.X / Block::SIZE,
-									   tpos.Y / Block::SIZE,
-									   tpos.Z / Block::SIZE);
+					sf::Vector3i bpos( tpos.X, tpos.Y,tpos.Z);
 					//std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
 					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
 					manager.deleteChunk(bpos);
@@ -171,11 +176,7 @@ int main(int argc, char ** argv) {
 						
             }
         }
-		const Vector3D & tpos = camera.getPosition();
-		sf::Vector3i bpos( tpos.X / Chunk::SIZE,
-						   tpos.Y / Chunk::SIZE,
-						   tpos.Z / Chunk::SIZE);
-		//manager.visible(bpos);
+		
 		
 		manager.update();
 		
@@ -192,8 +193,8 @@ int main(int argc, char ** argv) {
 		
 		
 		if (rh.raycast(manager,src,dir,sel,next)) {
-			cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
-			cout << " Next "<< next.x <<" "<<next.y<<" "<<next.z<<endl;
+			//cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+			//cout << " Next "<< next.x <<" "<<next.y<<" "<<next.z<<endl;
 			selectedBlock = sel;
 		}
 		}
@@ -242,7 +243,7 @@ int main(int argc, char ** argv) {
 			glVertex3f(0,1,0);glVertex3f(0,1,1);
 			glVertex3f(0,1,1);glVertex3f(0,0,1);
 		glEnd();
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		
         window.display();
 		

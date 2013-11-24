@@ -1,5 +1,8 @@
 #include "WorldGenerator.hpp"
 #include "ChunkManager.hpp"
+#include <cmath>
+
+#define SIZE Chunk::SIZE
 
 WorldGenerator::WorldGenerator()
 {
@@ -35,5 +38,29 @@ void WorldGenerator::generate(ChunkManager &manager, int w, int l, int h)
 		}
 	}
 	
+	
+}
+
+void WorldGenerator::gen(Chunk *chunk)
+{
+	const sf::Vector3i & pos = chunk->getPosition();
+	int h = (std::sin(pos.x*SIZE)+2) * 6;
+	if (h < pos.z*SIZE) // air
+		return;
+	
+	int dirth = h*7/10.;
+	
+	int z;
+	for (z = 0; z < SIZE && z+pos.z*SIZE < dirth;++z ) {
+		for(int x=0;x<SIZE;++x)
+			for (int y=0;y<SIZE;++y)
+				chunk->set(sf::Vector3i(x,y,z), Block::Stone);
+	}
+	
+	for (; z < SIZE && z+pos.z*SIZE < h;++z ) {
+		for(int x=0;x<SIZE;++x)
+			for (int y=0;y<SIZE;++y)
+				chunk->set(sf::Vector3i(x,y,z), Block::Dirt);
+	}
 	
 }

@@ -137,7 +137,7 @@ bool RaycastHelper::raycast(ChunkManager &manager,
            }
          }
 		 
-		 std::cout << "--" << std::endl;
+		 //std::cout << "--" << std::endl;
 		 return false;
 	
 }

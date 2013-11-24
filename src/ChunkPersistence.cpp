@@ -8,6 +8,7 @@
 #include "Chunk.hpp"
 
 //#define DEBUG
+//#define DEBUG_LOAD_1
 
 ChunkPersistence::ChunkPersistence() : mChunkPositions()
 {
@@ -32,7 +33,7 @@ bool ChunkPersistence::loadChunk(Chunk *chunk)
 	
 	const sf::Vector3i & chunkPosition = chunk->getPosition();
 	
-#ifdef DEBUG
+#ifdef DEBUG_LOAD_1
 	std::cout << "Persist : load (" << chunkPosition.x<<" "
 			  <<chunkPosition.y<< " "
 			 << chunkPosition.z<<")";
@@ -64,6 +65,9 @@ bool ChunkPersistence::loadChunk(Chunk *chunk)
 void ChunkPersistence::saveChunk(Chunk *chunk)
 {
 	if (chunk==0)
+		return;
+	
+	if (chunk->isModified())
 		return;
 	
 	const sf::Vector3i & chunkPosition = chunk->getPosition();
@@ -107,6 +111,7 @@ void ChunkPersistence::saveChunk(Chunk *chunk)
 	
 	file.close();
 	
+	chunk->setModified(false);
 }
 
 ChunkPersistence::~ChunkPersistence()
