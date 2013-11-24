@@ -80,6 +80,14 @@ int main(int argc, char ** argv) {
 					camera.OnKeyboard(FreeFlyCamera::backward, true);
 				} else if (event.key.code == sf::Keyboard::D) {
 					camera.OnKeyboard(FreeFlyCamera::strafe_right, true);
+				} else if (event.key.code == sf::Keyboard::Space) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+						camera.OnKeyboard(FreeFlyCamera::down, true);
+						camera.OnKeyboard(FreeFlyCamera::up, false);
+					} else {
+						camera.OnKeyboard(FreeFlyCamera::up, true);
+						camera.OnKeyboard(FreeFlyCamera::down, false);
+					}
 				}
             }
             else if (event.type == sf::Event::KeyReleased) {
@@ -111,7 +119,12 @@ int main(int argc, char ** argv) {
 					camera.OnKeyboard(FreeFlyCamera::backward, false);
 				} else if (event.key.code == sf::Keyboard::D) {
 					camera.OnKeyboard(FreeFlyCamera::strafe_right, false);
+				} else if (event.key.code == sf::Keyboard::Space) {
+						camera.OnKeyboard(FreeFlyCamera::up, false);
+						camera.OnKeyboard(FreeFlyCamera::down, false);
 				}
+				
+				
             }
             else if (event.type == sf::Event::MouseMoved) {
                 //event.mouseMove.x
@@ -126,7 +139,7 @@ int main(int argc, char ** argv) {
 				mouseMoved=!mouseMoved;
             }
             else if (event.type == sf::Event::MouseWheelMoved) {
-				camera.OnMouseButton(event.mouseWheel.delta > 0);	
+				
             }
             else if (event.type == sf::Event::MouseButtonReleased) {
 				if (event.mouseButton.button == sf::Mouse::Left) {

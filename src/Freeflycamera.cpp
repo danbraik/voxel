@@ -19,6 +19,8 @@ FreeFlyCamera::FreeFlyCamera(const Vector3D & position)
     _keystates[strafe_left] = false;
     _keystates[strafe_right] = false;
     _keystates[boost] = false;
+	_keystates[up] = false;
+	_keystates[down] = false;
 }
 
 void FreeFlyCamera::OnMouseMotion(int xrel, int yrel)
@@ -26,23 +28,6 @@ void FreeFlyCamera::OnMouseMotion(int xrel, int yrel)
     _theta -= xrel*_sensivity;
     _phi -= yrel*_sensivity;
     VectorsFromAngles();
-}
-
-void FreeFlyCamera::OnMouseButton(bool wheelup)
-{
-    if (wheelup) //coup de molette vers le haut
-    {
-        _verticalMotionActive = true;
-        _timeBeforeStoppingVerticalMotion = 250;
-        _verticalMotionDirection = 1;
-
-    }
-    else //coup de molette vers le bas
-    {
-        _verticalMotionActive = true;
-        _timeBeforeStoppingVerticalMotion = 250;
-        _verticalMotionDirection = -1;
-    }
 }
 
 void FreeFlyCamera::OnKeyboard(int key, bool state)
@@ -61,16 +46,12 @@ void FreeFlyCamera::animate(sf::Int32 timestep)
         _position += _left * (realspeed * timestep);
     if (_keystates[strafe_right])
         _position -= _left * (realspeed * timestep);
-    if (_verticalMotionActive)
-    {
-        if (timestep > _timeBeforeStoppingVerticalMotion)
-            _verticalMotionActive = false;
-        else
-            _timeBeforeStoppingVerticalMotion -= timestep;
-        _position += Vector3D(0,0,_verticalMotionDirection*realspeed*timestep);
-    }
+    
+	if (_keystates[up] || _keystates[down])
+		_position += Vector3D(0,0,_keystates[up]*realspeed*timestep
+							  - _keystates[down]*realspeed*timestep);
+    
     _target = _position + _forward;
-
 }
 
 void FreeFlyCamera::setSpeed(double speed)

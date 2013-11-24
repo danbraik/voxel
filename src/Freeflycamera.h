@@ -12,7 +12,6 @@ public:
     FreeFlyCamera(const Vector3D & position = Vector3D(0,0,0));
 
     virtual void OnMouseMotion(int xrel, int yrel);
-    virtual void OnMouseButton(bool wheelup); // false = wheeldown
     virtual void OnKeyboard(int key, bool state);
 
     virtual void animate(sf::Int32 timestep);
@@ -32,7 +31,9 @@ public:
 		   backward, 
 		   strafe_left,
 		   strafe_right,
-		   boost};
+		   boost,
+		   up,
+		   down};
 protected:
     double _speed;
     double _sensivity;
