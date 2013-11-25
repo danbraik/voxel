@@ -4,9 +4,8 @@
 #include <vector>
 #include <SFML/System.hpp>
 
-#include "Renderer.hpp"
 #include "Block.hpp"
-#include "Mesh.hpp"
+#include "ChunkData.hpp"
 
 class LocalChunkSystem;
 class ChunkManager;
@@ -14,11 +13,12 @@ class ChunkPersistence;
 
 class Chunk
 {
-	
+	friend class ChunkPersistence;
 		
 	public:
-		static const int SIZE = 8;
+		static const int SIZE = ChunkData::SIZE;
 		static const int SIZE_1 = SIZE - 1;
+		static const int SIZE_DEC = ChunkData::SIZE_DEC;
 		
 		static bool isStrictelyInside(const sf::Vector3i & blockPosition);
 		
@@ -32,49 +32,55 @@ class Chunk
 		void rebuild(const ChunkManager & manager);
 		void draw() const;
 		
-		BlockType get(const sf::Vector3i & pos) const;
+		
+		ChunkData * getData();
+		// can set data to null
+		void setData(ChunkData * data);
+		inline void invalidData();
+		
+		
+		BlockType get(const BlockCoordinate & pos) const;
 		void set(const sf::Vector3i & pos, BlockType type);
 		
 		void setModified(bool modified = true);
 		bool isModified();
 		
-		int todo;
+		void setCompletelyEmpty(bool empty = true);
+		bool isCompletelyEmpty();
 		
 	private:
-		void computeOneBlock(std::vector<MeshFloat> & data, 
-							 int &vertexCount, 
-							 const LocalChunkSystem & manager,
-							 int x, int y, int z, 
-							 const sf::Vector3f &ux,
-							 const sf::Vector3f &uy, 
-							 const sf::Vector3f &uz);
-		
-		friend class ChunkPersistence;
 		
 		sf::Vector3i mPosition;
+		ChunkData * mData;
 		
-		Mesh mMesh;
-		
-		BlockType mArray[SIZE][SIZE][SIZE]; 
 		
 		bool mIsModified;
+		
+		bool mIsCompletelyEmpty;	
 };
 
 
 
-inline BlockType Chunk::get(const sf::Vector3i &pos) const
+inline BlockType Chunk::get(const BlockCoordinate &pos) const
 {
-	if (   pos.x >= 0 && pos.x < SIZE 
-		&& pos.y >= 0 && pos.y < SIZE
-		&& pos.z >= 0 && pos.z < SIZE)
-		return mArray[pos.x][pos.y][pos.z];
-	return Block::NONE;
+	// or test mIsCompletlyEmpty
+	if(mData != 0)
+		return mData->get(pos);
+	std::cerr << "Chunk.Get : ChunkData is NULL !"<<std::endl;
+	return Block::AIR;
 }
 
 inline void Chunk::set(const sf::Vector3i & pos, BlockType type)
 {
-	if (pos.x >=0&&pos.x<SIZE&&pos.y>=0&&pos.y<SIZE&&pos.z>=0&&pos.z<SIZE)
-		mArray[pos.x][pos.y][pos.z] = type;
+	if(mData != 0)
+		mData->set(pos, type);
+	else
+		std::cerr << "Chunk.set : ChunkData is NULL !"<<std::endl;
+}
+
+void Chunk::invalidData()
+{
+	setData(0);
 }
 
 

@@ -39,29 +39,7 @@ void Mesh::setData(MeshFloat *data, int vertexCount)
 
 void Mesh::draw() const
 {
-#ifdef DEBUG_GRAPH
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
-		glColor3f(.7,.7,1);
-		glVertex3f(0,0,0);glVertex3f(Chunk::SIZE ,0,0);
-		glVertex3f(0,0,0);glVertex3f(0,Chunk::SIZE,0);
-		glVertex3f(0,0,0);glVertex3f(0,0,Chunk::SIZE);
-		
-		glVertex3f(Chunk::SIZE,Chunk::SIZE,Chunk::SIZE);glVertex3f(Chunk::SIZE,0,Chunk::SIZE);
-		glVertex3f(Chunk::SIZE,Chunk::SIZE,Chunk::SIZE);glVertex3f(0,Chunk::SIZE,Chunk::SIZE);
-		glVertex3f(Chunk::SIZE,Chunk::SIZE,Chunk::SIZE);glVertex3f(Chunk::SIZE,Chunk::SIZE,0);
-		
-		glVertex3f(Chunk::SIZE,0,0);glVertex3f(Chunk::SIZE,Chunk::SIZE,0);
-		glVertex3f(Chunk::SIZE,0,0);glVertex3f(Chunk::SIZE,0,Chunk::SIZE);
-		glVertex3f(Chunk::SIZE,0,Chunk::SIZE);glVertex3f(0,0,Chunk::SIZE);
-		
-		glVertex3f(0,Chunk::SIZE,0);glVertex3f(Chunk::SIZE,Chunk::SIZE,0);
-		glVertex3f(0,Chunk::SIZE,0);glVertex3f(0,Chunk::SIZE,Chunk::SIZE);
-		glVertex3f(0,Chunk::SIZE,Chunk::SIZE);glVertex3f(0,0,Chunk::SIZE);
-	glEnd();
-	glEnable(GL_LIGHTING);
-#endif
-	
+
 	
 	if (mVertexCount == 0)
 		return;
@@ -95,15 +73,12 @@ void Mesh::draw() const
 	//Actually draw the triangle, giving the number of vertices provided
 	glDrawArrays(GL_TRIANGLES, 0, mVertexCount);
 	
-	
 	// maybe useful
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);	
 	glDisableClientState(GL_NORMAL_ARRAY);	
 	
 	glBindBuffer(GL_ARRAY_BUFFER, -1);
-	
-
 	
 	//Force display to be drawn now
 	//glFlush();

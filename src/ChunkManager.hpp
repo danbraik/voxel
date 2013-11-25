@@ -10,6 +10,7 @@
 #include <hash_set>
 #include "Chunk.hpp"
 #include "ChunkPool.hpp"
+#include "ChunkDataPool.hpp"
 #include "ChunkPersistence.hpp"
 #include "WorldGenerator.hpp"
 
@@ -68,10 +69,15 @@ class ChunkManager
 											  const sf::Vector3i & toChunkPosition,
 											  const sf::Vector3i & relativeBlockPosition) const;
 		
-		
+		// test if chunk is loaded. the result is stored at the same time
 		bool isChunkLoaded(const sf::Vector3i & chunkPosition, Chunk* &chunk) const;
 		bool isChunkLoaded(const sf::Vector3i & chunkPosition, const Chunk* &chunk) const;
-		Chunk * createEmptyChunk(const sf::Vector3i & chunkPosition);
+		
+		bool acquireChunk(Chunk *& chunk, const ChunkCoordinate & chunkPosition);
+		void releaseChunk(Chunk * chunk);
+		bool acquireChunkData(Chunk * chunk);
+		
+		
 		Chunk * getChunk(const sf::Vector3i & chunkPosition) const;
 		
 		void rebuildWithNeighbours(Chunk* chunk, const sf::Vector3i & chunkPosition);
@@ -107,6 +113,7 @@ class ChunkManager
 		
 		// Pool : (de)allocate chunk
 		ChunkPool mPool;
+		ChunkDataPool mDataPool;
 		
 		// Save to and load from disk
 		ChunkPersistence & mPersistence;

@@ -26,6 +26,22 @@ const PositionVector &ChunkPersistence::getExistingPositions()
 	return mChunkPositions;
 }
 
+bool ChunkPersistence::isIndexed(const ChunkCoordinate & chunkPosition, ChunkPersistenceCache &cache)
+{
+	cache.mIsValid = false;
+	
+	for(PositionVector::iterator it = mChunkPositions.begin();
+		it != mChunkPositions.end();
+		++it) {
+		if (*it == chunkPosition) {
+			cache.mIsValid = true;
+			cache.mPos = chunkPosition;
+			return true;
+		}
+	}
+	return false;
+}
+
 bool ChunkPersistence::loadChunk(Chunk *chunk)
 {
 	if (chunk==0)
@@ -60,6 +76,39 @@ bool ChunkPersistence::loadChunk(Chunk *chunk)
 	std::cout << " no"<<std::endl;
 #endif
 	return false;
+}
+
+bool ChunkPersistence::loadChunk(Chunk * chunk, const ChunkPersistenceCache & cache)
+{
+	if (chunk == 0 || !cache.mIsValid)
+		return false;
+	
+	if (chunk->getData() == 0) {
+		std::cerr << "ERR : chunk has no chunkData !"<<std::endl;
+		return false;
+	}
+		
+	
+	const ChunkCoordinate & chunkPosition = cache.mPos;
+	
+#ifdef DEBUG_LOAD_1
+	std::cout << "Persist : load (" << chunkPosition.x<<" "
+			  <<chunkPosition.y<< " "
+			 << chunkPosition.z<<")";
+#endif	
+
+	std::ostringstream oss;
+	oss <<  mDirectory << "/" << chunkPosition.x 
+		<< "." << chunkPosition.y
+		<< "." << chunkPosition.z
+		<< ".chunk";
+
+	loadData(chunk, oss.str());
+
+#ifdef DEBUG			
+			std::cout << " OK" << std::endl;
+#endif
+	return true;
 }
 
 void ChunkPersistence::saveChunk(Chunk *chunk)
@@ -106,7 +155,7 @@ void ChunkPersistence::saveChunk(Chunk *chunk)
 	file.open((oss.str()).c_str(),std::ios_base::out | std::ios_base::binary );
 	//std::cout << file.is_open()<<std::endl;
 	
-	file.write((char*)&(chunk->mArray),
+	file.write((char*)&(chunk->getData()->mArray),
 			   Chunk::SIZE*Chunk::SIZE*Chunk::SIZE*sizeof(BlockType));
 	
 	file.close();
@@ -189,7 +238,7 @@ void ChunkPersistence::loadData(Chunk *chunk, const std::string &path)
 	file.open((path).c_str(),std::ios_base::in | std::ios_base::binary );
 	//std::cout << file.is_open()<<std::endl;
 	
-	file.read((char*)&(chunk->mArray), Chunk::SIZE*Chunk::SIZE*Chunk::SIZE*sizeof(BlockType));
+	file.read((char*)&(chunk->getData()->mArray), Chunk::SIZE*Chunk::SIZE*Chunk::SIZE*sizeof(BlockType));
 	
 	file.close();
 }

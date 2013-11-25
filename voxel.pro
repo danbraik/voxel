@@ -25,6 +25,8 @@ SOURCES += src/main.cpp \
     src/WorldGenerator.cpp \
     src/ChunkPersistence.cpp \
     src/RaycastHelper.cpp \
+    src/ChunkData.cpp \
+    src/ChunkDataPool.cpp
 
 HEADERS += \
     src/Renderer.hpp \
@@ -40,4 +42,6 @@ HEADERS += \
     src/WorldGenerator.hpp \
     src/ChunkPersistence.hpp \
     src/RaycastHelper.hpp \
+    src/ChunkData.hpp \
+    src/ChunkDataPool.hpp
 

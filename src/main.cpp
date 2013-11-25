@@ -49,6 +49,8 @@ int main(int argc, char ** argv) {
 	
 	RaycastHelper rh;
 	
+	int currentBlock = Block::Dirt;
+	
 	//avoid event when move cursor
 	bool mouseMoved = true;
 	sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), window);
@@ -139,7 +141,10 @@ int main(int argc, char ** argv) {
 				mouseMoved=!mouseMoved;
             }
             else if (event.type == sf::Event::MouseWheelMoved) {
-				
+				if (event.mouseWheel.delta > 0) {
+					currentBlock++;
+				} else
+					currentBlock--;
             }
             else if (event.type == sf::Event::MouseButtonReleased) {
 				if (event.mouseButton.button == sf::Mouse::Left) {
@@ -161,7 +166,7 @@ int main(int argc, char ** argv) {
 					
 					if (rh.raycast(manager,src,dir,sel,next)) {
 						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
-						manager.setBlockType(sel+next, Block::Dirt);		
+						manager.setBlockType(sel+next, currentBlock);		
 					}
 					
 					
@@ -183,7 +188,7 @@ int main(int argc, char ** argv) {
 				
 					
 					if (rh.raycast(manager,src,dir,sel,next)) {
-						manager.setBlockType(sel, Block::Air);
+						manager.setBlockType(sel, Block::Patate);
 						cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
 					}
 					

@@ -2,17 +2,21 @@
 #define BLOCK_HPP
 
 #include <SFML/System.hpp>
+#include <iostream>
 
 typedef sf::Int32 BlockType;
-
+typedef sf::Vector3i ChunkCoordinate;
+typedef sf::Vector3i BlockCoordinate;
 
 class Block
 {
 	public:
 		static const float SIZE = 1.f;
 		
-		static const BlockType NONE = 0;
-		static const BlockType Air = 1;
+		// de-activated
+		static const BlockType AIR = 0;//must be 0 (because of memset)
+		// activated
+		static const BlockType Patate = 1;
 		static const BlockType Dirt = 2;
 		static const BlockType Stone = 3;
 		static const BlockType Water = 4;
@@ -49,8 +53,8 @@ class BlockList {
 	public:
 		
 		BlockList() {
-			mList[Block::NONE].init(1.f,0,0,false);
-			mList[Block::Air].init(.9,.9,.9,false);
+			mList[Block::AIR].init(1.f,0,0,false);
+			mList[Block::Patate].init(.9,.9,.9,false);
 			mList[Block::Dirt].init(.25,.75,.25,true);
 			mList[Block::Stone].init(.5,.5,.5,true);
 			mList[Block::Water].init(0,0,0,false);

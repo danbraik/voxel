@@ -5,9 +5,20 @@
 #include <vector>
 #include <SFML/System.hpp>
 
+#include "Chunk.hpp"
+
 typedef std::vector<sf::Vector3i> PositionVector;
 
 class Chunk;
+
+class ChunkPersistence;
+
+class ChunkPersistenceCache {
+		friend class ChunkPersistence;
+	private:
+		bool mIsValid;
+		ChunkCoordinate mPos;
+};
 
 class ChunkPersistence
 {
@@ -18,7 +29,10 @@ class ChunkPersistence
 		
 		const PositionVector & getExistingPositions();
 		
+		bool isIndexed(const ChunkCoordinate & pos, ChunkPersistenceCache & cache);
+		
 		bool loadChunk(Chunk * chunk);
+		bool loadChunk(Chunk * chunk, const ChunkPersistenceCache & cache);
 		
 		void saveChunk(Chunk * chunk);
 		

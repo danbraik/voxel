@@ -27,7 +27,7 @@ void WorldGenerator::generate(ChunkManager &manager, int w, int l, int h)
 			for (;z<2*h/3;++z) {
 				manager.setBlockType(sf::Vector3i(x,y,z),type);	
 			}
-			type = Block::Air;
+			type = Block::Patate;
 			for (;z<h;++z) {
 				manager.setBlockType(sf::Vector3i(x,y,z),type);	
 			}
@@ -63,4 +63,9 @@ void WorldGenerator::gen(Chunk *chunk)
 				chunk->set(sf::Vector3i(x,y,z), Block::Dirt);
 	}
 	
+}
+
+bool WorldGenerator::willBeEmpty(Chunk *chunk)
+{
+	return random() % 2 == 0;
 }

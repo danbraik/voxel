@@ -7,18 +7,37 @@
 ChunkManager::ChunkManager(const BlockList &list, ChunkPersistence &persistence) : 
 	mList(list),
 	mPositionChunksToLoad(), mChunksToRebuild(),
-	mChunksToUnload()	, mPool(*this),mPersistence(persistence)
+	mChunksToUnload()	, mPool(*this), mDataPool(), mPersistence(persistence)
 {
 	
 }
 
-Chunk * ChunkManager::createEmptyChunk(const sf::Vector3i &chunkPosition) {
-	Chunk * chunk = mPool.getFreeChunk();
+bool ChunkManager::acquireChunk(Chunk *& chunk, const ChunkCoordinate & chunkPosition) {
+	chunk = mPool.getFreeChunk();
 	if (chunk != 0) {
 		chunk->reset();
 		chunk->setPosition(chunkPosition);
+		return true;
 	}
-	return chunk;
+	return false;
+}
+
+void ChunkManager::releaseChunk(Chunk *chunk)
+{
+	mDataPool.giveBackChunkData(chunk->getData());
+	mPool.giveBackChunk(chunk);
+}
+
+bool ChunkManager::acquireChunkData(Chunk * chunk)
+{
+	ChunkData * cd = mDataPool.getFreeChunkData();
+	if (cd != 0) {
+		cd->reset();
+		chunk->setData(cd);
+		return true;
+	}
+	chunk->setData(0);
+	return false;
 }
 
 void ChunkManager::init()
@@ -87,14 +106,17 @@ const Block & ChunkManager::getBlock(BlockType type) const
 inline sf::Vector3i ChunkManager::getChkPosByAbsBkPos(const sf::Vector3i &absoluteBlockPosition) const
 {
 	sf::Vector3i pos = absoluteBlockPosition;
-	if  (pos.x < 0)
-		pos.x -= Chunk::SIZE;
-	if  (pos.y < 0)
-		pos.y -= Chunk::SIZE;
-	if  (pos.z < 0)
-		pos.z -= Chunk::SIZE;
-	
-	return pos / Chunk::SIZE;
+//	if  (pos.x < 0)
+//		pos.x -= Chunk::SIZE;
+//	if  (pos.y < 0)
+//		pos.y -= Chunk::SIZE;
+//	if  (pos.z < 0)
+//		pos.z -= Chunk::SIZE;
+	pos.x >>= Chunk::SIZE_DEC;
+	pos.y >>= Chunk::SIZE_DEC;
+	pos.z >>= Chunk::SIZE_DEC;
+
+	return pos ;//  / Chunk::SIZE;
 }
 
 inline sf::Vector3i ChunkManager::getChkPosByRelBkPos(const sf::Vector3i & fromChunkPosition, const sf::Vector3i &relativeBlockPosition) const
@@ -123,14 +145,14 @@ const Block &ChunkManager::getBlock(const sf::Vector3i & absoluteBlockPosition) 
 
 BlockType ChunkManager::getBlockType(const sf::Vector3i &absoluteBlockPosition) const
 {
-	sf::Vector3i chunkPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
+	ChunkCoordinate chunkPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
 	Chunk * chunk = 0;
 	
 	if (!isChunkLoaded(chunkPosition, chunk)) {
-		return Block::NONE;
+		return Block::AIR;
 	}
 	
-	sf::Vector3i insideChunkBlockPosition =
+	BlockCoordinate insideChunkBlockPosition =
 			absoluteBlockPosition -
 			(chunkPosition) * Chunk::SIZE;
 	
@@ -147,7 +169,7 @@ const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & fromChunkPositi
 	Chunk * chunk = 0;
 	
 	if (!isChunkLoaded(chunkPosition, chunk)) {
-		return mList.get(Block::NONE);
+		return mList.get(Block::AIR);
 	}
 	
 	sf::Vector3i insideChunkBlockPosition = getInsideBkPosByRelBkPos(fromChunkPosition, 
@@ -203,13 +225,34 @@ void ChunkManager::update()
 			Chunk * chunk = 0;
 			
 			if(!isChunkLoaded(chunkPosition, chunk)) {
-				chunk = createEmptyChunk(chunkPosition);	
-				if (chunk == 0)
+				
+				if (! acquireChunk(chunk, chunkPosition))
 					break;
 				//*				
-				if (!mPersistence.loadChunk(chunk)) {
-					mWorldGen.gen(chunk); // new chunk
+				ChunkPersistenceCache cache;
+				if (mPersistence.isIndexed(chunkPosition, cache)) {
+					// assert(chunk has at least one block set by user)
+					
+					if (acquireChunkData(chunk)) {
+						mPersistence.loadChunk(chunk, cache);
+						
+						// setup
+						//...
+						
+						mLoadedChunks[chunkPosition] = chunk;
+					}
+					
+				} else {
+					if (acquireChunkData(chunk)) {
+						if (mWorldGen.willBeEmpty(chunk)) {
+							chunk->setCompletelyEmpty();
+							mDataPool.giveBackChunkData(chunk->getData());
+							chunk->invalidData();
+						}
+						mLoadedChunks[chunkPosition] = chunk;
+					}
 				}
+				
 				mLoadedChunks[chunkPosition] = chunk;//*/
 				/*
 				if (mPersistence.loadChunk(chunk))
