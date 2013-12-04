@@ -11,6 +11,8 @@ class WorldGenerator
 		
 		void init();
 		
+		
+		
 	private:
 		
 		ChunkManager & mManager;
