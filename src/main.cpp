@@ -10,17 +10,22 @@
 
 using namespace std;
 
-#define SCREEN_WIDTH 600 //1366
-#define SCREEN_HEIGHT 400//768
+
 
 int main(int argc, char ** argv) {
 
     cout << "Voxel " << __DATE__ << " à " << __TIME__ << endl;
 
-    sf::RenderWindow window(
-                sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Title", sf::Style::Default,
-				sf::ContextSettings(24));
 
+    sf::RenderWindow window(
+                sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Title",
+#if 1
+				sf::Style::Default
+#else
+				sf::Style::Fullscreen
+#endif
+				,sf::ContextSettings(24));
+	
     window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(10);
 
@@ -89,7 +94,8 @@ int main(int argc, char ** argv) {
                 if (event.key.code == sf::Keyboard::Up) {
                 } else if (event.key.code == sf::Keyboard::L) {
 					const Vector3D & tpos = camera.getPosition();
-					sf::Vector3i bpos( tpos.X,tpos.Y,tpos.Z);
+					BlockCoordinate bpos( tpos.X,tpos.Y,tpos.Z);
+					worldGenerator.makeIsland(bpos);
 					
                 } else if (event.key.code == sf::Keyboard::U) {
 					const Vector3D & tpos = camera.getTargetPosition();

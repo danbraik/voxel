@@ -17,8 +17,8 @@ class ChunkData
 		
 	public:
 		// must be a power of 2
-		static const int SIZE = 8;
-		static const int SIZE_DEC = 3;
+		static const int SIZE = 32;
+		static const int SIZE_DEC = 5;
 	
 		ChunkData();
 		

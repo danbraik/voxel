@@ -5,6 +5,8 @@
 #include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
 
+#define SCREEN_WIDTH 600 //1366
+#define SCREEN_HEIGHT 400//768
 
 
 class Renderer

@@ -15,10 +15,16 @@ WorldGenerator::WorldGenerator(ChunkManager & manager) : mManager(manager)
 	
 }
 
+
+
 void WorldGenerator::init()
 {
+	makeIsland(BlockCoordinate(0,0,0));
 	
-	BlockCoordinate islandPos(5,4,2);
+}
+
+void WorldGenerator::makeIsland(const BlockCoordinate &islandPos)
+{
 	BlockCoordinate blkPos;
 	
 	mManager.beginGeneration();
@@ -64,7 +70,10 @@ void WorldGenerator::init()
 				
 				//caves = pow( (xf*5, yf*5, zf*5), 3);
 				density = (
-					octave_noise_3d(2, .5, 1, xf, yf, zf)
+					octave_noise_3d(2, .5, 1, 
+									islandPos.x+xf,
+									islandPos.y+yf, 
+									islandPos.z+zf)
 					 * center_falloff 
 				    * plateau_falloff
 				);
@@ -87,7 +96,6 @@ void WorldGenerator::init()
 	}
 	
 	mManager.endGeneration();
-	
 }
 
 

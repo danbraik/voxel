@@ -9,7 +9,7 @@ Renderer::Renderer()
 	// Setup a perspective projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	gluPerspective(90.f, 800/600., 0.5f, 5000.f);
+	gluPerspective(90.f, SCREEN_WIDTH/SCREEN_HEIGHT, 0.5f, 5000.f);
 	
 	glClearDepth(1.0);		
 	//glDepthFunc(GL_LESS);			        // The Type Of Depth Test To Do

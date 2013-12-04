@@ -9,7 +9,7 @@
 #include "ChunkManager.hpp"
 #include "LocalChunkSystem.hpp"
 
-//#define DEBUG_GRAPH
+#define DEBUG_GRAPH
 
 bool Chunk::isStrictelyInside(const sf::Vector3i & blockPosition)
 {

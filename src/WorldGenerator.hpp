@@ -11,6 +11,7 @@ class WorldGenerator
 		
 		void init();
 		
+		void makeIsland(const BlockCoordinate & islandPosition);
 		
 		
 	private:
