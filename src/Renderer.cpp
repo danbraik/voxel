@@ -54,8 +54,8 @@ Renderer::Renderer()
 	 glFogfv(GL_FOG_COLOR, fogColor);            // Set Fog Color
 	 glFogf(GL_FOG_DENSITY, 0.35f);              // How Dense Will The Fog Be
 	 glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
-	 glFogf(GL_FOG_START, 10.0f);             // Fog Start Depth
-	 glFogf(GL_FOG_END, 50.0f);               // Fog End Depth
+	 glFogf(GL_FOG_START, 60.0f);             // Fog Start Depth
+	 glFogf(GL_FOG_END, 80.0f);               // Fog End Depth
 	 //glEnable(GL_FOG); 
 	 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	 

@@ -17,8 +17,6 @@ int main(int argc, char ** argv) {
 
     cout << "Voxel " << __DATE__ << " à " << __TIME__ << endl;
 
-	
-
     sf::RenderWindow window(
                 sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Title", sf::Style::Default,
 				sf::ContextSettings(24));
@@ -32,19 +30,14 @@ int main(int argc, char ** argv) {
 	ChunkPersistence persistence;
 	persistence.setDirectory("/home/daniel/projects/c_cpp/voxel/world");
 	
-	
 	BlockList list;
 	
 	ChunkManager manager(list, persistence);
-	manager.init();
-	WorldGenerator worldGenerator;
-	//worldGenerator.generate(manager, 8,8,8);
+	
+	WorldGenerator worldGenerator(manager);
+	worldGenerator.init();
 	
 	
-//	Chunk chunk;
-//	chunk.init(4);
-//	chunk.update(renderer, manager);
-
 	FreeFlyCamera camera(Vector3D(12,-12,12));
 	
 	RaycastHelper rh;
@@ -97,19 +90,16 @@ int main(int argc, char ** argv) {
                 } else if (event.key.code == sf::Keyboard::L) {
 					const Vector3D & tpos = camera.getPosition();
 					sf::Vector3i bpos( tpos.X,tpos.Y,tpos.Z);
-					manager.loadChunk(bpos);
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-						manager.visible(bpos);
-					}
+					
                 } else if (event.key.code == sf::Keyboard::U) {
 					const Vector3D & tpos = camera.getTargetPosition();
-					sf::Vector3i bpos( tpos.X, tpos.Y,tpos.Z);
+					BlockCoordinate bpos( tpos.X, tpos.Y,tpos.Z);
 					//std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
 					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
 					manager.deleteChunk(bpos);
                 } else if (event.key.code == sf::Keyboard::I) {
 					const Vector3D & tpos = camera.getTargetPosition();
-					sf::Vector3i bpos( tpos.X, tpos.Y,tpos.Z);
+					ChunkCoordinate bpos( tpos.X, tpos.Y,tpos.Z);
 					manager.resetChunk(bpos);
                 } else if (event.key.code == sf::Keyboard::LShift) {
 					camera.OnKeyboard(FreeFlyCamera::boost, false);
@@ -141,10 +131,10 @@ int main(int argc, char ** argv) {
 				mouseMoved=!mouseMoved;
             }
             else if (event.type == sf::Event::MouseWheelMoved) {
-				if (event.mouseWheel.delta > 0) {
-					currentBlock++;
-				} else
-					currentBlock--;
+//				if (event.mouseWheel.delta > 0) {
+//					currentBlock++;
+//				} else
+//					currentBlock--;
             }
             else if (event.type == sf::Event::MouseButtonReleased) {
 				if (event.mouseButton.button == sf::Mouse::Left) {
@@ -188,7 +178,7 @@ int main(int argc, char ** argv) {
 				
 					
 					if (rh.raycast(manager,src,dir,sel,next)) {
-						manager.setBlockType(sel, Block::Patate);
+						manager.setBlockType(sel, Block::AIR);
 						cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
 					}
 					
@@ -243,7 +233,7 @@ int main(int argc, char ** argv) {
 		renderer.translate(selectedBlock.x,
 						   selectedBlock.y,
 						   selectedBlock.z);
-		glLineWidth(3);
+		glLineWidth(1);
 		//glDisable(GL_DEPTH_TEST);
 		glBegin(GL_LINES);
 			glColor3f(1,0,0);

@@ -4,8 +4,8 @@
 #include "ChunkData.hpp"
 
 
-#define MAX_TOTAL_CHUNKS 50
-#define INIT_CHUNKS 40
+#define MAX_TOTAL_CHUNKS 50000
+#define INIT_CHUNKS 400
 //#define DEBUG_POOL
 
 ChunkDataPool::ChunkDataPool(/*const ChunkManager &manager*/) :
@@ -53,12 +53,17 @@ ChunkData * ChunkDataPool::getFreeChunkData()
 
 void ChunkDataPool::giveBackChunkData(ChunkData * chunk)
 {
+	if (chunk == 0)
+		return;
 	if (mUsedChunks.size() == 0)
 		std::cerr << "No used chunkdata but you want to give back one" << std::endl;
 	mFreeChunks.push(chunk);
+	ChunkData * cd = mUsedChunks.front();
 	while(mUsedChunks.front() != chunk) {
 		mUsedChunks.push(mUsedChunks.front());
 		mUsedChunks.pop();
+		if (mUsedChunks.front() == cd)
+			break;//BIG BUG from garbage
 	}
 	mUsedChunks.pop();
 #ifdef DEBUG_POOL

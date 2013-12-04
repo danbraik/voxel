@@ -32,6 +32,8 @@ class ChunkData
 		BlockType get(const BlockCoordinate & pos) const;
 		void set(const BlockCoordinate & pos, BlockType type);
 		
+		bool upIsCompletelyEmpty();
+		
 	private:
 		void computeOneBlock(MeshFloatVector & data, 
 							 int &vertexCount, 
@@ -66,8 +68,9 @@ inline void ChunkData::set(const BlockCoordinate & pos, BlockType type)
 	else
 		std::cerr << "ChunkData : wanted to set invalid block pos at ("
 				  << pos.x<<" "<<pos.y<<" "<<pos.z<<")"<<std::endl;
-		
+	
 }
+
 
 
 #endif // CHUNKDATA_HPP

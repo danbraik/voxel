@@ -13,7 +13,7 @@ void ChunkData::reset()
 	// Block::AIR must be 0
 	// because memset doesnot copy
 	// very well other values
-	memset(mArray, Block::AIR, Block::SIZE*Block::SIZE*Block::SIZE);
+	memset(mArray, Block::AIR, Chunk::SIZE*Chunk::SIZE*Chunk::SIZE);
 }
 
 void ChunkData::rebuild(const LocalChunkSystem & local)
@@ -24,9 +24,9 @@ void ChunkData::rebuild(const LocalChunkSystem & local)
 	data.reserve(SIZE*SIZE*SIZE*12);
 	int vertexCount = 0;
 	
-	const sf::Vector3f ux(Block::SIZE,0,0);
-	const sf::Vector3f uy(0,Block::SIZE,0);
-	const sf::Vector3f uz(0,0,Block::SIZE);
+	const sf::Vector3f ux(1,0,0);
+	const sf::Vector3f uy(0,1,0);
+	const sf::Vector3f uz(0,0,1);
 		
 	for (int x=0;x < SIZE; ++x) {
 		for (int y=0;y < SIZE;++y){
@@ -70,7 +70,9 @@ void addVertexToMesh(std::vector<MeshFloat> & data,
 	vertexCount++;
 }
 
-
+inline bool testBlock(const LocalChunkSystem &manager, const BlockCoordinate & bc) {
+	return  ! manager.getRelativeBlock(bc).isFilled();
+}
 
 
 inline void ChunkData::computeOneBlock(MeshFloatVector &data, 
@@ -84,11 +86,11 @@ inline void ChunkData::computeOneBlock(MeshFloatVector &data,
 	const Block & block = manager.getBlock(type);
 		
 	if (block.isFilled()) {
-		sf::Vector3f pos(x*Block::SIZE, y*Block::SIZE, z*Block::SIZE);
+		const sf::Vector3f pos(x, y, z);
 		
 //		std::cout << "block r("<<block.r()<<") g("<<block.g()<<") "<<std::endl;
 		
-		if (!manager.getRelativeBlock(BlockCoordinate(x,y-1,z)).isFilled()){
+		if (testBlock(manager, BlockCoordinate(x,y-1,z))){
 		// front
 			
 			addVertexToMesh(data, vertexCount, -uy,  pos,block.r(), block.g(),block.b());
@@ -100,7 +102,7 @@ inline void ChunkData::computeOneBlock(MeshFloatVector &data,
 			addVertexToMesh(data, vertexCount, -uy,  pos+uz,block.r(), block.g(),block.b());
 			
 		}
-		if (!manager.getRelativeBlock( sf::Vector3i(x+1,y,z)).isFilled()){	
+		if (testBlock(manager,  sf::Vector3i(x+1,y,z))){	
 			// right
 			
 			addVertexToMesh(data, vertexCount, ux,  pos+ux,block.r(), block.g(),block.b());
@@ -111,7 +113,7 @@ inline void ChunkData::computeOneBlock(MeshFloatVector &data,
 			addVertexToMesh(data, vertexCount, ux,  pos+ux+uy+uz,block.r(), block.g(),block.b());
 			addVertexToMesh(data, vertexCount, ux,  pos+ux+uz,block.r(), block.g(),block.b());
 		}
-		if (!manager.getRelativeBlock( sf::Vector3i(x,y+1,z)).isFilled()){
+		if (testBlock(manager,  sf::Vector3i(x,y+1,z))){
 			// behind
 			
 			addVertexToMesh(data, vertexCount, uy,  pos+ux+uy,block.r(), block.g(),block.b());
@@ -122,7 +124,7 @@ inline void ChunkData::computeOneBlock(MeshFloatVector &data,
 			addVertexToMesh(data, vertexCount, uy,  pos+uy+uz,block.r(), block.g(),block.b());
 			addVertexToMesh(data, vertexCount, uy,  pos+ux+uy+uz,block.r(), block.g(),block.b());
 		}
-		if (!manager.getRelativeBlock( sf::Vector3i(x-1,y,z)).isFilled()){
+		if (testBlock(manager,  sf::Vector3i(x-1,y,z))){
 			// left
 			
 			addVertexToMesh(data, vertexCount, -ux,  pos+uy,block.r(), block.g(),block.b());
@@ -133,7 +135,7 @@ inline void ChunkData::computeOneBlock(MeshFloatVector &data,
 			addVertexToMesh(data, vertexCount, -ux,  pos+uz,block.r(), block.g(),block.b());
 			addVertexToMesh(data, vertexCount, -ux,  pos+uy+uz,block.r(), block.g(),block.b());
 		}
-		if (!manager.getRelativeBlock( sf::Vector3i(x,y,z+1)).isFilled()){
+		if (testBlock(manager,  sf::Vector3i(x,y,z+1))){
 			// top
 			
 			addVertexToMesh(data, vertexCount, uz,  pos+uz,block.r(), block.g(),block.b());
@@ -144,7 +146,7 @@ inline void ChunkData::computeOneBlock(MeshFloatVector &data,
 			addVertexToMesh(data, vertexCount, uz,  pos+uz+ux+uy,block.r(), block.g(),block.b());
 			addVertexToMesh(data, vertexCount, uz,  pos+uz+uy,block.r(), block.g(),block.b());
 		}
-		if (!manager.getRelativeBlock( sf::Vector3i(x,y,z-1)).isFilled()){
+		if (testBlock(manager,  sf::Vector3i(x,y,z-1))){
 			// bottom
 			
 			addVertexToMesh(data, vertexCount, -uz,  pos,block.r(), block.g(),block.b());
@@ -156,5 +158,16 @@ inline void ChunkData::computeOneBlock(MeshFloatVector &data,
 			addVertexToMesh(data, vertexCount, -uz,  pos+ux,block.r(), block.g(),block.b());
 		}
 	}
+}
+
+
+bool ChunkData::upIsCompletelyEmpty()
+{
+	for (int x = 0; x < SIZE; ++x)
+		for (int y = 0; y < SIZE; ++y)
+			for (int z = 0; z < SIZE; ++z)
+				if (mArray[x][y][z] > Block::ACTIVATED)
+					return false;
+	return true;
 }
 

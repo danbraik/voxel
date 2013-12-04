@@ -1,17 +1,19 @@
 #ifndef WORLDGENERATOR_HPP
 #define WORLDGENERATOR_HPP
 
-class Chunk;
-class ChunkManager;
+#include "ChunkManager.hpp"
+
 
 class WorldGenerator
 {
 	public:
-		WorldGenerator();
+		WorldGenerator(ChunkManager & manager);
 		
-		void generate(ChunkManager & manager, int w, int l, int h);
-		void gen(Chunk * chunk);
-		bool willBeEmpty(Chunk * chunk);
+		void init();
+		
+	private:
+		
+		ChunkManager & mManager;
 };
 
 #endif // WORLDGENERATOR_HPP

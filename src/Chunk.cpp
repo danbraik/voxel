@@ -19,26 +19,18 @@ bool Chunk::isStrictelyInside(const sf::Vector3i & blockPosition)
 
 
 
-Chunk::Chunk() :  mPosition(), mIsModified(false), mIsCompletelyEmpty(false)
+Chunk::Chunk() :  mPosition(), mIsModified(false), mIsEmpty(false), mIsValid(false)
 {
 }
 
 void Chunk::reset() {
-	mIsCompletelyEmpty = false;
+	mIsEmpty = false;
 	mPosition.x=mPosition.y=mPosition.z=0x7FFFFFFF;
 	mIsModified = false;
 	mData = 0; // leak memory ?
 }
 
-ChunkData * Chunk::getData()
-{
-	return mData;
-}
 
-void Chunk::setData(ChunkData *data)
-{
-	mData = data;
-}
 
 
 
@@ -48,16 +40,15 @@ const ChunkCoordinate & Chunk::getPosition() const
 	return mPosition;
 }
 
-void Chunk::setPosition(const sf::Vector3i &position)
+void Chunk::setPosition(const ChunkCoordinate &position)
 {
 	mPosition = position;
 }
 
-void Chunk::rebuild(const ChunkManager &manager)
+void Chunk::rebuild()
 {
-	if (!mIsCompletelyEmpty) {
-		// assert(mData != 0)
-		const LocalChunkSystem local(manager, this);
+	if (hasData()) {
+		const LocalChunkSystem local(*mManager, this);
 		mData->rebuild(local);
 	}
 }
@@ -66,8 +57,12 @@ void Chunk::draw() const
 {
 #ifdef DEBUG_GRAPH
 	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
-		if (mIsCompletelyEmpty)
+	if (!hasData())
+		glBegin(GL_POINTS);
+	else
+		glBegin(GL_LINES);
+	
+		if (!hasData())
 			glColor3f(1,.7,7);
 		else	
 			glColor3f(.7,.7,1);
@@ -91,35 +86,60 @@ void Chunk::draw() const
 #endif
 	
 	
-	if (!mIsCompletelyEmpty) {
-		// assert(mData != 0)
-		if (mData != 0)
-			mData->getMesh().draw();
-		else
-			std::cerr << "Chunk.draw : chunkdata is NULL !"<<std::endl;
-	} 
+	if (hasData())
+		mData->getMesh().draw();
+//		else
+//			std::cerr << "Chunk.draw : chunkdata is NULL !"<<std::endl;
+	
 }
 
-
-void Chunk::setModified(bool modified)
+void Chunk::load()
 {
-	mIsModified = modified;
+	mData = new ChunkData;
+	mData->reset();
+	
+	// load from file or generate
+	mManager->loadChunk(this);
+	
+//	if (mData->upIsCompletelyEmpty()) {
+//		delete mData;
+//		mData = 0;
+//	} else {
+//		rebuild();
+//	}
+	
+	mIsValid = true;
+	
 }
 
-bool Chunk::isModified()
+
+
+void Chunk::beginSet(bool playerAction)
 {
-	return mIsModified;
+	mIsModified = playerAction;
+	
+	if(!hasData()) {
+		mData = new ChunkData();
+	}
+	
 }
 
-void Chunk::setCompletelyEmpty(bool empty)
+
+void Chunk::endSet()
 {
-	mIsCompletelyEmpty = empty;
+	rebuild();
 }
 
-bool Chunk::isCompletelyEmpty()
+
+void Chunk::setOne(const BlockCoordinate &pos, BlockType type)
 {
-	return mIsCompletelyEmpty;
+	beginSet(true);
+	set(pos, type);
+	endSet();
 }
 
 
-
+void Chunk::unload()
+{
+	mIsValid = false;
+}

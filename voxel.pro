@@ -26,7 +26,10 @@ SOURCES += src/main.cpp \
     src/ChunkPersistence.cpp \
     src/RaycastHelper.cpp \
     src/ChunkData.cpp \
-    src/ChunkDataPool.cpp
+    src/ChunkDataPool.cpp \
+    src/Chunk3dContainer.cpp \
+    src/procedural/simplexnoise.cpp \
+    src/procedural/simplextextures.cpp
 
 HEADERS += \
     src/Renderer.hpp \
@@ -43,5 +46,8 @@ HEADERS += \
     src/ChunkPersistence.hpp \
     src/RaycastHelper.hpp \
     src/ChunkData.hpp \
-    src/ChunkDataPool.hpp
+    src/ChunkDataPool.hpp \
+    src/Chunk3dContainer.hpp \
+    src/procedural/simplexnoise.h \
+    src/procedural/simplextextures.h
 

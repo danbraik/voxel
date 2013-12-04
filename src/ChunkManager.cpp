@@ -7,79 +7,46 @@
 ChunkManager::ChunkManager(const BlockList &list, ChunkPersistence &persistence) : 
 	mList(list),
 	mPositionChunksToLoad(), mChunksToRebuild(),
-	mChunksToUnload()	, mPool(*this), mDataPool(), mPersistence(persistence)
+	mChunksToUnload()	, mPool(*this), mDataPool(), mPersistence(persistence),
+	mLoadedChunksGarbage(0), mChunks(), mVisibleChunks()
 {
-	
+	mChunks.setGlobal(this);
 }
 
-bool ChunkManager::acquireChunk(Chunk *& chunk, const ChunkCoordinate & chunkPosition) {
-	chunk = mPool.getFreeChunk();
-	if (chunk != 0) {
-		chunk->reset();
-		chunk->setPosition(chunkPosition);
-		return true;
-	}
-	return false;
-}
 
-void ChunkManager::releaseChunk(Chunk *chunk)
-{
-	mDataPool.giveBackChunkData(chunk->getData());
-	mPool.giveBackChunk(chunk);
-}
-
-bool ChunkManager::acquireChunkData(Chunk * chunk)
-{
-	ChunkData * cd = mDataPool.getFreeChunkData();
-	if (cd != 0) {
-		cd->reset();
-		chunk->setData(cd);
-		return true;
-	}
-	chunk->setData(0);
-	return false;
-}
 
 void ChunkManager::init()
 {
 	const PositionVector & exis = mPersistence.getExistingPositions();
 	for(PositionVector::const_iterator it = exis.begin();
 		it != exis.end(); ++it)
-			reqLoadChunk(*it);
+			notifVisibleZone(*it);
 }
 
-void ChunkManager::reinit()
+void ChunkManager::loadChunk(Chunk * chunk) const
 {
-	for(ChunkMap::iterator it = mLoadedChunks.begin();
-		it != mLoadedChunks.end(); ++it) {
-		it->second->reset();
-		mChunksToRebuild.insert(it->second);
+	ChunkPersistenceCache cache;
+	if (mPersistence.isIndexed(chunk->getPosition(), cache)) {
+		mPersistence.loadChunk(chunk, cache);
 	}
-}
-
-void ChunkManager::deleteChunk(sf::Vector3i &absBkPos)
-{
-	sf::Vector3i cp = getChkPosByAbsBkPos(absBkPos);
-	
-	Chunk * chunk;
-	if (isChunkLoaded(cp,chunk)) {
-		reqUnloadChunk(chunk);
-	}
-}
-
-void ChunkManager::loadChunk(const sf::Vector3i &absBkPos)
-{
-	
-	reqLoadChunk(getChkPosByAbsBkPos( absBkPos));
 }
 
 void ChunkManager::visible(const sf::Vector3i &absBkPos)
 {
 	sf::Vector3i cp = getChkPosByAbsBkPos(absBkPos);
-	for (int x = -5; x <5;++x)
-		for(int y=-5;y< 5;++y)
-			for (int z=-2;z<15;++z)
-				reqLoadChunk(cp + sf::Vector3i(x,y,z));
+	for (int x = -10; x <10;++x)
+		for(int y=-10;y< 10;++y)
+			for (int z=-10;z<10;++z)
+				notifVisibleZone(cp + sf::Vector3i(x,y,z));
+}
+
+void ChunkManager::notifVisibleZone(const ChunkCoordinate & position) {
+	Chunk * chunk = 0;
+	if (! mChunks.isThere(position, chunk)) {
+		chunk = mChunks.create(position);
+		chunk->load();
+	}
+	mVisibleChunks.push_front(chunk);
 }
 
 void ChunkManager::resetChunk(const sf::Vector3i &absBkPos)
@@ -124,8 +91,8 @@ inline sf::Vector3i ChunkManager::getChkPosByRelBkPos(const sf::Vector3i & fromC
 	return getChkPosByAbsBkPos(fromChunkPosition * Chunk::SIZE + relativeBlockPosition);
 }
 
-inline sf::Vector3i ChunkManager::getInsideBkPosByAbsBkPos(const sf::Vector3i &toChunkPosition, 
-														   const sf::Vector3i &absoluteBlockPosition) const
+inline sf::Vector3i ChunkManager::getInsideBkPosByAbsBkPos(const ChunkCoordinate &toChunkPosition, 
+														   const BlockCoordinate &absoluteBlockPosition) const
 {
 	return absoluteBlockPosition - (toChunkPosition * Chunk::SIZE);
 }
@@ -148,8 +115,8 @@ BlockType ChunkManager::getBlockType(const sf::Vector3i &absoluteBlockPosition) 
 	ChunkCoordinate chunkPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
 	Chunk * chunk = 0;
 	
-	if (!isChunkLoaded(chunkPosition, chunk)) {
-		return Block::AIR;
+	if (!mChunks.isThere(chunkPosition, chunk)) {
+		return Block::NONE;
 	}
 	
 	BlockCoordinate insideChunkBlockPosition =
@@ -169,7 +136,7 @@ const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & fromChunkPositi
 	Chunk * chunk = 0;
 	
 	if (!isChunkLoaded(chunkPosition, chunk)) {
-		return mList.get(Block::AIR);
+		return mList.get(Block::NONE);
 	}
 	
 	sf::Vector3i insideChunkBlockPosition = getInsideBkPosByRelBkPos(fromChunkPosition, 
@@ -184,159 +151,242 @@ void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, Block
 			getChkPosByAbsBkPos(absoluteBlockPosition);
 	
 	Chunk * chunk = 0;
-	if (!isChunkLoaded(chunkPosition, chunk)) {
-		reqLoadChunk(chunkPosition);
-		// dont add cube change to some toBeTreat list
-		// (suppose chunk would be load
-		// before we can edit it)
-		return;
+	if (!mChunks.isThere(chunkPosition, chunk)) {
+		chunk = mChunks.create(chunkPosition);
 	}
 	
 	sf::Vector3i insideChunkBlockPosition =
 			getInsideBkPosByAbsBkPos(chunkPosition, absoluteBlockPosition);
 	
-	chunk->set(insideChunkBlockPosition, type);
+	chunk->setOne(insideChunkBlockPosition, type);
 	
 	// the current chunk state cannot be
 	// generated again (can't generate user action ^^)
-	chunk->setModified();
+	//wchunk->setModified();
+	
 	
 	// todo : optimise again, select neighbours
-	if (Chunk::isStrictelyInside(insideChunkBlockPosition))
-		reqRebuildChunk(chunk);
-	else
-		rebuildWithNeighbours(chunk, chunkPosition);
+//	if (Chunk::isStrictelyInside(insideChunkBlockPosition))
+//		reqRebuildChunk(chunk);
+//	else {
+//		loadAndRebuildNeighbours(chunk, chunkPosition);
+//	}
 }
 
 void ChunkManager::update()
 {
-	const int maxLoad = 1;
-	const int maxRebuild = 1;
-	const int maxUnload = 100;
+	return ;
 	
-	// -- Load chunks
-	int chunksLoaded = 0;
-	if (mPositionChunksToLoad.size() > 0) {
-		for(PositionSet::iterator it = mPositionChunksToLoad.begin();
-			it != mPositionChunksToLoad.end() && chunksLoaded < maxLoad;
-			mPositionChunksToLoad.erase(it++), ++chunksLoaded) {
+//	const int maxLoad = 30;
+//	const int maxRebuild = 10;
+//	const int maxUnload = 100;
+	
+	
+	
+//	// -- Load chunks
+//	int chunksLoaded = 0;
+//	if (mPositionChunksToLoad.size() > 0) {
+//		for(PositionSet::iterator it = mPositionChunksToLoad.begin();
+//			it != mPositionChunksToLoad.end() && chunksLoaded < maxLoad;
+//			mPositionChunksToLoad.erase(it++), ++chunksLoaded) {
 			
-			const sf::Vector3i & chunkPosition = *it;
-			Chunk * chunk = 0;
+//			const sf::Vector3i & chunkPosition = *it;
+//			Chunk * chunk = 0;
 			
-			if(!isChunkLoaded(chunkPosition, chunk)) {
+//			if(!isChunkLoaded(chunkPosition, chunk)) {
 				
-				if (! acquireChunk(chunk, chunkPosition))
-					break;
-				//*				
-				ChunkPersistenceCache cache;
-				if (mPersistence.isIndexed(chunkPosition, cache)) {
-					// assert(chunk has at least one block set by user)
+//				if (! acquireChunk(chunk, chunkPosition))
+//					break;
+//				//*				
+//				ChunkPersistenceCache cache;
+//				if (mPersistence.isIndexed(chunkPosition, cache)) {
+//					// assert(chunk has at least one block set by user)
 					
-					if (acquireChunkData(chunk)) {
-						mPersistence.loadChunk(chunk, cache);
+//					if (acquireChunkData(chunk)) {
+//						mPersistence.loadChunk(chunk, cache);
 						
-						// setup
-						//...
+//						// setup
+//						//...
 						
-						mLoadedChunks[chunkPosition] = chunk;
-					}
+//						//mLoadedChunks[chunkPosition] = chunk;
+//					}
 					
-				} else {
-					if (acquireChunkData(chunk)) {
-						if (mWorldGen.willBeEmpty(chunk)) {
-							chunk->setCompletelyEmpty();
-							mDataPool.giveBackChunkData(chunk->getData());
-							chunk->invalidData();
-						}
-						mLoadedChunks[chunkPosition] = chunk;
-					}
-				}
+//				} else {
+					
+//					if (mWorldGen.willBeEmpty(chunk)) {
+////						chunk->invalidData();
+////						mLoadedChunks[chunkPosition] = chunk;
+//					} else {
+//						if (acquireChunkData(chunk)) {	
+//							mWorldGen.gen(chunk);
+////							mLoadedChunks[chunkPosition] = chunk;
+//						}
+//					}
+					
+//				}
 				
-				mLoadedChunks[chunkPosition] = chunk;//*/
-				/*
-				if (mPersistence.loadChunk(chunk))
-					mLoadedChunks[chunkPosition] = chunk;
-				else {
-					mPool.giveBackChunk(chunk);
-					continue;
-				}
-				//*/
+////				mLoadedChunks[chunkPosition] = chunk;//*/
+//				/*
+//				if (mPersistence.loadChunk(chunk))
+//					mLoadedChunks[chunkPosition] = chunk;
+//				else {
+//					mPool.giveBackChunk(chunk);
+//					continue;
+//				}
+//				//*/
 				
-				rebuildWithNeighbours(chunk, chunkPosition);
-			}
-		}
-		//mPositionChunksToLoad.clear();
-		//std::cout << "CMup: (l) " << chunksLoaded << " loaded." << std::endl;
-	}
-	// -- end
-	
-	
-	// -- Rebuild chunks
-	//std::cout << "CMup: (b) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
-	int chunkRebuild = 0;
-	if (mChunksToRebuild.size() > 0) {
-		for(ChunkSet::iterator it = mChunksToRebuild.begin();
-			it != mChunksToRebuild.end() && chunkRebuild < maxRebuild;
-			 mChunksToRebuild.erase(it++), ++chunkRebuild) {
-			
-			
-			(*it)->rebuild(*this);
-		}
-		//mChunksToRebuild.clear();
-		//std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
-	}
-	//std::cout << "CMup: (a) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
-	//std::cout << std::endl;
-	// -- end
+//				rebuildWithNeighbours(chunk, chunkPosition);
+//			}
+//		}
+//		//mPositionChunksToLoad.clear();
+//		//std::cout << "CMup: (l) " << chunksLoaded << " loaded." << std::endl;
+//	}
+//	// -- end
 	
 	
 	
-	// -- Unload chunks
-	int chunkUnload = 0;
-	if (mChunksToUnload.size() > 0) {
-		for(ChunkSet::iterator it = mChunksToUnload.begin();
-			it != mChunksToUnload.end() && chunkUnload < maxUnload; 
-			mChunksToUnload.erase(it++), ++chunkUnload) {
+	
+//	// -- Create chunks
+//	if (mPositionChunksToCreate.size() > 0) {
+//		for(PositionSet::iterator it = mPositionChunksToCreate.begin();
+//			it != mPositionChunksToCreate.end();
+//			) {
 			
-			// save to disk
-			// maybe bug : already given back
-			mPersistence.saveChunk(*it);
-			mPool.giveBackChunk(*it);			
+//			const sf::Vector3i & chunkPosition = *it;
+//			Chunk * chunk = 0;
+//			if (isChunkLoaded(chunkPosition, chunk)) {
+////				if(chunk->isEmpty())
+////					mPositionChunksToCreate.erase(it++);
+//				/*else*/ if(acquireChunkData(chunk)) {
+//					mPositionChunksToCreate.erase(it++);
+//				}
+//				else
+//					it++;					
+//			} else {
+//				it++;
+//			}
+//		}
+//	}
+//	// -- end
+	
+	
+	
+//	// -- Rebuild chunks
+//	//std::cout << "CMup: (b) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
+//	int chunkRebuild = 0;
+//	if (mChunksToRebuild.size() > 0) {
+//		for(ChunkSet::iterator it = mChunksToRebuild.begin();
+//			it != mChunksToRebuild.end() && chunkRebuild < maxRebuild;
+//			 mChunksToRebuild.erase(it++), ++chunkRebuild) {
 			
 			
-		}
-		//mChunksToUnload.clear();
-		//std::cout << "CMup: (u) " << chunkUnload << " Unloaded." << std::endl;
-	}
-	// -- end
+//			(*it)->rebuild();
+//		}
+//		//mChunksToRebuild.clear();
+//		//std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
+//	}
+//	//std::cout << "CMup: (a) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
+//	//std::cout << std::endl;
+//	// -- end
+	
+	
+//	// -- Unload chunks
+//	int chunkUnload = 0;
+//	if (mChunksToUnload.size() > 0) {
+//		for(ChunkSet::iterator it = mChunksToUnload.begin();
+//			it != mChunksToUnload.end() && chunkUnload < maxUnload; 
+//			mChunksToUnload.erase(it++), ++chunkUnload) {
+			
+//			// save to disk
+//			// maybe bug : already given back
+//			mPersistence.saveChunk(*it);
+//			mPool.giveBackChunk(*it);			
+			
+			
+//		}
+//		//mChunksToUnload.clear();
+//		//std::cout << "CMup: (u) " << chunkUnload << " Unloaded." << std::endl;
+//	}
+//	// -- end
+	
+	
+	
+	
+//	// -- Garbage
+//	int garbaged = 0;
+////	if (mLoadedChunksGarbage > mLoadedChunks.size())
+//		mLoadedChunksGarbage = 0;
+////	ChunkMap::iterator it = mLoadedChunks.begin();
+//	for (int i = 0; i < mLoadedChunksGarbage;++i)
+//		++it;
+	
+//	for(;it != mLoadedChunks.end() && garbaged < 100;++it, ++garbaged) {
+		
+//		Chunk * chunk = it->second;
+		
+////		chunk->upEmptyState();
+////		if (chunk->isEmpty()) {
+//			mDataPool.giveBackChunkData(
+//						chunk->invalidData());
+//		} else 
+//			--garbaged;
+//	}
+//	mLoadedChunksGarbage += garbaged;
+//	// -- end
 	
 }
 
 void ChunkManager::draw(Renderer &renderer) const
 {
-	sf::Vector3i oldPosition;
+	ChunkCoordinate oldPosition;
 	
-	for  (ChunkMap::const_iterator it = mLoadedChunks.begin();
-		  it != mLoadedChunks.end(); ++it) {
+	for  (ChunkList::const_iterator it = mVisibleChunks.begin();
+		  it != mVisibleChunks.end(); ++it) {
 		
-		const sf::Vector3i & chunkPosition = it->first;
-		const Chunk * chunk = it->second;
+		const Chunk * chunk = *it;
+		const ChunkCoordinate & chunkPosition = chunk->getPosition();
+		
 		
 		// use oldPosition to compute difference
 		// between previous and current chunks
 		oldPosition -= chunkPosition;
 		
 		renderer.translate(
-					-oldPosition.x*
-					Chunk::SIZE*Block::SIZE,
-					-oldPosition.y*
-					Chunk::SIZE*Block::SIZE,
-					-oldPosition.z*
-					Chunk::SIZE*Block::SIZE);
+					-oldPosition.x << Chunk::SIZE_DEC,
+					-oldPosition.y << Chunk::SIZE_DEC,
+					-oldPosition.z << Chunk::SIZE_DEC);
+					
 		chunk->draw();
 		
 		oldPosition = chunkPosition;
+	}
+}
+
+void ChunkManager::beginGeneration()
+{
+}
+
+void ChunkManager::genSetBlockType(const BlockCoordinate & absoluteBlockPosition, 
+								   BlockType type)
+{
+	Chunk * chunk = 0;
+	ChunkCoordinate cPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
+	if (!mChunks.isThere(cPosition, chunk)) {
+		chunk = mChunks.create(cPosition);
+		chunk->load();
+		mGeneratedChunks.push_back(chunk);
+	}
+	chunk->set(getInsideBkPosByAbsBkPos(cPosition, absoluteBlockPosition), type);
+}
+
+void ChunkManager::endGeneration()
+{
+	for (ChunkVector::iterator it = mGeneratedChunks.begin();
+		it != mGeneratedChunks.end(); ++it) {
+		
+		(*it)->rebuild();
+		
+		mVisibleChunks.push_back(*it);
 	}
 }
 
@@ -344,14 +394,8 @@ void ChunkManager::draw(Renderer &renderer) const
 
 bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition, Chunk* & chunk) const
 {
-	ChunkMap::const_iterator it = 
-			mLoadedChunks.find(chunkPosition);
-	
-	if (it == mLoadedChunks.end())
-		return false;
-	
-	chunk = it->second;
-	return true;
+	return mChunks.isThere(chunkPosition, chunk);
+
 }
 
 bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition, const Chunk *& chunk) const
@@ -366,10 +410,40 @@ bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition, const Chunk 
 
 Chunk *ChunkManager::getChunk(const sf::Vector3i &chunkPosition) const
 {
-	return mLoadedChunks.find(chunkPosition)->second;
+//	return mLoadedChunks.find(chunkPosition)->second;
 }
 
-void ChunkManager::rebuildWithNeighbours(Chunk *chunk, const sf::Vector3i &chunkPosition)
+inline void ChunkManager::loadAndRebuildOneNeighbour(const ChunkCoordinate & chunkPosition,
+											  Chunk *& nearChunk) {
+//	if (isChunkLoaded(chunkPosition, nearChunk)) {
+//		if (! nearChunk->isEmpty())
+//			mChunksToRebuild.insert(nearChunk);
+//		else if (! nearChunk->isEmpty())
+//			mPositionChunksToCreate.insert(chunkPosition);
+//	} else {
+//		mPositionChunksToLoad.insert(chunkPosition);
+//		mPositionChunksToCreate.insert(chunkPosition);
+//	}
+}
+
+void ChunkManager::loadAndRebuildNeighbours(Chunk *chunk, const ChunkCoordinate & chunkPosition)
+{
+	mChunksToRebuild.insert(chunk);
+	
+	Chunk * nearChunk = 0;
+	loadAndRebuildOneNeighbour(chunkPosition + VectorTools::EX, nearChunk);
+	loadAndRebuildOneNeighbour(chunkPosition - VectorTools::EX, nearChunk);
+	loadAndRebuildOneNeighbour(chunkPosition + VectorTools::EY, nearChunk);
+	loadAndRebuildOneNeighbour(chunkPosition - VectorTools::EY, nearChunk);
+	loadAndRebuildOneNeighbour(chunkPosition + VectorTools::EZ, nearChunk);
+	loadAndRebuildOneNeighbour(chunkPosition - VectorTools::EZ, nearChunk);
+	
+	// need to rebuild others too (think about torches)
+	// ...
+}
+
+
+void ChunkManager::rebuildWithNeighbours(Chunk *chunk, const ChunkCoordinate &chunkPosition)
 {
 	mChunksToRebuild.insert(chunk);
 	
@@ -404,17 +478,25 @@ void ChunkManager::reqRebuildChunk(Chunk* & chunk)
 void ChunkManager::reqUnloadChunk(Chunk* & chunk)
 {
 	// avoid to use this chunk in computation
-	mLoadedChunks.erase(chunk->getPosition());
-	mChunksToUnload.insert(chunk);
+//	mLoadedChunks.erase(chunk->getPosition());
+//	mChunksToUnload.insert(chunk);
 }
 
 
 
 ChunkManager::~ChunkManager() {
-	for(ChunkMap::iterator it = mLoadedChunks.begin();
-		it != mLoadedChunks.end(); ++it) {
-		// unload (save to disk)
-		mPersistence.saveChunk(it->second);		
-		mPool.giveBackChunk(it->second);
-	}
+//	for(ChunkMap::iterator it = mLoadedChunks.begin();
+//		it != mLoadedChunks.end(); ++it) {
+//		// unload (save to disk)
+//		//mPersistence.saveChunk(it->second);		
+//		mPool.giveBackChunk(it->second);
+	//	}
+}
+
+
+
+void ChunkManager::deleteChunk(BlockCoordinate &absBkPos)
+{
+	Chunk * chunk = mChunks.get(getChkPosByAbsBkPos(absBkPos));
+	chunk->unload();
 }

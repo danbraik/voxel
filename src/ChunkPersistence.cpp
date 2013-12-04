@@ -83,7 +83,7 @@ bool ChunkPersistence::loadChunk(Chunk * chunk, const ChunkPersistenceCache & ca
 	if (chunk == 0 || !cache.mIsValid)
 		return false;
 	
-	if (chunk->getData() == 0) {
+	if (!chunk->hasData()) {
 		std::cerr << "ERR : chunk has no chunkData !"<<std::endl;
 		return false;
 	}

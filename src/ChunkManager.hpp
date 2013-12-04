@@ -13,6 +13,7 @@
 #include "ChunkDataPool.hpp"
 #include "ChunkPersistence.hpp"
 #include "WorldGenerator.hpp"
+#include "Chunk3dContainer.hpp"
 
 struct HashConfiguration{
    size_t operator()(const sf::Vector3i & v) const {
@@ -29,6 +30,8 @@ struct HashChunkPtr{
 
 class ChunkManager
 {
+	friend class Chunk;
+		
 	public:
 		
 		ChunkManager(const BlockList & list, ChunkPersistence & persistence);
@@ -36,7 +39,7 @@ class ChunkManager
 		// tests
 		void init();
 		void reinit();
-		void deleteChunk(sf::Vector3i & absBkPos);
+		void deleteChunk(BlockCoordinate &absBkPos);
 		void loadChunk(const sf::Vector3i & absBkPos);
 		void visible(const sf::Vector3i & absBkPos);
 		void resetChunk(const sf::Vector3i & absBkPos);
@@ -56,10 +59,20 @@ class ChunkManager
 		
 		void draw(Renderer & renderer) const;
 		
+		
+		void beginGeneration();
+		void genSetBlockType(const BlockCoordinate & absoluteBlockPosition, BlockType type);
+		
+		void endGeneration();
+		
+		
 		~ChunkManager();
 		
 		
 	private:	
+		
+		void loadChunk(Chunk * chunk) const;
+		
 		sf::Vector3i getChkPosByAbsBkPos(const sf::Vector3i & absoluteBlockPosition) const;
 		sf::Vector3i getChkPosByRelBkPos(const sf::Vector3i & fromChunkPosition,
 										 const sf::Vector3i & relativeBlockPosition) const;
@@ -77,10 +90,15 @@ class ChunkManager
 		void releaseChunk(Chunk * chunk);
 		bool acquireChunkData(Chunk * chunk);
 		
+		void notifVisibleZone(const ChunkCoordinate & position);
 		
 		Chunk * getChunk(const sf::Vector3i & chunkPosition) const;
 		
-		void rebuildWithNeighbours(Chunk* chunk, const sf::Vector3i & chunkPosition);
+		
+		void rebuildWithNeighbours(Chunk *chunk, const ChunkCoordinate &chunkPosition);
+		void loadAndRebuildNeighbours(Chunk* chunk, const ChunkCoordinate & chunkPosition);
+		void loadAndRebuildOneNeighbour(const ChunkCoordinate & chunkPosition,
+										Chunk *&nearChunk);
 		
 		// asynchronous requests
 		void reqLoadChunk(const sf::Vector3i & chunkPosition);
@@ -104,12 +122,18 @@ class ChunkManager
 		const BlockList & mList;
 		
 		// All chunks
-		ChunkMap mLoadedChunks;
+		Chunk3dContainer mChunks;
+		int mLoadedChunksGarbage;
 		
 		// Task lists
 		PositionSet mPositionChunksToLoad;
+		PositionSet mPositionChunksToCreate;
 		ChunkSet mChunksToRebuild;
 		ChunkSet mChunksToUnload;
+		
+		// other
+		ChunkList mVisibleChunks;
+		ChunkVector mGeneratedChunks;
 		
 		// Pool : (de)allocate chunk
 		ChunkPool mPool;
@@ -119,8 +143,6 @@ class ChunkManager
 		ChunkPersistence & mPersistence;
 		
 		
-		// test
-		WorldGenerator mWorldGen;
 		
 };
 

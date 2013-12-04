@@ -86,7 +86,7 @@ bool RaycastHelper::raycast(ChunkManager &manager,
                //break;
 			 BlockType type = manager.getBlockType(BlockCoordinate(x,y,z));
 			 //std::cout << "BT " << type << std::endl;
-			 if (type > Block::Patate) {
+			 if (type > Block::ACTIVATED) {
 				 selectCube = sf::Vector3i(x,y,z);
 				 nextNorm = face;
 				 //std::cout << "--" << std::endl;

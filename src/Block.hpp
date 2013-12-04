@@ -4,22 +4,32 @@
 #include <SFML/System.hpp>
 #include <iostream>
 
+//#define DEV
+
+#ifdef DEV
+	class ChunkCoordinate : public sf::Vector3i {public:ChunkCoordinate(){}ChunkCoordinate(int x, int y, int z):sf::Vector3i(x,y,z){}};
+	class BlockCoordinate : public sf::Vector3i {public:BlockCoordinate(){}BlockCoordinate(int x, int y, int z):sf::Vector3i(x,y,z){}};
+#else	
+	typedef sf::Vector3i ChunkCoordinate;
+	typedef sf::Vector3i BlockCoordinate;
+#endif
+
 typedef sf::Int32 BlockType;
-typedef sf::Vector3i ChunkCoordinate;
-typedef sf::Vector3i BlockCoordinate;
 
 class Block
 {
 	public:
-		static const float SIZE = 1.f;
+		//static const float SIZE = 1.f;
 		
 		// de-activated
+		
 		static const BlockType AIR = 0;//must be 0 (because of memset)
+		static const BlockType NONE = 1;
 		// activated
-		static const BlockType Patate = 1;
-		static const BlockType Dirt = 2;
-		static const BlockType Stone = 3;
-		static const BlockType Water = 4;
+		static const BlockType ACTIVATED = 2;
+		static const BlockType Dirt = 10;
+		static const BlockType Stone = 11;
+		static const BlockType Water = 12;
 
 	public:	
 		Block();
@@ -53,8 +63,9 @@ class BlockList {
 	public:
 		
 		BlockList() {
-			mList[Block::AIR].init(1.f,0,0,false);
-			mList[Block::Patate].init(.9,.9,.9,false);
+			mList[Block::AIR].init(1.f,1,1,false);
+			mList[Block::NONE].init(1.f,0,0,true);
+			
 			mList[Block::Dirt].init(.25,.75,.25,true);
 			mList[Block::Stone].init(.5,.5,.5,true);
 			mList[Block::Water].init(0,0,0,false);
@@ -63,7 +74,7 @@ class BlockList {
 		const Block & get(BlockType type) const;
 		
 	private:
-		Block mList[5];
+		Block mList[50];
 	
 };
 

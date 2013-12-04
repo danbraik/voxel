@@ -79,7 +79,7 @@ inline const Block & LocalChunkSystem::getInsideChunk(const Chunk * chunk,
 											   const sf::Vector3i & insideBlockPosition) const {
 	if (chunk != 0)
 		return mManager.getBlock(chunk->get(insideBlockPosition));
-	return mManager.getBlock(Block::AIR);
+	return mManager.getBlock(Block::NONE);
 }
 
 const Block & LocalChunkSystem::getRelativeBlock(const sf::Vector3i & relativeBlockPosition) const
