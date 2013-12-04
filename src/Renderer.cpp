@@ -1,5 +1,7 @@
 #include "Renderer.hpp"
 
+//#define BEAUTY
+
 Renderer::Renderer()
 {
 	glewInit();
@@ -49,19 +51,25 @@ Renderer::Renderer()
 	 GLuint filter;                      // Which Filter To Use
 	 GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR };   // Storage For Three Types Of Fog
 	 GLuint fogfilter= 2;                    // Which Fog To Use
-	 GLfloat fogColor[4]= {0.f, 0.f, 0.f, 0.50f};  
+	 GLfloat fogColor[4]= {.8f, .8f, 1.f, 0.050f};  
 	 glFogi(GL_FOG_MODE, fogMode[fogfilter]);        // Fog Mode
 	 glFogfv(GL_FOG_COLOR, fogColor);            // Set Fog Color
 	 glFogf(GL_FOG_DENSITY, 0.35f);              // How Dense Will The Fog Be
-	 glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
+	 //glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
 	 glFogf(GL_FOG_START, 60.0f);             // Fog Start Depth
 	 glFogf(GL_FOG_END, 80.0f);               // Fog End Depth
-	 //glEnable(GL_FOG); 
+#ifdef BEAUTY
+	 glEnable(GL_FOG); 
+#endif
 	 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	 
 	 
-	 glEnable( GL_BLEND ); 
+	 glEnable( GL_BLEND );
+#ifdef BEAUTY
+	 glClearColor(0.7, 0.7, 1.0, 1.0);
+#else
 	 glClearColor(0.0, 0.0, 0.0, 1.0);
+#endif
 }
 
 void Renderer::screen(int width, int height)

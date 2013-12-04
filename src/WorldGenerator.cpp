@@ -28,7 +28,13 @@ void WorldGenerator::init()
 				
 				float v = octave_noise_3d(1,.5,.9,x/16.0,y/16.0,z/16.0);
 				if (v < -.2)
-					mManager.genSetBlockType(blkPos, Block::Dirt);
+					mManager.genSetBlockType(blkPos, Block::Stone);
+				else if (v < 0) {
+					if (z > 15)
+						mManager.genSetBlockType(blkPos, Block::Dirt);
+					else
+						mManager.genSetBlockType(blkPos, Block::Stone);
+				}
 				
 			}
 		}

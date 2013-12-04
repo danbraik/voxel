@@ -64,7 +64,7 @@ class BlockList {
 		
 		BlockList() {
 			mList[Block::AIR].init(1.f,1,1,false);
-			mList[Block::NONE].init(1.f,0,0,true);
+			mList[Block::NONE].init(1.f,0,0,false);
 			
 			mList[Block::Dirt].init(.25,.75,.25,true);
 			mList[Block::Stone].init(.5,.5,.5,true);

@@ -95,10 +95,8 @@ class ChunkManager
 		Chunk * getChunk(const sf::Vector3i & chunkPosition) const;
 		
 		
-		void rebuildWithNeighbours(Chunk *chunk, const ChunkCoordinate &chunkPosition);
-		void loadAndRebuildNeighbours(Chunk* chunk, const ChunkCoordinate & chunkPosition);
-		void loadAndRebuildOneNeighbour(const ChunkCoordinate & chunkPosition,
-										Chunk *&nearChunk);
+		void rebuildNeighbours(const ChunkCoordinate & chunkPosition);
+		void rebuildOneNeighbour(const ChunkCoordinate & chunkPosition);
 		
 		// asynchronous requests
 		void reqLoadChunk(const sf::Vector3i & chunkPosition);
