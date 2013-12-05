@@ -9,27 +9,31 @@
 	#include "Chunk.hpp"
 #endif
 
-Mesh::Mesh() : mVboId(0), mVertexCount(0)
+Mesh::Mesh() : mVboId(), mVertexCount()
 {
+	for (int i = 0; i < MAX_DETAIL; ++i) {
+		mVboId[i] = 0;
+		mVertexCount[i] = 0;
+	}
 }
 
 
-void Mesh::setData(MeshFloat *data, int vertexCount)
+void Mesh::setData(MeshFloat *data, int vertexCount, MeshDetail detail)
 {
 	// std::cout << "Set data" << std::endl;
 	
-	if (mVboId == 0) { // init
-		glGenBuffers(1, &mVboId);
+	if (mVboId[detail] == 0) { // init
+		glGenBuffers(1, &(mVboId[detail]));
 		// std::cout << "VboId " << mVboId << std::endl;
 	}
 	
 	// float [x y z r g b n n n]
 	GLsizei sizeDataInBytes = vertexCount * PROPS * sizeof(MeshFloat);
 	// std::cout << "estimate data size " << sizeDataInBytes << std::endl;
-	mVertexCount = vertexCount ;
+	mVertexCount[detail] = vertexCount ;
 	
 	//Make the new VBO active
-	glBindBuffer(GL_ARRAY_BUFFER, mVboId);
+	glBindBuffer(GL_ARRAY_BUFFER, mVboId[detail]);
 	 
 	//Upload vertex data to the video device
 	glBufferData(GL_ARRAY_BUFFER, sizeDataInBytes, data, GL_DYNAMIC_DRAW);
@@ -37,15 +41,14 @@ void Mesh::setData(MeshFloat *data, int vertexCount)
 	glBindBuffer(GL_ARRAY_BUFFER, -1);
 }
 
-void Mesh::draw() const
+void Mesh::draw(MeshDetail detail) const
 {
 
-	
-	if (mVertexCount == 0)
+	if (mVertexCount[detail] == 0)
 		return;
 	
 	//Make the new VBO active. Repeat here incase changed since initialisation
-	glBindBuffer(GL_ARRAY_BUFFER, mVboId);
+	glBindBuffer(GL_ARRAY_BUFFER, mVboId[detail]);
 	
 	//Draw Triangle from VBO - do each time window, view point or data changes
 	//Establish its 3 coordinates per vertex with zero stride in this array; necessary here
@@ -66,19 +69,19 @@ void Mesh::draw() const
 					static_cast<GLvoid*>(static_cast<GLvoid*>(0) + 6*sizeof(MeshFloat)));
 	
 	//Establish array contains vertices (not normals, colours, texture coords etc)
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
+//	glEnableClientState(GL_VERTEX_ARRAY);
+//	glEnableClientState(GL_COLOR_ARRAY);
+//	glEnableClientState(GL_NORMAL_ARRAY);
 	 
 	//Actually draw the triangle, giving the number of vertices provided
-	glDrawArrays(GL_TRIANGLES, 0, mVertexCount);
+	glDrawArrays(GL_TRIANGLES, 0, mVertexCount[detail]);
 	
 	// maybe useful
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);	
-	glDisableClientState(GL_NORMAL_ARRAY);	
+//	glDisableClientState(GL_VERTEX_ARRAY);
+//	glDisableClientState(GL_COLOR_ARRAY);	
+//	glDisableClientState(GL_NORMAL_ARRAY);	
 	
-	glBindBuffer(GL_ARRAY_BUFFER, -1);
+//	glBindBuffer(GL_ARRAY_BUFFER, -1);
 	
 	//Force display to be drawn now
 	//glFlush();

@@ -7,6 +7,7 @@
 #include "WorldGenerator.hpp"
 #include "ChunkPersistence.hpp"
 #include "RaycastHelper.hpp"
+#include "ProfilTimer.hpp"
 
 using namespace std;
 
@@ -48,6 +49,8 @@ int main(int argc, char ** argv) {
 	RaycastHelper rh;
 	
 	int currentBlock = Block::Dirt;
+	
+	ProfilTimer ptimer;
 	
 	//avoid event when move cursor
 	bool mouseMoved = true;
@@ -231,6 +234,9 @@ int main(int argc, char ** argv) {
 		
 		
 		manager.draw(renderer);
+		
+//		ptimer.end();
+//		ptimer.begin();
 		
 		glPopMatrix();
 		

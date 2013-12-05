@@ -46,7 +46,7 @@ void ChunkManager::notifVisibleZone(const ChunkCoordinate & position) {
 		chunk = mChunks.create(position);
 		chunk->load();
 	}
-	mVisibleChunks.push_front(chunk);
+	mVisibleChunks.push_back(chunk);
 }
 
 void ChunkManager::resetChunk(const sf::Vector3i &absBkPos)
@@ -341,12 +341,11 @@ void ChunkManager::draw(Renderer &renderer) const
 {
 	ChunkCoordinate oldPosition;
 	
-	for  (ChunkList::const_iterator it = mVisibleChunks.begin();
+	for  (ChunkVector::const_iterator it = mVisibleChunks.begin();
 		  it != mVisibleChunks.end(); ++it) {
 		
 		const Chunk * chunk = *it;
 		const ChunkCoordinate & chunkPosition = chunk->getPosition();
-		
 		
 		// use oldPosition to compute difference
 		// between previous and current chunks
@@ -356,8 +355,14 @@ void ChunkManager::draw(Renderer &renderer) const
 					-oldPosition.x << Chunk::SIZE_DEC,
 					-oldPosition.y << Chunk::SIZE_DEC,
 					-oldPosition.z << Chunk::SIZE_DEC);
-					
-		chunk->draw();
+		
+		// test
+		if (chunkPosition.x < 2)
+			chunk->draw(0);
+		else if (chunkPosition.x < 6)
+			chunk->draw(1);
+		else
+			chunk->draw(2);
 		
 		oldPosition = chunkPosition;
 	}

@@ -53,7 +53,7 @@ void Chunk::rebuild()
 	}
 }
 
-void Chunk::draw() const
+void Chunk::draw(const MeshDetail detail) const
 {
 #ifdef DEBUG_GRAPH
 	glDisable(GL_LIGHTING);
@@ -63,9 +63,9 @@ void Chunk::draw() const
 		glBegin(GL_LINES);
 	
 		if (!hasData())
-			glColor3f(1,.7,7);
+			glColor3f(1,.7,1);
 		else	
-			glColor3f(.7,.7,1);
+			glColor3f(.7,detail,detail/2.0);
 		glVertex3f(0,0,0);glVertex3f(Chunk::SIZE ,0,0);
 		glVertex3f(0,0,0);glVertex3f(0,Chunk::SIZE,0);
 		glVertex3f(0,0,0);glVertex3f(0,0,Chunk::SIZE);
@@ -87,7 +87,7 @@ void Chunk::draw() const
 	
 	
 	if (hasData())
-		mData->getMesh().draw();
+		mData->getMesh().draw(detail);
 //		else
 //			std::cerr << "Chunk.draw : chunkdata is NULL !"<<std::endl;
 	

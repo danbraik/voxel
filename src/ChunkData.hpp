@@ -2,6 +2,7 @@
 #define CHUNKDATA_HPP
 
 #include <vector>
+
 #include "Mesh.hpp"
 #include "Block.hpp"
 
@@ -36,7 +37,7 @@ class ChunkData
 		
 	private:
 		void computeOneBlock(MeshFloatVector & data, 
-							 int &vertexCount, 
+							 int & vertexCount, 
 							 const LocalChunkSystem & manager,
 							 int x, int y, int z, 
 							 const sf::Vector3f &ux,

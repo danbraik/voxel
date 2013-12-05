@@ -130,7 +130,7 @@ class ChunkManager
 		ChunkSet mChunksToUnload;
 		
 		// other
-		ChunkList mVisibleChunks;
+		ChunkVector mVisibleChunks;
 		ChunkVector mGeneratedChunks;
 		
 		// Pool : (de)allocate chunk

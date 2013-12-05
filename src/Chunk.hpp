@@ -37,7 +37,9 @@ class Chunk
 		const ChunkCoordinate & getPosition() const;
 		
 		void rebuild();
-		void draw() const;
+		// detail level
+		// 0 = best, 1 = medium etc.
+		void draw(const MeshDetail detail = 0) const;
 		
 		void load();
 		void unload();

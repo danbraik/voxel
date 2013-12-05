@@ -20,7 +20,11 @@ WorldGenerator::WorldGenerator(ChunkManager & manager) : mManager(manager)
 void WorldGenerator::init()
 {
 	makeIsland(BlockCoordinate(0,0,0));
-	
+	makeIsland(BlockCoordinate(Chunk::SIZE << 1,0,0));
+	makeIsland(BlockCoordinate(Chunk::SIZE << 2,0,0));
+	makeIsland(BlockCoordinate(Chunk::SIZE << 3,0,0));
+	makeIsland(BlockCoordinate(Chunk::SIZE << 4,0,0));
+	makeIsland(BlockCoordinate(Chunk::SIZE << 5,0,0));
 }
 
 void WorldGenerator::makeIsland(const BlockCoordinate &islandPos)

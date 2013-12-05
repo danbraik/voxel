@@ -2,6 +2,9 @@ TEMPLATE = app
 #CONFIG += console
 #CONFIG -= qt
 
+QMAKE_CXXFLAGS_DEBUG -= -O2
+QMAKE_CXXFLAGS_RELEASE += -O2 -Os
+
 # debug
 LIBS += -L/usr/local/lib/ -lsfml-graphics-d -lsfml-window-d -lsfml-audio-d -lsfml-system-d -lGL -lGLU -lGLEW
 # release
@@ -29,7 +32,8 @@ SOURCES += src/main.cpp \
     src/ChunkDataPool.cpp \
     src/Chunk3dContainer.cpp \
     src/procedural/simplexnoise.cpp \
-    src/procedural/simplextextures.cpp
+    src/procedural/simplextextures.cpp \
+    src/ProfilTimer.cpp
 
 HEADERS += \
     src/Renderer.hpp \
@@ -49,5 +53,6 @@ HEADERS += \
     src/ChunkDataPool.hpp \
     src/Chunk3dContainer.hpp \
     src/procedural/simplexnoise.h \
-    src/procedural/simplextextures.h
+    src/procedural/simplextextures.h \
+    src/ProfilTimer.hpp
 
