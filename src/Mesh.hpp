@@ -12,6 +12,9 @@ class Mesh
 	public:
 		static const MeshDetail MAX_DETAIL = 3;
 		
+		static MeshId globId;
+		static void initStatic();
+		
 		
 		Mesh();
 		
