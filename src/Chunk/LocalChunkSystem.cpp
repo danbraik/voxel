@@ -1,33 +1,31 @@
 #include "LocalChunkSystem.hpp"
 #include "ChunkManager.hpp"
-#include "VectorTools.hpp"
+#include "../VectorTools.hpp"
 
-#define EX VectorTools::EX
-#define EY VectorTools::EY
-#define EZ VectorTools::EZ
+using namespace VectorTools;
 
 LocalChunkSystem::LocalChunkSystem(const ChunkManager &manager, 
-								   const Chunk * chunk) :
+								   /*const*/ Chunk * chunk) :
 	mManager(manager), c(chunk),
 	cx(0),cmx(0),cy(0),cmy(0),cz(0),cmz(0),cxy(0),cmxy(0),cmxmy(0),cxmy(0),
 	cxyz(0),cmxyz(0),cmxmyz(0),cxmyz(0), 
 	cxymz(0),cmxymz(0),cmxmymz(0),cxmymz(0)
 {
 	const sf::Vector3i & chunkPosition = c->getPosition();
-	const Chunk * nearChunk = 0;
+	/*const*/ Chunk * nearChunk = 0;
 	
-	if (manager.isChunkLoaded(chunkPosition+EX, nearChunk))
+	if (manager.isChunkLoaded(chunkPosition+EXi, nearChunk))
 		cx = nearChunk;
-	if (manager.isChunkLoaded(chunkPosition+EY, nearChunk))
+	if (manager.isChunkLoaded(chunkPosition+EYi, nearChunk))
 		cy = nearChunk;
 	
-	if (manager.isChunkLoaded(chunkPosition-EX, nearChunk))
+	if (manager.isChunkLoaded(chunkPosition-EXi, nearChunk))
 		cmx = nearChunk;
-	if (manager.isChunkLoaded(chunkPosition-EY, nearChunk))
+	if (manager.isChunkLoaded(chunkPosition-EYi, nearChunk))
 		cmy = nearChunk;
-	if (manager.isChunkLoaded(chunkPosition+EZ, nearChunk))
+	if (manager.isChunkLoaded(chunkPosition+EZi, nearChunk))
 		cz = nearChunk;
-	if (manager.isChunkLoaded(chunkPosition-EZ, nearChunk))
+	if (manager.isChunkLoaded(chunkPosition-EZi, nearChunk))
 		cmz = nearChunk;
 	
 //	if (manager.isChunkLoaded(chunkPosition+E, nearChunk))
@@ -70,21 +68,18 @@ LocalChunkSystem::LocalChunkSystem(const ChunkManager &manager,
 	
 }
 
-const Block & LocalChunkSystem::getBlock(BlockType type) const
-{
-	return mManager.getBlock(type);
-}
+
 
 inline const Block & LocalChunkSystem::getInsideChunk(const Chunk * chunk, 
-											   const sf::Vector3i & insideBlockPosition) const {
+											   const BlockCoordinate & insideBlockPosition) const {
 	if (chunk != 0)
-		return mManager.getBlock(chunk->get(insideBlockPosition));
-	return mManager.getBlock(Block::NONE);
+		return chunk->get(insideBlockPosition);
+	return mManager.getNoBlock();
 }
 
 const Block & LocalChunkSystem::getRelativeBlock(const sf::Vector3i & relativeBlockPosition) const
 {
-	sf::Vector3i bkPos(relativeBlockPosition);
+	BlockCoordinate bkPos(relativeBlockPosition);
 	
 	if (bkPos.x >= 0) {										
 		if (bkPos.x < Chunk::SIZE) {
@@ -183,11 +178,6 @@ const Block & LocalChunkSystem::getRelativeBlock(const sf::Vector3i & relativeBl
 		}
 	} else { // x < 0
 		
-		
-		
-		
-		
-		
 		bkPos.x += Chunk::SIZE;
 		
 		if (bkPos.y >= 0) {
@@ -234,8 +224,7 @@ const Block & LocalChunkSystem::getRelativeBlock(const sf::Vector3i & relativeBl
 			}
 		}
 		
-		
-	
 	}
-	return mManager.getBlock(Block::AIR);
+	
+	return mManager.getNoBlock();
 }

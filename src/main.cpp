@@ -1,13 +1,16 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Renderer.hpp"
-#include "Chunk.hpp"
+#include "Render/Renderer.hpp"
 #include "Freeflycamera.h"
-#include "ChunkManager.hpp"
+#include "Chunk/ChunkManager.hpp"
 #include "WorldGenerator.hpp"
-#include "ChunkPersistence.hpp"
+#include "Chunk/ChunkPersistence.hpp"
 #include "RaycastHelper.hpp"
 #include "ProfilTimer.hpp"
+#include "ElectricManager.hpp"
+#include "VoxelEngine.hpp"
+#include "Block/SimpleBlock.hpp"
+#include "Block/BlockList.hpp"
 
 using namespace std;
 
@@ -26,29 +29,35 @@ int main(int argc, char ** argv) {
 				sf::Style::Fullscreen
 #endif
 				,sf::ContextSettings(24));
-	
+	window.setPosition(sf::Vector2i(0,0));
     window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(10);
 
+	
 	Renderer renderer;
 	renderer.screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 	
-	ChunkPersistence persistence;
-	persistence.setDirectory("/home/daniel/projects/c_cpp/voxel/world");
 	
-	BlockList list;
+	VoxelEngine voxel;
 	
-	ChunkManager manager(list, persistence);
-	
-	WorldGenerator worldGenerator(manager);
+	WorldGenerator worldGenerator(voxel);
 	worldGenerator.init();
 	
 	
+	ElectricManager electricManager(voxel);
+
+
+	
+	//	addWireBlock(Block::WireOff, );
+	//	addWireBlock(Block::WireOn, );
+		
+	//	addPowerBlock(Block::Power, ;
+	
 	FreeFlyCamera camera(Vector3D(12,-12,12));
 	
-	RaycastHelper rh;
+	SimpleBlock dirt(.0, 1.,.0);
 	
-	int currentBlock = Block::Dirt;
+	Block * currentBlock = &dirt;
 	
 	ProfilTimer ptimer;
 	
@@ -98,18 +107,18 @@ int main(int argc, char ** argv) {
                 } else if (event.key.code == sf::Keyboard::L) {
 					const Vector3D & tpos = camera.getPosition();
 					BlockCoordinate bpos( tpos.X,tpos.Y,tpos.Z);
-					worldGenerator.makeIsland(bpos);
+					worldGenerator.makeBoard(bpos);
 					
                 } else if (event.key.code == sf::Keyboard::U) {
 					const Vector3D & tpos = camera.getTargetPosition();
 					BlockCoordinate bpos( tpos.X, tpos.Y,tpos.Z);
 					//std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
 					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
-					manager.deleteChunk(bpos);
+					
                 } else if (event.key.code == sf::Keyboard::I) {
 					const Vector3D & tpos = camera.getTargetPosition();
 					ChunkCoordinate bpos( tpos.X, tpos.Y,tpos.Z);
-					manager.resetChunk(bpos);
+					
                 } else if (event.key.code == sf::Keyboard::LShift) {
 					camera.OnKeyboard(FreeFlyCamera::boost, false);
                 } else if (event.key.code == sf::Keyboard::Z) {
@@ -123,6 +132,12 @@ int main(int argc, char ** argv) {
 				} else if (event.key.code == sf::Keyboard::Space) {
 						camera.OnKeyboard(FreeFlyCamera::up, false);
 						camera.OnKeyboard(FreeFlyCamera::down, false);
+				} else if (event.key.code == sf::Keyboard::Numpad1) {
+//					currentBlock = Block::Dirt;
+				} else if (event.key.code == sf::Keyboard::Numpad2) {
+//					currentBlock = ElectricManager::Block.WireOff;
+				} else if (event.key.code == sf::Keyboard::Numpad3) {
+				//	currentBlock = ElectricManager::Block.Power;
 				}
 				
 				
@@ -163,9 +178,15 @@ int main(int argc, char ** argv) {
 					sf::Vector3i sel, next; 
 					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
 					
-					if (rh.raycast(manager,src,dir,sel,next)) {
+					if (voxel.raycast(src,dir,sel,next)) {
 						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
-						manager.setBlockType(sel+next, currentBlock);		
+						voxel.setBlock(sel+next, *currentBlock);
+						
+//						if (currentBlock==ElectricManager::Block.Power)
+//							electricManager.newPower(sel+next);
+//						else if (currentBlock==ElectricManager::Block.WireOff)
+//							electricManager.newWire(sel+next);
+							
 					}
 					
 					
@@ -186,18 +207,23 @@ int main(int argc, char ** argv) {
 					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
 				
 					
-					if (rh.raycast(manager,src,dir,sel,next)) {
-						manager.setBlockType(sel, Block::AIR);
+					if (voxel.raycast(src,dir,sel,next)) {
+						const Block & block = voxel.getBlock(sel);
+//						if (type == ElectricManager::Block.Power)
+//							electricManager.rmPower(sel);
+//						else if (type == ElectricManager::Block.WireOn)
+//							electricManager.rmWireOn(sel);
+						
+						voxel.setBlock(sel, BlockList::NO_BLOCK);
 						cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
 					}
-					
-				} 
-						
+				} 	
             }
         }
 		
 		
-		manager.update();
+		electricManager.update();
+		voxel.update();
 		
 		camera.animate(10);
 		
@@ -211,7 +237,7 @@ int main(int argc, char ** argv) {
 		sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
 		
 		
-		if (rh.raycast(manager,src,dir,sel,next)) {
+		if (voxel.raycast(src,dir,sel,next)) {
 			//cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
 			//cout << " Next "<< next.x <<" "<<next.y<<" "<<next.z<<endl;
 			selectedBlock = sel;
@@ -233,7 +259,7 @@ int main(int argc, char ** argv) {
 		glPushMatrix();
 		
 		
-		manager.draw(renderer);
+		voxel.draw(renderer);
 		
 //		ptimer.end();
 //		ptimer.begin();

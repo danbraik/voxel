@@ -2,8 +2,8 @@ TEMPLATE = app
 #CONFIG += console
 #CONFIG -= qt
 
-QMAKE_CXXFLAGS_DEBUG -= -O2
-QMAKE_CXXFLAGS_RELEASE += -O2 -Os
+# QMAKE_CXXFLAGS_DEBUG -= -O2
+# QMAKE_CXXFLAGS_RELEASE += -O2 -Os
 
 # debug
 LIBS += -L/usr/local/lib/ -lsfml-graphics-d -lsfml-window-d -lsfml-audio-d -lsfml-system-d -lGL -lGLU -lGLEW
@@ -15,44 +15,64 @@ OBJECTS_DIR = .obj
 OBJECTS_DIR = .obj
 
 SOURCES += src/main.cpp \
-    src/Renderer.cpp \
-    src/Chunk.cpp \
-    src/Block.cpp \
+    src/Render/Renderer.cpp \
+    src/Chunk/Chunk.cpp \
+    src/Block/Block.cpp \
+    src/Block/SimpleBlock.cpp \
     src/Freeflycamera.cpp \
     src/Vector3d.cpp \
-    src/ChunkManager.cpp \
-    src/Mesh.cpp \
-    src/LocalChunkSystem.cpp \
+    src/Chunk/ChunkManager.cpp \
+    src/Render/Mesh.cpp \
+    src/Chunk/LocalChunkSystem.cpp \
     src/VectorTools.cpp \
-    src/ChunkPool.cpp \
+    src/Chunk/ChunkPool.cpp \
     src/WorldGenerator.cpp \
-    src/ChunkPersistence.cpp \
+    src/Chunk/ChunkPersistence.cpp \
     src/RaycastHelper.cpp \
-    src/ChunkData.cpp \
-    src/ChunkDataPool.cpp \
-    src/Chunk3dContainer.cpp \
+    src/Chunk/ChunkData.cpp \
+    src/Chunk/Chunk3dContainer.cpp \
     src/procedural/simplexnoise.cpp \
     src/procedural/simplextextures.cpp \
-    src/ProfilTimer.cpp
+    src/ProfilTimer.cpp \
+    src/ElectricManager.cpp \
+    src/Block/BlockList.cpp \
+    src/Render/MeshVertex.cpp \
+    src/Block/BlockCxWire.cpp \
+    src/Block/BlockCxElec.cpp \
+    src/Block/BlockCxPower.cpp \
+    src/VoxelEngine.cpp \
+    src/Block/NoBlock.cpp \
+    src/Block/ComplexBlock.cpp
+    
 
 HEADERS += \
-    src/Renderer.hpp \
-    src/Chunk.hpp \
-    src/Block.hpp \
+    src/Render/Renderer.hpp \
     src/Freeflycamera.h \
     src/Vector3d.h \
-    src/Mesh.hpp \
-    src/LocalChunkSystem.hpp \
     src/VectorTools.hpp \
-    src/ChunkManager.hpp \
-    src/ChunkPool.hpp \
+    src/Mesh.hpp \
+    src/MeshVertex.hpp \
+    src/Chunk/Chunk.hpp \
+    src/Block/Block.hpp \
+    src/Block/SimpleBlock.hpp \
+    src/Chunk/LocalChunkSystem.hpp \
+    src/Chunk/ChunkManager.hpp \
+    src/Chunk/ChunkPool.hpp \
+    src/Chunk/ChunkPersistence.hpp \
+    src/Chunk/ChunkData.hpp \
+    src/Chunk/Chunk3dContainer.hpp \
     src/WorldGenerator.hpp \
-    src/ChunkPersistence.hpp \
     src/RaycastHelper.hpp \
-    src/ChunkData.hpp \
-    src/ChunkDataPool.hpp \
-    src/Chunk3dContainer.hpp \
     src/procedural/simplexnoise.h \
     src/procedural/simplextextures.h \
-    src/ProfilTimer.hpp
+    src/ProfilTimer.hpp \
+    src/ElectricManager.hpp \
+    src/Block/BlockList.hpp \
+    src/Block/BlockCxWire.hpp \
+    src/Block/BlockCxElec.hpp \
+    src/Block/BlockCxPower.hpp \
+    src/VoxelEngine.hpp \
+    src/Block/NoBlock.hpp \
+    src/Block/ComplexBlock.hpp
+    
 

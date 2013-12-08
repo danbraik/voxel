@@ -6,7 +6,7 @@
 #define DEBUG_GRAPH
 
 #ifdef DEBUG_GRAPH
-	#include "Chunk.hpp"
+	#include "../Chunk/Chunk.hpp"
 #endif
 
 Mesh::Mesh() : mVboId(), mVertexCount()

@@ -3,15 +3,18 @@
 
 #include <SFML/Graphics.hpp>
 
-class VectorTools
+namespace VectorTools
 {
-	public:
+	
+	const sf::Vector3i EXi(1,0,0);
+	const sf::Vector3i EYi(0,1,0);
+	const sf::Vector3i EZi(0,0,1);
+	
+	const sf::Vector3f EXf(1.0, 0,   0);
+	const sf::Vector3f EYf(0,   1.0, 0);
+	const sf::Vector3f EZf(0,   0,   1.0);
+	
 		
-		// use it to compute near positions
-		static const sf::Vector3i EX, EY, EZ;
-		
-		VectorTools();
-};
-
+}
 
 #endif // VECTORTOOLS_HPP

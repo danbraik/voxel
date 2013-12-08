@@ -10,9 +10,8 @@
 #include <hash_set>
 #include "Chunk.hpp"
 #include "ChunkPool.hpp"
-#include "ChunkDataPool.hpp"
+
 #include "ChunkPersistence.hpp"
-#include "WorldGenerator.hpp"
 #include "Chunk3dContainer.hpp"
 
 struct HashConfiguration{
@@ -39,21 +38,25 @@ class ChunkManager
 		// tests
 		void init();
 		void reinit();
-		void deleteChunk(BlockCoordinate &absBkPos);
 		void loadChunk(const sf::Vector3i & absBkPos);
 		void visible(const sf::Vector3i & absBkPos);
 		void resetChunk(const sf::Vector3i & absBkPos);
 		
 		
+		const Block & getBlock(const BlockCoordinate & absoluteBlockPosition) const;
+		Block & getBlock(const BlockCoordinate & absoluteBlockPosition);
 		
-		const Block & getBlock(BlockType type) const;
-		const Block & getBlock(const sf::Vector3i & absoluteBlockPosition) const;
-		BlockType getBlockType(const sf::Vector3i & absoluteBlockPosition) const;
-		const Block & getRelativeBlock(const sf::Vector3i & fromChunkPosition,
-									   const sf::Vector3i & relativeBlockPosition) const;
+		const Block & getRelativeBlock(const ChunkCoordinate & fromChunkPosition,
+									   const BlockCoordinate & relativeBlockPosition) const;
 		
-		void setBlockType(const sf::Vector3i & absoluteBlockPosition, BlockType type);
+		Block & getRelativeBlock(const ChunkCoordinate & fromChunkPosition,
+									   const BlockCoordinate & relativeBlockPosition);
 		
+		void setBlock(const BlockCoordinate & absoluteBlockPosition, Block & block);
+		
+		Block & getNoBlock() const {
+			return mList.NO_BLOCK;
+		}
 		
 		void update(); // pseudo asynchronous update
 		
@@ -61,7 +64,7 @@ class ChunkManager
 		
 		
 		void beginGeneration();
-		void genSetBlockType(const BlockCoordinate & absoluteBlockPosition, BlockType type);
+		void genSetBlock(const BlockCoordinate & absoluteBlockPosition, Block & block);
 		
 		void endGeneration();
 		
@@ -92,8 +95,7 @@ class ChunkManager
 		
 		void notifVisibleZone(const ChunkCoordinate & position);
 		
-		Chunk * getChunk(const sf::Vector3i & chunkPosition) const;
-		
+	
 		
 		void rebuildNeighbours(const ChunkCoordinate & chunkPosition);
 		void rebuildOneNeighbour(const ChunkCoordinate & chunkPosition);
@@ -132,16 +134,9 @@ class ChunkManager
 		// other
 		ChunkVector mVisibleChunks;
 		ChunkVector mGeneratedChunks;
-		
-		// Pool : (de)allocate chunk
-		ChunkPool mPool;
-		ChunkDataPool mDataPool;
-		
+				
 		// Save to and load from disk
 		ChunkPersistence & mPersistence;
-		
-		
-		
 };
 
 #endif // CHUNKMANAGER_HPP

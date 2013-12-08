@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Block.hpp"
+#include "../Block/Block.hpp"
 #include "Chunk.hpp"
 #include "ChunkManager.hpp"
 #include "LocalChunkSystem.hpp"
@@ -19,20 +19,15 @@ bool Chunk::isStrictelyInside(const sf::Vector3i & blockPosition)
 
 
 
-Chunk::Chunk() :  mPosition(), mIsModified(false), mIsEmpty(false), mIsValid(false)
+Chunk::Chunk() :  mPosition(), mIsModified(false)
 {
+	mData = new ChunkData();
 }
 
 void Chunk::reset() {
-	mIsEmpty = false;
 	mPosition.x=mPosition.y=mPosition.z=0x7FFFFFFF;
 	mIsModified = false;
-	mData = 0; // leak memory ?
 }
-
-
-
-
 
 
 const ChunkCoordinate & Chunk::getPosition() const
@@ -85,30 +80,15 @@ void Chunk::draw(const MeshDetail detail) const
 	glEnable(GL_LIGHTING);
 #endif
 	
-	
 	if (hasData())
 		mData->getMesh().draw(detail);
-//		else
-//			std::cerr << "Chunk.draw : chunkdata is NULL !"<<std::endl;
 	
 }
 
 void Chunk::load()
 {
-	mData = new ChunkData;
-	mData->reset();
-	
 	// load from file or generate
 	mManager->loadChunk(this);
-	
-//	if (mData->upIsCompletelyEmpty()) {
-//		delete mData;
-//		mData = 0;
-//	} else {
-//		rebuild();
-//	}
-	
-	mIsValid = true;
 	
 }
 
@@ -116,12 +96,7 @@ void Chunk::load()
 
 void Chunk::beginSet(bool playerAction)
 {
-	mIsModified = playerAction;
-	
-	if(!hasData()) {
-		mData = new ChunkData();
-	}
-	
+	mIsModified = playerAction;	
 }
 
 
@@ -131,15 +106,21 @@ void Chunk::endSet()
 }
 
 
-void Chunk::setOne(const BlockCoordinate &pos, BlockType type)
+void Chunk::setOne(const BlockCoordinate &pos, Block & block)
 {
 	beginSet(true);
-	set(pos, type);
+	set(pos, block);
 	endSet();
 }
 
 
 void Chunk::unload()
 {
-	mIsValid = false;
+	// TODO : implement persistence
+}
+
+Chunk::~Chunk()
+{
+	if (mData != 0)
+		delete mData;
 }

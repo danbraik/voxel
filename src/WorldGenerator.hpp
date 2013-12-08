@@ -1,17 +1,18 @@
 #ifndef WORLDGENERATOR_HPP
 #define WORLDGENERATOR_HPP
 
-#include "ChunkManager.hpp"
-
+#include "Chunk/ChunkManager.hpp"
+#include "VoxelEngine.hpp"
 
 class WorldGenerator
 {
 	public:
 		WorldGenerator(ChunkManager & manager);
+		WorldGenerator(VoxelEngine & manager);
 		
 		void init();
 		
-		void makeIsland(const BlockCoordinate & islandPosition);
+		void makeBoard(const BlockCoordinate &boardPos);
 		
 		
 	private:

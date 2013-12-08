@@ -4,7 +4,7 @@
 #include <vector>
 #include <SFML/System.hpp>
 
-#include "Block.hpp"
+#include "../Block/BlockList.hpp"
 #include "ChunkData.hpp"
 
 class LocalChunkSystem;
@@ -47,18 +47,19 @@ class Chunk
 		// player action = is the player has modified the block
 		// or maybe it is the world generator (with player = false)
 		void beginSet(bool playerAction = false);
-		void set(const BlockCoordinate & bpos, BlockType type);
+		void set(const BlockCoordinate & bpos, Block & block);
 		void endSet();
 		
-		BlockType get(const BlockCoordinate & pos) const;
+		Block & get(const BlockCoordinate & pos);
+		const Block & get(const BlockCoordinate & pos) const;
 		
 		// usually used after player action
-		void setOne(const BlockCoordinate & pos, BlockType type);
+		void setOne(const BlockCoordinate & pos, Block & block);
 		
-		bool isFilled();
+		
+		~Chunk();
 	private:
 		
-		bool mIsValid;
 		
 		void setPosition(const ChunkCoordinate &position);
 		void setGlobal(Chunk3dContainer * container,
@@ -83,36 +84,39 @@ class Chunk
 		ChunkCoordinate mPosition;
 		ChunkData * mData;
 		
-		
+		bool mNeedRebuild; // TODO : implement
 		bool mIsModified;
-		bool mIsEmpty;
 		
 		Chunk3dContainer * mContainer;
 		ChunkManager * mManager;
-		
-		
 };
 
 
 
-inline BlockType Chunk::get(const BlockCoordinate &pos) const
+inline Block & Chunk::get(const BlockCoordinate &pos)
 {
 	if(hasData())
 		return mData->get(pos);
-	//std::cerr << "Chunk.Get : ChunkData is NULL !"<<std::endl;
-	return Block::AIR;
+	std::cerr << "Chunk.Get : ChunkData is NULL !"<<std::endl;
+	return BlockList::NO_BLOCK;
+}
+
+inline const Block & Chunk::get(const BlockCoordinate &pos) const
+{
+	if(hasData())
+		return mData->get(pos);
+	std::cerr << "Chunk.Get : ChunkData is NULL !"<<std::endl;
+	return BlockList::NO_BLOCK;
 }
 
 
 
-inline void Chunk::set(const BlockCoordinate & pos, BlockType type)
+inline void Chunk::set(const BlockCoordinate & pos, Block & block)
 {
-
-	mData->set(pos, type);
-	if (type > Block::ACTIVATED)
-		mIsEmpty = false;
-	
-	//	std::cerr << "Chunk.set : ChunkData is NULL !"<<std::endl;
+	if (hasData())
+		mData->set(pos, block);
+	else
+		std::cerr << "Chunk.set : ChunkData is NULL !"<<std::endl;
 }
 
 

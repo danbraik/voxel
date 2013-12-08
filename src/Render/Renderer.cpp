@@ -39,6 +39,13 @@ Renderer::Renderer()
 	    // by the other lights are not completely black.
 		GLfloat ambient_lightModel[] = { 0.5f, 0.5f, 0.6f, 1.f };
 		glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambient_lightModel );
+		
+		//Add directed light
+		    GLfloat lightColor1[] = {0.5f, 0.2f, 0.2f, 1.0f}; //Color (0.5, 0.2, 0.2)
+		    //Coming from the direction (-1, 0.5, 0.5)
+		    GLfloat lightPos1[] = {-1.0f, 0.5f, 0.5f, 0.0f};
+		    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
+		    glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
 	
 	   
 	   glColorMaterial ( GL_FRONT, GL_AMBIENT_AND_DIFFUSE) ;
@@ -48,7 +55,6 @@ Renderer::Renderer()
 	 glShadeModel(GL_FLAT);
 	
 	 
-	 GLuint filter;                      // Which Filter To Use
 	 GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR };   // Storage For Three Types Of Fog
 	 GLuint fogfilter= 2;                    // Which Fog To Use
 	 GLfloat fogColor[4]= {.8f, .8f, 1.f, 0.050f};  

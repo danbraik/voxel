@@ -35,11 +35,11 @@ float signum(float x) {
 }
 
 
-bool RaycastHelper::raycast(ChunkManager &manager, 
-							sf::Vector3f &origin, 
-							sf::Vector3f &direction, 
+bool RaycastHelper::raycast(const ChunkManager &manager, 
+							const sf::Vector3f &origin, 
+							const sf::Vector3f &direction, 
 							sf::Vector3i &selectCube, 
-							sf::Vector3i &nextNorm)
+							sf::Vector3i &nextNorm) const
 {
 	
 		 // Cube containing origin point.
@@ -84,9 +84,9 @@ bool RaycastHelper::raycast(ChunkManager &manager,
            
              //if (callback(x, y, z, blocks[x*wy*wz + y*wz + z], face))
                //break;
-			 BlockType type = manager.getBlockType(BlockCoordinate(x,y,z));
+			 const Block & block = manager.getBlock(BlockCoordinate(x,y,z));
 			 //std::cout << "BT " << type << std::endl;
-			 if (type > Block::ACTIVATED) {
+			 if (block.isActivated()) {
 				 selectCube = sf::Vector3i(x,y,z);
 				 nextNorm = face;
 				 //std::cout << "--" << std::endl;

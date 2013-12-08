@@ -1,13 +1,13 @@
 #include <iostream>
 #include "ChunkManager.hpp"
-#include "Mesh.hpp"
-#include "VectorTools.hpp"
+#include "../Render/Mesh.hpp"
+#include "../VectorTools.hpp"
 #include <algorithm>
 
 ChunkManager::ChunkManager(const BlockList &list, ChunkPersistence &persistence) : 
 	mList(list),
 	mPositionChunksToLoad(), mChunksToRebuild(),
-	mChunksToUnload()	, mPool(*this), mDataPool(), mPersistence(persistence),
+	mChunksToUnload(), mPersistence(persistence),
 	mLoadedChunksGarbage(0), mChunks(), mVisibleChunks()
 {
 	mChunks.setGlobal(this);
@@ -44,7 +44,6 @@ void ChunkManager::notifVisibleZone(const ChunkCoordinate & position) {
 	Chunk * chunk = 0;
 	if (! mChunks.isThere(position, chunk)) {
 		chunk = mChunks.create(position);
-		chunk->load();
 	}
 	mVisibleChunks.push_back(chunk);
 }
@@ -63,10 +62,7 @@ void ChunkManager::resetChunk(const sf::Vector3i &absBkPos)
 // ***************************
 
 
-const Block & ChunkManager::getBlock(BlockType type) const
-{
-	return mList.get(type);
-}
+
 
 
 
@@ -105,18 +101,13 @@ inline sf::Vector3i ChunkManager::getInsideBkPosByRelBkPos(const sf::Vector3i & 
 			(toChunkPosition - fromChunkPosition) * Chunk::SIZE;
 }
 
-const Block &ChunkManager::getBlock(const sf::Vector3i & absoluteBlockPosition) const
-{
-	return mList.get( getBlockType(absoluteBlockPosition) );
-}
-
-BlockType ChunkManager::getBlockType(const sf::Vector3i &absoluteBlockPosition) const
+Block & ChunkManager::getBlock(const BlockCoordinate & absoluteBlockPosition)
 {
 	ChunkCoordinate chunkPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
 	Chunk * chunk = 0;
 	
 	if (!mChunks.isThere(chunkPosition, chunk)) {
-		return Block::NONE;
+		return getNoBlock();
 	}
 	
 	BlockCoordinate insideChunkBlockPosition =
@@ -125,6 +116,23 @@ BlockType ChunkManager::getBlockType(const sf::Vector3i &absoluteBlockPosition) 
 	
 	return chunk->get(insideChunkBlockPosition);
 }
+
+const Block & ChunkManager::getBlock(const BlockCoordinate & absoluteBlockPosition) const
+{
+	ChunkCoordinate chunkPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
+	Chunk * chunk = 0;
+	
+	if (!mChunks.isThere(chunkPosition, chunk)) {
+		return getNoBlock();
+	}
+	
+	BlockCoordinate insideChunkBlockPosition =
+			absoluteBlockPosition -
+			(chunkPosition) * Chunk::SIZE;
+	
+	return chunk->get(insideChunkBlockPosition);
+}
+
 
 const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & fromChunkPosition,
 											const sf::Vector3i & relativeBlockPosition) const
@@ -136,16 +144,16 @@ const Block &ChunkManager::getRelativeBlock(const sf::Vector3i & fromChunkPositi
 	Chunk * chunk = 0;
 	
 	if (!isChunkLoaded(chunkPosition, chunk)) {
-		return mList.get(Block::NONE);
+		return BlockList::NO_BLOCK;
 	}
 	
 	sf::Vector3i insideChunkBlockPosition = getInsideBkPosByRelBkPos(fromChunkPosition, 
 																	 chunkPosition, 
 																	 relativeBlockPosition);
-	return mList.get( chunk->get(insideChunkBlockPosition) );
+	return chunk->get(insideChunkBlockPosition);
 }
 
-void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, BlockType type)
+void ChunkManager::setBlock(const BlockCoordinate &absoluteBlockPosition, Block & block)
 {
 	ChunkCoordinate chunkPosition = 
 			getChkPosByAbsBkPos(absoluteBlockPosition);
@@ -153,14 +161,13 @@ void ChunkManager::setBlockType(const sf::Vector3i &absoluteBlockPosition, Block
 	Chunk * chunk = 0;
 	if (!mChunks.isThere(chunkPosition, chunk)) {
 		chunk = mChunks.create(chunkPosition);
-		chunk->load();
 		mVisibleChunks.push_back(chunk);
 	}
 	
 	BlockCoordinate insideChunkBlockPosition =
 			getInsideBkPosByAbsBkPos(chunkPosition, absoluteBlockPosition);
 	
-	chunk->setOne(insideChunkBlockPosition, type);
+	chunk->setOne(insideChunkBlockPosition, block);
 	
 	// the current chunk state cannot be
 	// generated again (can't generate user action ^^)
@@ -372,17 +379,17 @@ void ChunkManager::beginGeneration()
 {
 }
 
-void ChunkManager::genSetBlockType(const BlockCoordinate & absoluteBlockPosition, 
-								   BlockType type)
+void ChunkManager::genSetBlock(const BlockCoordinate & absoluteBlockPosition, 
+								   Block & block)
 {
 	Chunk * chunk = 0;
 	ChunkCoordinate cPosition = getChkPosByAbsBkPos(absoluteBlockPosition);
 	if (!mChunks.isThere(cPosition, chunk)) {
 		chunk = mChunks.create(cPosition);
-		chunk->load();
 		mGeneratedChunks.push_back(chunk);
+		chunk->beginSet(false);
 	}
-	chunk->set(getInsideBkPosByAbsBkPos(cPosition, absoluteBlockPosition), type);
+	chunk->set(getInsideBkPosByAbsBkPos(cPosition, absoluteBlockPosition), block);
 }
 
 void ChunkManager::endGeneration()
@@ -390,7 +397,7 @@ void ChunkManager::endGeneration()
 	for (ChunkVector::iterator it = mGeneratedChunks.begin();
 		it != mGeneratedChunks.end(); ++it) {
 		
-		(*it)->rebuild();
+		(*it)->endSet();
 		
 		mVisibleChunks.push_back(*it);
 	}
@@ -414,10 +421,7 @@ bool ChunkManager::isChunkLoaded(const sf::Vector3i &chunkPosition, const Chunk 
 	return false;
 }
 
-Chunk *ChunkManager::getChunk(const sf::Vector3i &chunkPosition) const
-{
-//	return mLoadedChunks.find(chunkPosition)->second;
-}
+
 
 inline void ChunkManager::rebuildOneNeighbour(const ChunkCoordinate & chunkPosition) {
 	Chunk * nearChunk = 0;
@@ -429,12 +433,12 @@ inline void ChunkManager::rebuildOneNeighbour(const ChunkCoordinate & chunkPosit
 
 void ChunkManager::rebuildNeighbours(const ChunkCoordinate & chunkPosition)
 {
-	rebuildOneNeighbour(chunkPosition + VectorTools::EX);
-	rebuildOneNeighbour(chunkPosition - VectorTools::EX);
-	rebuildOneNeighbour(chunkPosition + VectorTools::EY);
-	rebuildOneNeighbour(chunkPosition - VectorTools::EY);
-	rebuildOneNeighbour(chunkPosition + VectorTools::EZ);
-	rebuildOneNeighbour(chunkPosition - VectorTools::EZ);
+	rebuildOneNeighbour(chunkPosition + VectorTools::EXi);
+	rebuildOneNeighbour(chunkPosition - VectorTools::EXi);
+	rebuildOneNeighbour(chunkPosition + VectorTools::EYi);
+	rebuildOneNeighbour(chunkPosition - VectorTools::EYi);
+	rebuildOneNeighbour(chunkPosition + VectorTools::EZi);
+	rebuildOneNeighbour(chunkPosition - VectorTools::EZi);
 	
 	// need to rebuild others too (think about torches)
 	// ...
@@ -471,9 +475,3 @@ ChunkManager::~ChunkManager() {
 }
 
 
-
-void ChunkManager::deleteChunk(BlockCoordinate &absBkPos)
-{
-	Chunk * chunk = mChunks.get(getChkPosByAbsBkPos(absBkPos));
-	chunk->unload();
-}

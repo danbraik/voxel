@@ -3,12 +3,11 @@
 #include "ChunkManager.hpp"
 
 
-#define MAX_TOTAL_CHUNKS 500000
-#define INIT_CHUNKS 400000
-//#define DEBUG_POOL
+#define MAX_TOTAL_CHUNKS 5000
+#define INIT_CHUNKS 1
+#define DEBUG_POOL
 
-ChunkPool::ChunkPool(const ChunkManager &manager) :
-	mManager(const_cast<ChunkManager&>(manager)),
+ChunkPool::ChunkPool() :
 	mFreeChunks(),
 	mUsedChunks(),
 	mPoolChunks()
@@ -19,6 +18,10 @@ ChunkPool::ChunkPool(const ChunkManager &manager) :
 		mPoolChunks.push_back(chunk);
 		mFreeChunks.push(chunk);
 	}
+	
+#ifdef DEBUG_POOL
+	std::cout << "ChunkPool(i) : " << mFreeChunks.size() << " free chunk(s) for start" << std::endl;
+#endif
 }
 
 Chunk *ChunkPool::getFreeChunk()
@@ -28,7 +31,7 @@ Chunk *ChunkPool::getFreeChunk()
 	if (mFreeChunks.empty()) {
 		if (mPoolChunks.size() > MAX_TOTAL_CHUNKS /*limit*/) {
 			if (mUsedChunks.size())
-				mManager.reqUnloadChunk(mUsedChunks.front());
+				;//mManager.reqUnloadChunk(mUsedChunks.front());
 			return 0;
 		} // else
 		chunk = new Chunk;
@@ -42,7 +45,7 @@ Chunk *ChunkPool::getFreeChunk()
 		chunk = mFreeChunks.top();
 		mFreeChunks.pop();
 #ifdef DEBUG_POOL
-		std::cout << "ChunkPool (n) : " << mFreeChunks.size() << " free chunk(s)" << std::endl;
+		std::cout << "ChunkPool (n) : " << mFreeChunks.size() << " free chunk(s) now" << std::endl;
 #endif
 	}
 	mUsedChunks.push(chunk);
@@ -61,7 +64,7 @@ void ChunkPool::giveBackChunk(Chunk * chunk)
 	}
 	mUsedChunks.pop();
 #ifdef DEBUG_POOL
-	std::cout << "ChunkPool (d) : " << mFreeChunks.size() << " free chunk(s)" << std::endl;
+	std::cout << "ChunkPool (d) : " << mFreeChunks.size() << " free chunk(s) now" << std::endl;
 #endif
 }
 
@@ -69,7 +72,11 @@ ChunkPool::~ChunkPool()
 {
 	// delete pool
 	if (mFreeChunks.size() != mPoolChunks.size())
-		std::cerr << "ChunkPool, some chunk were not given back !" << std::endl;
+		std::cerr << "ChunkPool(i), some chunk were not given back !" << std::endl;
+#ifdef DEBUG_POOL
+	else
+		std::cout << "ChunkPool(i), all chunks were given back :)" << std::endl;
+#endif
 	Chunk * chunk;
 	while (!mFreeChunks.empty()) {
 		chunk = mFreeChunks.top();

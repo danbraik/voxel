@@ -21,17 +21,14 @@ typedef std::vector<Chunk*> ChunkVector;
 class ChunkPool
 {
 	public:
-		ChunkPool(const ChunkManager & manager);
+		ChunkPool();
 		
 		Chunk * getFreeChunk();
 		void giveBackChunk(Chunk *chunk);
 		
 		~ChunkPool();		
 		
-	private:
-		ChunkManager & mManager;
-		
-		
+	private:		
 		ChunkStack mFreeChunks;
 		ChunkQueue mUsedChunks;
 		ChunkVector mPoolChunks;

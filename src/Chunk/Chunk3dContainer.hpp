@@ -7,6 +7,8 @@
 #include <hash_map>
 
 #include "Chunk.hpp"
+#include "ChunkPool.hpp"
+
 class Chunk;
 
 class Chunk3dContainer
@@ -17,10 +19,11 @@ class Chunk3dContainer
 		Chunk3dContainer();
 		
 		Chunk * create(const ChunkCoordinate & position);
-	
-		Chunk * get(const ChunkCoordinate & position) const;
 		
+		// Get Chunk and Test existance at same time
 		bool isThere(const ChunkCoordinate & position, Chunk *& chunk) const;
+		
+		~Chunk3dContainer();
 		
 	private:
 		
@@ -32,10 +35,16 @@ class Chunk3dContainer
 									Chunk*, 
 									HashChunkCoordinate> ChunkMap;
 		
+		// Chunk map : (ChunkCoordinate) -> (Chunk)
 		ChunkMap mAllChunks;
-			
+		
+		// Memory manager for Chunk
+		ChunkPool mPool;
+		
 		
 		ChunkManager * mManager;
+		
+		
 		
 		
 };

@@ -1,26 +1,23 @@
 #include "Chunk3dContainer.hpp"
 
-Chunk3dContainer::Chunk3dContainer() : mAllChunks()
+Chunk3dContainer::Chunk3dContainer() : mAllChunks(), mPool(), mManager(0)
 {
 }
 
 Chunk * Chunk3dContainer::create(const ChunkCoordinate &position)
 {
-	// TODO : use pool
-	Chunk * chunk = new Chunk;
+	Chunk * chunk = mPool.getFreeChunk();
 	chunk->reset();
 	chunk->setPosition(position);
 	chunk->setGlobal(this, mManager);
+	chunk->load();
 	
 	mAllChunks[position] = chunk;
 	
 	return chunk;
 }
 
-Chunk * Chunk3dContainer::get(const ChunkCoordinate &position) const
-{
-	return mAllChunks.find(position)->second;
-}
+
 
 bool Chunk3dContainer::isThere(const ChunkCoordinate &position, Chunk *&chunk) const
 {
@@ -32,4 +29,12 @@ bool Chunk3dContainer::isThere(const ChunkCoordinate &position, Chunk *&chunk) c
 		
 	chunk = it->second;
 	return true;
+}
+
+Chunk3dContainer::~Chunk3dContainer()
+{
+	for (ChunkMap::iterator it = mAllChunks.begin();
+		 it != mAllChunks.end(); ++it) {
+		mPool.giveBackChunk(it->second);
+	}
 }
