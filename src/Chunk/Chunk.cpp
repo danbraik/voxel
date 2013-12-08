@@ -19,7 +19,7 @@ bool Chunk::isStrictelyInside(const sf::Vector3i & blockPosition)
 
 
 
-Chunk::Chunk() :  mPosition(), mIsModified(false)
+Chunk::Chunk() :  mPosition(), mIsModified(false), mNeedRebuild(false)
 {
 	mData = new ChunkData();
 }
@@ -40,12 +40,15 @@ void Chunk::setPosition(const ChunkCoordinate &position)
 	mPosition = position;
 }
 
-void Chunk::rebuild()
+bool Chunk::rebuild()
 {
-	if (hasData()) {
+	if (hasData() && mNeedRebuild) {
 		const LocalChunkSystem local(*mManager, this);
 		mData->rebuild(local);
+		mNeedRebuild = false;
+		return true;
 	}
+	return false;
 }
 
 void Chunk::draw(const MeshDetail detail) const
@@ -102,7 +105,8 @@ void Chunk::beginSet(bool playerAction)
 
 void Chunk::endSet()
 {
-	rebuild();
+	//rebuild();
+	mNeedRebuild = true;
 }
 
 
@@ -112,6 +116,8 @@ void Chunk::setOne(const BlockCoordinate &pos, Block & block)
 	set(pos, block);
 	endSet();
 }
+
+
 
 
 void Chunk::unload()

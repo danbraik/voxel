@@ -108,7 +108,7 @@ bool ChunkPersistence::loadChunk(Chunk * chunk, const ChunkPersistenceCache & ca
 //#ifdef DEBUG			
 //			std::cout << " OK" << std::endl;
 //#endif
-//	return true;
+	return true;
 }
 
 void ChunkPersistence::saveChunk(Chunk *chunk)

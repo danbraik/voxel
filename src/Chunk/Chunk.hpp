@@ -36,7 +36,11 @@ class Chunk
 		
 		const ChunkCoordinate & getPosition() const;
 		
-		void rebuild();
+		// Rebuild mesh
+		// return true if rebuild was performed
+		//        false if rebuild was not needed
+		bool rebuild();
+		
 		// detail level
 		// 0 = best, 1 = medium etc.
 		void draw(const MeshDetail detail = 0) const;
@@ -56,6 +60,7 @@ class Chunk
 		// usually used after player action
 		void setOne(const BlockCoordinate & pos, Block & block);
 		
+		void needRebuild();
 		
 		~Chunk();
 	private:
@@ -84,7 +89,7 @@ class Chunk
 		ChunkCoordinate mPosition;
 		ChunkData * mData;
 		
-		bool mNeedRebuild; // TODO : implement
+		bool mNeedRebuild;
 		bool mIsModified;
 		
 		Chunk3dContainer * mContainer;
@@ -121,6 +126,9 @@ inline void Chunk::set(const BlockCoordinate & pos, Block & block)
 
 
 
+inline void Chunk::needRebuild() {
+	mNeedRebuild = true;	
+}
 
 
 

@@ -64,7 +64,9 @@ int main(int argc, char ** argv) {
 	//avoid event when move cursor
 	bool mouseMoved = true;
 	sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), window);
-    // run the main loop
+    
+	long loop = 0;
+	// run the main loop
     bool running = true;
     while (running) {
 
@@ -223,7 +225,9 @@ int main(int argc, char ** argv) {
 		
 		
 		electricManager.update();
-		voxel.update();
+		
+		if (loop % 50 == 0)
+			voxel.update();
 		
 		camera.animate(10);
 		
@@ -295,6 +299,7 @@ int main(int argc, char ** argv) {
 		
         window.display();
 		
+		++loop;
     }
 
     return 0;

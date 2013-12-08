@@ -173,6 +173,7 @@ void ChunkManager::setBlock(const BlockCoordinate &absoluteBlockPosition, Block 
 	// generated again (can't generate user action ^^)
 	// chunk->setModified();
 	
+	mChunksToRebuild.push(chunk);
 	
 	// todo : optimise again, select neighbours
 	if (! Chunk::isStrictelyInside(insideChunkBlockPosition)) {
@@ -281,16 +282,15 @@ void ChunkManager::update()
 	// -- Rebuild chunks
 	//std::cout << "CMup: (b) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
 	int chunkRebuild = 0;
-	if (mChunksToRebuild.size() > 0) {
-		for(ChunkSet::iterator it = mChunksToRebuild.begin();
-			it != mChunksToRebuild.end() && chunkRebuild < maxRebuild;
-			 mChunksToRebuild.erase(it++), ++chunkRebuild) {
-			
-			(*it)->rebuild();
-		}
-		//mChunksToRebuild.clear();
-		//std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
+	while (!mChunksToRebuild.empty() && chunkRebuild < maxRebuild) {
+		Chunk * chunk = mChunksToRebuild.front();
+		
+		chunkRebuild += (chunk->rebuild()) ? 1 : 0;
+		
+		mChunksToRebuild.pop();	
 	}
+//	if (chunkRebuild != 0)
+//		std::cout << "CMup: (r) " << chunkRebuild << " rebuilded." << std::endl;
 	//std::cout << "CMup: (a) " << mChunksToRebuild.size() << " to rebuild." << std::endl;
 	//std::cout << std::endl;
 	// -- end
@@ -399,6 +399,7 @@ void ChunkManager::endGeneration()
 		
 		(*it)->endSet();
 		
+		mChunksToRebuild.push(*it);
 		mVisibleChunks.push_back(*it);
 	}
 }
@@ -427,7 +428,8 @@ inline void ChunkManager::rebuildOneNeighbour(const ChunkCoordinate & chunkPosit
 	Chunk * nearChunk = 0;
 	
 	if (mChunks.isThere(chunkPosition, nearChunk)) {
-		mChunksToRebuild.insert(nearChunk);
+		nearChunk->needRebuild();
+		mChunksToRebuild.push(nearChunk);
 	}
 }
 
@@ -453,7 +455,7 @@ void ChunkManager::reqLoadChunk(const sf::Vector3i &chunkPosition)
 
 void ChunkManager::reqRebuildChunk(Chunk* & chunk)
 {
-	mChunksToRebuild.insert(chunk);
+	mChunksToRebuild.push(chunk);
 }
 
 void ChunkManager::reqUnloadChunk(Chunk* & chunk)
