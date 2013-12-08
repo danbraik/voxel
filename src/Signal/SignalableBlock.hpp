@@ -5,7 +5,7 @@
 
 namespace Signal {
 
-	class SignalableBlock : public ComplexBlock
+	class SignalableBlock
 	{
 		public:
 			SignalableBlock();

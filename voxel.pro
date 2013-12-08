@@ -34,16 +34,15 @@ SOURCES += src/main.cpp \
     src/procedural/simplexnoise.cpp \
     src/procedural/simplextextures.cpp \
     src/ProfilTimer.cpp \
-    src/ElectricManager.cpp \
     src/Block/BlockList.cpp \
     src/Render/MeshVertex.cpp \
-    src/Block/BlockCxElec.cpp \
-    src/Block/BlockCxPower.cpp \
     src/VoxelEngine.cpp \
     src/Block/NoBlock.cpp \
     src/Block/ComplexBlock.cpp \
     src/Signal/SignalableBlock.cpp \
-    src/Signal/Wire.cpp
+    src/Signal/Wire.cpp \
+    src/Signal/Power.cpp \
+    src/Signal/SignalManager.cpp
     
 
 HEADERS += \
@@ -67,14 +66,13 @@ HEADERS += \
     src/procedural/simplexnoise.h \
     src/procedural/simplextextures.h \
     src/ProfilTimer.hpp \
-    src/ElectricManager.hpp \
     src/Block/BlockList.hpp \
-    src/Block/BlockCxElec.hpp \
-    src/Block/BlockCxPower.hpp \
     src/VoxelEngine.hpp \
     src/Block/NoBlock.hpp \
     src/Block/ComplexBlock.hpp \
     src/Signal/SignalableBlock.hpp \
-    src/Signal/Wire.hpp
+    src/Signal/Wire.hpp \
+    src/Signal/Power.hpp \
+    src/Signal/SignalManager.hpp
     
 

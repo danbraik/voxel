@@ -5,7 +5,7 @@
 
 namespace Signal {
 	
-	class Wire : public SignalableBlock
+	class Wire : public SignalableBlock, public ComplexBlock
 	{
 		public:
 			

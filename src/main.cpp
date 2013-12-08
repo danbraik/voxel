@@ -7,12 +7,12 @@
 #include "Chunk/ChunkPersistence.hpp"
 #include "RaycastHelper.hpp"
 #include "ProfilTimer.hpp"
-#include "ElectricManager.hpp"
 #include "VoxelEngine.hpp"
 #include "Block/SimpleBlock.hpp"
 #include "Block/BlockList.hpp"
 
 #include "Signal/Wire.hpp"
+#include "Signal/SignalManager.hpp"
 
 using namespace std;
 
@@ -41,7 +41,7 @@ Block & getNewBlock(const std::string & classname) {
 	if (classname == WIRE_GREEN)
 		return *(new Signal::Wire(2));
 	if (classname == POWER)
-		return BlockList::NO_BLOCK;
+		return *(new Signal::Power());
 	
 	return BlockList::NO_BLOCK;
 }
@@ -75,7 +75,7 @@ int main(int argc, char ** argv) {
 	worldGenerator.init();
 	
 	
-	ElectricManager electricManager(voxel);
+	Signal::SignalManager signalManager(voxel);
 
 
 	
@@ -172,6 +172,8 @@ int main(int argc, char ** argv) {
 					currentBlock = WIRE_GREEN;
 				} else if (event.key.code == sf::Keyboard::Numpad3) {
 					currentBlock = WIRE_UNIV;
+				} else if (event.key.code == sf::Keyboard::Numpad4) {
+					currentBlock = POWER;
 				}
 				
 				
@@ -216,8 +218,8 @@ int main(int argc, char ** argv) {
 						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
 						voxel.setBlock(sel+next, getNewBlock(currentBlock));
 						
-//						if (currentBlock==ElectricManager::Block.Power)
-//							electricManager.newPower(sel+next);
+						if (currentBlock==POWER)
+							signalManager.addPower(sel+next);
 //						else if (currentBlock==ElectricManager::Block.WireOff)
 //							electricManager.newWire(sel+next);
 							
@@ -256,9 +258,9 @@ int main(int argc, char ** argv) {
         }
 		
 		
-		electricManager.update();
+		//signalManager.update();
 		
-		if (loop % 50 == 0)
+		//if (loop % 50 == 0)
 			voxel.update();
 		
 		camera.animate(10);
