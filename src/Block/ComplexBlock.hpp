@@ -8,6 +8,8 @@ class ComplexBlock : public Block
 	public:
 		ComplexBlock();
 		
+		virtual ~ComplexBlock();
+		
 };
 
 #endif // COMPLEXBLOCK_HPP

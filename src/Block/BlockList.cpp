@@ -1,7 +1,6 @@
 #include "BlockList.hpp"
 
 #include "ComplexBlock.hpp"
-#include "BlockCxPower.hpp"
 
 
 NoBlock BlockList::NO_BLOCK;

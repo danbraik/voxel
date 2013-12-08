@@ -50,7 +50,7 @@ class Block
 				   const Block &left, const Block &front, const Block &top, 
 						   const Block &bottom) const = 0;
 		
-		virtual ~Block() {}
+		virtual ~Block();
 		
 	protected:
 		Block(bool activated = false, bool filled = false);

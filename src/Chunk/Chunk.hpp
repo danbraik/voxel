@@ -56,6 +56,7 @@ class Chunk
 		
 		Block & get(const BlockCoordinate & pos);
 		const Block & get(const BlockCoordinate & pos) const;
+		Block * getPtr(const BlockCoordinate &pos);
 		
 		// usually used after player action
 		void setOne(const BlockCoordinate & pos, Block & block);
@@ -113,6 +114,7 @@ inline const Block & Chunk::get(const BlockCoordinate &pos) const
 	std::cerr << "Chunk.Get : ChunkData is NULL !"<<std::endl;
 	return BlockList::NO_BLOCK;
 }
+
 
 
 

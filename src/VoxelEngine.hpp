@@ -28,11 +28,7 @@ class VoxelEngine
 		
 		inline Block & getBlock(const BlockCoordinate & absoluteBlockPosition) {
 			return mManager.getBlock(absoluteBlockPosition);
-		}
-		
-		inline const Block & getBlock(const BlockCoordinate & absoluteBlockPosition) const {
-			return mManager.getBlock(absoluteBlockPosition);
-		}
+		}		
 		
 		inline void update() {
 			mManager.update();

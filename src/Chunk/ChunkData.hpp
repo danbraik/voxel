@@ -34,7 +34,6 @@ class ChunkData
 		Block & get(const BlockCoordinate & pos);
 		const Block & get(const BlockCoordinate & pos) const;
 		
-		
 		void set(const BlockCoordinate & pos, Block & block);
 		
 	private:

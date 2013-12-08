@@ -9,3 +9,7 @@ void NoBlock::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const B
 {
 	throw "NoBlock.build was called.";
 }
+
+NoBlock::~NoBlock()
+{
+}

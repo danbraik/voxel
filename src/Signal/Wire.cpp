@@ -8,7 +8,6 @@ using namespace VectorTools;
 using namespace Signal;
 
 Wire::Wire(int color) : SignalableBlock(),
-	hasSignal(false),
 	mColor(color)
 {
 }
@@ -34,20 +33,20 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 	float r=.0,g=.0,b=.0,a=1.;
 	switch(mColor) {
 		case RED:
-			r =.6;
+			r =.4;
 			break;
 		case GREEN:
-			g=.6;
+			g=.4;
 			break;
 		case BLUE:
-			b=.6;
+			b=.4;
 			break;
 		case WHITE:
-			r = .6; g =.6 ; b =.6 ;
+			r = .4; g =0.4 ; b =.4 ;
 			break;
 	}
-	if (hasSignal) {
-		r*=1.6;g*=1.6;b*=1.6;
+	if (mHasSignal) {
+		r*=2.5;g*=2.5;b*=2.5;
 	}
 	const SignalableBlock * wr = dynamic_cast<const SignalableBlock*>(&right);
 	const SignalableBlock * wbe = dynamic_cast<const SignalableBlock*>(&behind);
@@ -275,4 +274,29 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666667,0.666667,0.333333));				
 	}
 	
+}
+
+void Wire::welcomeToWorld(SignalableBlock * nei[])
+{
+	for (int i=0;i<MAX_SLOTS;++i) {
+		if (nei[i] && (nei[i]->getColor() == mColor || nei[i]->getColor()==WHITE||mColor==WHITE))
+			if(nei[i]->helloIwantToConnect(this, (i+3)%MAX_SLOTS)) {
+				mNei[i] = nei[i];
+		}
+	}
+	
+}
+
+void Wire::send(int from)
+{
+	if (!mHasSignal) {
+		mHasSignal = true;
+		for (int i=0;i<MAX_SLOTS;++i)
+			if (i!=from&&mNei[i] && (mNei[i]->getColor() == mColor || mNei[i]->getColor()==WHITE||mColor==WHITE))
+				mNei[i]->send((i+3)%MAX_SLOTS);
+	}
+}
+
+Wire::~Wire()
+{
 }

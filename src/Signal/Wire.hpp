@@ -23,11 +23,16 @@ namespace Signal {
 						  const Block &front, 
 						  const Block &top, 
 						  const Block &bottom) const;
+			
+			virtual void welcomeToWorld(SignalableBlock *nei[]);
+			
+			virtual void send(int from);
 		
+			virtual ~Wire();
+			
 		protected:
 			bool blockIsOk(const SignalableBlock * sb) const;
 		private:
-			bool hasSignal;
 			int mColor;
 	};
 	

@@ -42,7 +42,8 @@ SOURCES += src/main.cpp \
     src/Signal/SignalableBlock.cpp \
     src/Signal/Wire.cpp \
     src/Signal/Power.cpp \
-    src/Signal/SignalManager.cpp
+    src/Signal/SignalManager.cpp \
+    src/Signal/AndLogic.cpp
     
 
 HEADERS += \
@@ -73,6 +74,7 @@ HEADERS += \
     src/Signal/SignalableBlock.hpp \
     src/Signal/Wire.hpp \
     src/Signal/Power.hpp \
-    src/Signal/SignalManager.hpp
+    src/Signal/SignalManager.hpp \
+    src/Signal/AndLogic.hpp
     
 

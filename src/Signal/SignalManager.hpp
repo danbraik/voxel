@@ -13,7 +13,8 @@ namespace Signal {
 		public:
 			SignalManager(VoxelEngine & voxel);
 			
-			void addPower(const BlockCoordinate & bpos);
+			void addPower(Block &block, const BlockCoordinate &bpos);
+			void addWire(Block &block, const BlockCoordinate &bpos);
 			
 		private:
 			VoxelEngine & mVoxel;

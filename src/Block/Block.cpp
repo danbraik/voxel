@@ -10,3 +10,6 @@ Block::Block(bool activated, bool filled) :
 
 
 
+Block::~Block()
+{
+}

@@ -10,6 +10,12 @@ namespace Signal {
 	{
 		public:
 			Power();
+			
+			virtual void welcomeToWorld(SignalableBlock *neid[]);
+			
+			void update();
+			
+			~Power();
 	};
 
 }

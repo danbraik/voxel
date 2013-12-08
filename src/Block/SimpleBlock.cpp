@@ -83,3 +83,7 @@ void SimpleBlock::build(MeshVertexVector &vertices, const sf::Vector3f &pos, con
 		addVertex(vertices,  -EZf,  pos+EXf,mRed, mGreen,mBlue, mAlpha);
 	}
 }
+
+SimpleBlock::~SimpleBlock()
+{
+}

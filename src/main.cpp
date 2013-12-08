@@ -13,6 +13,7 @@
 
 #include "Signal/Wire.hpp"
 #include "Signal/SignalManager.hpp"
+#include "Signal/AndLogic.hpp"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ using namespace std;
 #define WIRE_RED "wire_red"
 #define WIRE_GREEN "wire_green"
 #define POWER "power"
+#define AND "and"
 
 SimpleBlock ground, dirt(.0,1.,.0);
 
@@ -42,6 +44,8 @@ Block & getNewBlock(const std::string & classname) {
 		return *(new Signal::Wire(2));
 	if (classname == POWER)
 		return *(new Signal::Power());
+	if (classname == AND)
+		return *(new Signal::AndLogic());
 	
 	return BlockList::NO_BLOCK;
 }
@@ -84,11 +88,11 @@ int main(int argc, char ** argv) {
 		
 	//	addPowerBlock(Block::Power, ;
 	
-	FreeFlyCamera camera(Vector3D(12,-12,12));
+	FreeFlyCamera camera(Vector3D(12,12,4));
 	
 	
 	
-	std::string currentBlock = DIRT;
+	std::string currentBlock = WIRE_GREEN;
 	
 	
 	ProfilTimer ptimer;
@@ -166,6 +170,8 @@ int main(int argc, char ** argv) {
 				} else if (event.key.code == sf::Keyboard::Space) {
 						camera.OnKeyboard(FreeFlyCamera::up, false);
 						camera.OnKeyboard(FreeFlyCamera::down, false);
+				} else if (event.key.code == sf::Keyboard::Numpad0) {
+					currentBlock = GROUND;					
 				} else if (event.key.code == sf::Keyboard::Numpad1) {
 					currentBlock = WIRE_RED;
 				} else if (event.key.code == sf::Keyboard::Numpad2) {
@@ -174,6 +180,8 @@ int main(int argc, char ** argv) {
 					currentBlock = WIRE_UNIV;
 				} else if (event.key.code == sf::Keyboard::Numpad4) {
 					currentBlock = POWER;
+				} else if (event.key.code == sf::Keyboard::Numpad5) {
+					currentBlock = AND;
 				}
 				
 				
@@ -216,13 +224,15 @@ int main(int argc, char ** argv) {
 					
 					if (voxel.raycast(src,dir,sel,next)) {
 						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
-						voxel.setBlock(sel+next, getNewBlock(currentBlock));
+						Block & block = getNewBlock(currentBlock);
+						voxel.setBlock(sel+next, block);
 						
 						if (currentBlock==POWER)
-							signalManager.addPower(sel+next);
-//						else if (currentBlock==ElectricManager::Block.WireOff)
-//							electricManager.newWire(sel+next);
-							
+							signalManager.addPower(block, sel+next);
+						else if (currentBlock==WIRE_RED||
+								 currentBlock==WIRE_GREEN||
+								 currentBlock==WIRE_UNIV)
+							signalManager.addWire(block , sel+next);
 					}
 					
 					
