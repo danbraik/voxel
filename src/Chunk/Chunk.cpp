@@ -19,7 +19,7 @@ bool Chunk::isStrictelyInside(const sf::Vector3i & blockPosition)
 
 
 
-Chunk::Chunk() :  mPosition(), mIsModified(false), mNeedRebuild(false)
+Chunk::Chunk() : mPosition(), mNeedRebuild(false), mIsModified(false)
 {
 	mData = new ChunkData();
 }

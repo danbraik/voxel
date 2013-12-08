@@ -127,7 +127,6 @@ class ChunkManager
 		
 		// Task lists
 		PositionSet mPositionChunksToLoad;
-		PositionSet mPositionChunksToCreate;
 		ChunkQueue mChunksToRebuild;
 		ChunkSet mChunksToUnload;
 		

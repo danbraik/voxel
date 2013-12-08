@@ -1,5 +1,5 @@
 #include "ComplexBlock.hpp"
 
-ComplexBlock::ComplexBlock()
+ComplexBlock::ComplexBlock() : Block(true, false)
 {
 }

@@ -2,7 +2,9 @@
 
 
 
-Block::Block(bool activated) : mIsActivated(activated)
+Block::Block(bool activated, bool filled) : 
+	mIsActivated(activated),
+	mIsFilled(filled)
 {
 }
 

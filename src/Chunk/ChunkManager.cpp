@@ -6,9 +6,15 @@
 
 ChunkManager::ChunkManager(const BlockList &list, ChunkPersistence &persistence) : 
 	mList(list),
-	mPositionChunksToLoad(), mChunksToRebuild(),
-	mChunksToUnload(), mPersistence(persistence),
-	mLoadedChunksGarbage(0), mChunks(), mVisibleChunks()
+	mChunks(), 
+	mLoadedChunksGarbage(0), 	
+	mPositionChunksToLoad(), 
+	mChunksToRebuild(),
+	mChunksToUnload(), 
+	mVisibleChunks(),
+	mGeneratedChunks(),
+	mPersistence(persistence)
+  
 {
 	mChunks.setGlobal(this);
 }

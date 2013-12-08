@@ -15,7 +15,7 @@ class MeshVertex
 		MeshVertex();
 		MeshVertex(sf::Vector3f pos, sf::Vector3f norm, 
 				   float red, float green, float blue, float alpha = 1.0) {
-			set(pos.x, pos.y,pos.z,norm.x, norm.y,norm.z,red,blue,green,alpha);
+			set(pos.x, pos.y,pos.z,norm.x, norm.y,norm.z,red,green,blue,alpha);
 		}
 
 		void set(float _x, float _y, float _z, 

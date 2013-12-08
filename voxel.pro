@@ -37,12 +37,13 @@ SOURCES += src/main.cpp \
     src/ElectricManager.cpp \
     src/Block/BlockList.cpp \
     src/Render/MeshVertex.cpp \
-    src/Block/BlockCxWire.cpp \
     src/Block/BlockCxElec.cpp \
     src/Block/BlockCxPower.cpp \
     src/VoxelEngine.cpp \
     src/Block/NoBlock.cpp \
-    src/Block/ComplexBlock.cpp
+    src/Block/ComplexBlock.cpp \
+    src/Signal/SignalableBlock.cpp \
+    src/Signal/Wire.cpp
     
 
 HEADERS += \
@@ -68,11 +69,12 @@ HEADERS += \
     src/ProfilTimer.hpp \
     src/ElectricManager.hpp \
     src/Block/BlockList.hpp \
-    src/Block/BlockCxWire.hpp \
     src/Block/BlockCxElec.hpp \
     src/Block/BlockCxPower.hpp \
     src/VoxelEngine.hpp \
     src/Block/NoBlock.hpp \
-    src/Block/ComplexBlock.hpp
+    src/Block/ComplexBlock.hpp \
+    src/Signal/SignalableBlock.hpp \
+    src/Signal/Wire.hpp
     
 

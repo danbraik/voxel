@@ -3,13 +3,13 @@
 #include "../VectorTools.hpp"
 using namespace VectorTools;
 
-SimpleBlock::SimpleBlock(float red, float green, float blue, float alpha) : Block(true),
+SimpleBlock::SimpleBlock(float red, float green, float blue, float alpha) : Block(true, true),
 	mRed(red), mGreen(green), mBlue(blue), mAlpha(alpha)
 {
 }
 
 inline bool testBlock(const Block & block) {
-	return ! block.isActivated();
+	return ! block.isFilled();
 }
 
 void SimpleBlock::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const Block &right, const Block &behind, const Block &left, const Block &front, const Block &top, const Block &bottom) const

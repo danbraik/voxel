@@ -3,7 +3,7 @@
 #include "ChunkManager.hpp"
 
 
-#define MAX_TOTAL_CHUNKS 5000
+#define MAX_TOTAL_CHUNKS 5000 // not used
 #define INIT_CHUNKS 1
 #define DEBUG_POOL
 
@@ -29,11 +29,9 @@ Chunk *ChunkPool::getFreeChunk()
 	Chunk * chunk = 0;
 	
 	if (mFreeChunks.empty()) {
-		if (mPoolChunks.size() > MAX_TOTAL_CHUNKS /*limit*/) {
-			if (mUsedChunks.size())
-				;//mManager.reqUnloadChunk(mUsedChunks.front());
-			return 0;
-		} // else
+//		if (mPoolChunks.size() > MAX_TOTAL_CHUNKS /*limit*/) {
+//			return 0;
+//		} // else
 		chunk = new Chunk;
 		mPoolChunks.push_back(chunk);
 #ifdef DEBUG_POOL

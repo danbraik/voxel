@@ -8,6 +8,7 @@ class BlockCxElec : public ComplexBlock
 	public:
 		BlockCxElec();
 		
+		
 	protected:
 		float r,g,b,a;
 };

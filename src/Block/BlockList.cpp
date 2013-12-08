@@ -1,7 +1,6 @@
 #include "BlockList.hpp"
 
 #include "ComplexBlock.hpp"
-#include "BlockCxWire.hpp"
 #include "BlockCxPower.hpp"
 
 

@@ -43,6 +43,7 @@ class Block
 //		Block();
 		
 		bool isActivated() const;
+		bool isFilled() const;
 		
 		virtual void build(MeshVertexVector & vertices, const sf::Vector3f &pos,
 				   const Block &right, const Block &behind,
@@ -52,7 +53,7 @@ class Block
 		virtual ~Block() {}
 		
 	protected:
-		Block(bool activated = false);
+		Block(bool activated = false, bool filled = false);
 		void setActivated(bool activated);
 		
 		void addVertex(MeshVertexVector & vertices,
@@ -66,6 +67,7 @@ class Block
 		
 	private:
 		bool mIsActivated;
+		bool mIsFilled;
 		
 };
 
@@ -79,6 +81,9 @@ inline void Block::setActivated(bool activated) {
 }
 
 
+inline bool Block::isFilled() const {
+	return mIsFilled;
+}
 
 
 inline void Block::addVertex(MeshVertexVector & vertices, 
@@ -90,7 +95,7 @@ inline void Block::addVertex(MeshVertexVector & vertices,
 
 inline void Block::addVertex(MeshVertexVector &vertices, const sf::Vector3f &norm, const sf::Vector3f &pos, float r, float g, float b, float a) const
 {
-	addVertex(vertices, norm, r, g,b,a,pos);
+	addVertex(vertices, norm, r, g, b,a,pos);
 }
 
 

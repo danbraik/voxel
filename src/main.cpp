@@ -12,8 +12,39 @@
 #include "Block/SimpleBlock.hpp"
 #include "Block/BlockList.hpp"
 
+#include "Signal/Wire.hpp"
+
 using namespace std;
 
+#define NONE "none"
+#define GROUND "ground"
+#define DIRT "dirt"
+#define WIRE_UNIV "wire_univ"
+#define WIRE_RED "wire_red"
+#define WIRE_GREEN "wire_green"
+#define POWER "power"
+
+SimpleBlock ground, dirt(.0,1.,.0);
+
+// TODO : a factory
+Block & getNewBlock(const std::string & classname) {
+	if (classname == NONE)
+		return BlockList::NO_BLOCK;
+	if (classname == GROUND)
+		return ground;
+	if (classname == DIRT)
+		return dirt;
+	if (classname == WIRE_UNIV)
+		return *(new Signal::Wire(0));
+	if (classname == WIRE_RED)
+		return *(new Signal::Wire(1));
+	if (classname == WIRE_GREEN)
+		return *(new Signal::Wire(2));
+	if (classname == POWER)
+		return BlockList::NO_BLOCK;
+	
+	return BlockList::NO_BLOCK;
+}
 
 
 int main(int argc, char ** argv) {
@@ -55,9 +86,10 @@ int main(int argc, char ** argv) {
 	
 	FreeFlyCamera camera(Vector3D(12,-12,12));
 	
-	SimpleBlock dirt(.0, 1.,.0);
 	
-	Block * currentBlock = &dirt;
+	
+	std::string currentBlock = DIRT;
+	
 	
 	ProfilTimer ptimer;
 	
@@ -135,11 +167,11 @@ int main(int argc, char ** argv) {
 						camera.OnKeyboard(FreeFlyCamera::up, false);
 						camera.OnKeyboard(FreeFlyCamera::down, false);
 				} else if (event.key.code == sf::Keyboard::Numpad1) {
-//					currentBlock = Block::Dirt;
+					currentBlock = WIRE_RED;
 				} else if (event.key.code == sf::Keyboard::Numpad2) {
-//					currentBlock = ElectricManager::Block.WireOff;
+					currentBlock = WIRE_GREEN;
 				} else if (event.key.code == sf::Keyboard::Numpad3) {
-				//	currentBlock = ElectricManager::Block.Power;
+					currentBlock = WIRE_UNIV;
 				}
 				
 				
@@ -182,7 +214,7 @@ int main(int argc, char ** argv) {
 					
 					if (voxel.raycast(src,dir,sel,next)) {
 						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
-						voxel.setBlock(sel+next, *currentBlock);
+						voxel.setBlock(sel+next, getNewBlock(currentBlock));
 						
 //						if (currentBlock==ElectricManager::Block.Power)
 //							electricManager.newPower(sel+next);
