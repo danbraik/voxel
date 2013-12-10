@@ -65,6 +65,24 @@ void ChunkManager::resetChunk(const sf::Vector3i &absBkPos)
 	}
 }
 
+ChunkId ChunkManager::getChunkId(const ChunkCoordinate &cpos)
+{
+	Chunk * c = 0;
+	if (mChunks.isThere(cpos, c)) {
+		return static_cast<ChunkId>(c);
+	} else
+		return 0;
+}
+
+void ChunkManager::needRebuild(const ChunkId &chunkId)
+{
+	Chunk * c = static_cast<Chunk*>(chunkId);
+	if (c) {
+		c->needRebuild();
+		mChunksToRebuild.push(c);
+	}
+}
+
 // ***************************
 
 

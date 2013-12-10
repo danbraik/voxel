@@ -99,6 +99,8 @@ class Chunk
 
 
 
+
+
 inline Block & Chunk::get(const BlockCoordinate &pos)
 {
 	if(hasData())
@@ -132,6 +134,9 @@ inline void Chunk::needRebuild() {
 	mNeedRebuild = true;	
 }
 
+
+
+typedef Chunk* ChunkId;
 
 
 #endif // CHUNK_HPP

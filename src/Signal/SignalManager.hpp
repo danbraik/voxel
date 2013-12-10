@@ -6,18 +6,28 @@
 #include "Power.hpp"
 #include "../VoxelEngine.hpp"
 
+#include <queue>
+
 namespace Signal {
+	
+	typedef std::queue<SignalableBlock*> SignalableQueue;
 	
 	class SignalManager
 	{
 		public:
 			SignalManager(VoxelEngine & voxel);
 			
-			void addPower(Block &block, const BlockCoordinate &bpos);
-			void addWire(Block &block, const BlockCoordinate &bpos);
+			void addSignalable(Block &block, const BlockCoordinate &bpos);
+			void rmSignalable(Block &block, const BlockCoordinate &bpos);
+			
+			void update();
+			
+			void addToUpdate(SignalableBlock * block);
 			
 		private:
 			VoxelEngine & mVoxel;
+			
+			SignalableQueue mToUpdate;
 	};
 
 }

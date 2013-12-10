@@ -8,7 +8,7 @@ AndLogic::AndLogic()
 }
 
 
-void Signal::AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const Block &right, const Block &behind, const Block &left, const Block &front, const Block &top, const Block &bottom) const
+void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const Block &right, const Block &behind, const Block &left, const Block &front, const Block &top, const Block &bottom) const
 {
 	float r,g,b,a;
 	r=g=b=a=1.;
@@ -408,4 +408,8 @@ void Signal::AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,1.000000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,1.000000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.666666));	
+}
+
+bool AndLogic::isAcceptable(SignalableBlock *him) const
+{
 }

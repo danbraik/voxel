@@ -1,27 +1,30 @@
 #include "Power.hpp"
 
+#include "SignalManager.hpp"
 using namespace Signal;
 
 Power::Power() : SignalableBlock(), SimpleBlock(1.,1.,1.)
 {
-	mHasSignal = true;
+	state = WILL_POWER;
+	SignalW s = SignalW::newSignal();
+	
+	mSignals.push_back(s);
 }
 
-void Power::welcomeToWorld(SignalableBlock *nei[])
+void Power::iAmConnected(SignalManager & manager)
 {
-	for (int i=0;i<MAX_SLOTS;++i) {
-		if(nei[i] && nei[i]->helloIwantToConnect(this, (i+3)%MAX_SLOTS)) {
-			mNei[i] = nei[i];
-		}
+	for(PairFromNeiList::iterator it = mNeig.begin();
+		it!=mNeig.end();++it) {
+		it->nei->notify(it->remoteSlot, mSignals.front());
+		manager.addToUpdate(it->nei);
 	}
 }
 
-void Power::update()
+
+
+bool Power::cycle(SignalManager & manager)
 {
-	for (int i=0;i<MAX_SLOTS;++i) {
-		if (mNei[i])
-			mNei[i]->send((i+3)%MAX_SLOTS);
-	}
+	return false;
 }
 
 Power::~Power()

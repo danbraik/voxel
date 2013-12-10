@@ -45,7 +45,7 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 			r = .4; g =0.4 ; b =.4 ;
 			break;
 	}
-	if (mHasSignal) {
+	if (!mSignals.empty()) {
 		r*=2.5;g*=2.5;b*=2.5;
 	}
 	const SignalableBlock * wr = dynamic_cast<const SignalableBlock*>(&right);
@@ -276,27 +276,17 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 	
 }
 
-void Wire::welcomeToWorld(SignalableBlock * nei[])
+bool Wire::isAcceptable(SignalableBlock *him) const
 {
-	for (int i=0;i<MAX_SLOTS;++i) {
-		if (nei[i] && (nei[i]->getColor() == mColor || nei[i]->getColor()==WHITE||mColor==WHITE))
-			if(nei[i]->helloIwantToConnect(this, (i+3)%MAX_SLOTS)) {
-				mNei[i] = nei[i];
-		}
-	}
-	
+	return  mColor == WHITE ||
+			him->getColor() == mColor || 
+			him->getColor() == WHITE;
 }
 
-void Wire::send(int from)
-{
-	if (!mHasSignal) {
-		mHasSignal = true;
-		for (int i=0;i<MAX_SLOTS;++i)
-			if (i!=from&&mNei[i] && (mNei[i]->getColor() == mColor || mNei[i]->getColor()==WHITE||mColor==WHITE))
-				mNei[i]->send((i+3)%MAX_SLOTS);
-	}
-}
+
 
 Wire::~Wire()
 {
 }
+
+

@@ -4,6 +4,8 @@ Chunk3dContainer::Chunk3dContainer() : mAllChunks(), mPool(), mManager(0)
 {
 }
 
+
+
 Chunk * Chunk3dContainer::create(const ChunkCoordinate &position)
 {
 	Chunk * chunk = mPool.getFreeChunk();

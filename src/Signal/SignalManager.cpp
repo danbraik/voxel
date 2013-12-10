@@ -10,39 +10,74 @@ SignalManager::SignalManager(VoxelEngine & voxel) : mVoxel(voxel)
 	
 }
 
-void SignalManager::addPower(Block & block, const BlockCoordinate &bpos)
-{
-	Power * power = dynamic_cast<Power*>(&(block));
-	if(!power)
-		return;
-	
-	SignalableBlock * nei[MAX_SLOTS];
-	nei[SignalableBlock::X] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EXi)));
-	nei[SignalableBlock::Y] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EYi)));
-	nei[SignalableBlock::Z] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EZi)));
-	nei[SignalableBlock::_X] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EXi)));
-	nei[SignalableBlock::_Y] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EYi)));
-	nei[SignalableBlock::_Z] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EZi)));
-	
-	power->welcomeToWorld(nei);
-	
-	power->update();
+bool add(PairFromNei & pair, int localSlot, SignalableBlock * block) {
+	if (block == 0) {
+		pair.nei = 0;
+		return false;
+	}
+	pair.localSlot = localSlot;
+	pair.nei = block;
+	return true;
 }
 
-void SignalManager::addWire(Block &block, const BlockCoordinate &bpos)
+void SignalManager::addSignalable(Block & block, const BlockCoordinate &bpos)
 {
-	Wire * wire = dynamic_cast<Wire*>(&(block));
-	if(!wire)
+	SignalableBlock * sblock = dynamic_cast<SignalableBlock*>(&(block));
+	if(!sblock)
 		return;
 	
-	SignalableBlock * nei[MAX_SLOTS];
-	nei[SignalableBlock::X] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EXi)));
-	nei[SignalableBlock::Y] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EYi)));
-	nei[SignalableBlock::Z] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EZi)));
-	nei[SignalableBlock::_X] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EXi)));
-	nei[SignalableBlock::_Y] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EYi)));
-	nei[SignalableBlock::_Z] = dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EZi)));
-
-	wire->welcomeToWorld(nei);
+	std::vector<PairFromNei> pairvec;
 	
+	PairFromNei pair;
+	
+	if (add(pair, SignalableBlock::X, dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EXi)))))
+		pairvec.push_back(pair);
+	if (add(pair, SignalableBlock::Y, dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EYi)))))
+		pairvec.push_back(pair);
+	if (add(pair, SignalableBlock::Z, dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EZi)))))
+		pairvec.push_back(pair);
+	if (add(pair, SignalableBlock::_X, dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EXi)))))
+		pairvec.push_back(pair);
+	if (add(pair, SignalableBlock::_Y, dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EYi)))))
+		pairvec.push_back(pair);
+	if (add(pair, SignalableBlock::_Z, dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos-EZi)))))
+		pairvec.push_back(pair);
+	
+	sblock->welcomeToWorld(*this, pairvec);
+	
+	mToUpdate.push(sblock);
+}
+
+void SignalManager::rmSignalable(Block &block, const BlockCoordinate &bpos)
+{
+	SignalableBlock * sblock = dynamic_cast<SignalableBlock*>(&(block));
+	if(!sblock)
+		return;
+	
+	sblock->sayByeToWorld(*this);
+}
+
+
+void SignalManager::update()
+{
+	SignalableQueue copy = mToUpdate;
+	// clear
+	while (!mToUpdate.empty()) mToUpdate.pop();
+	
+	while(!copy.empty()) {
+		SignalableBlock * sb = copy.front();
+		copy.pop();
+		
+		if (sb->update(*this)) {
+			//test
+			
+			mVoxel.needRebuild(mVoxel.getChunkId(ChunkCoordinate(0,0,0)));
+		}
+			
+	}
+}
+
+void SignalManager::addToUpdate(SignalableBlock *block)
+{
+	mToUpdate.push(block);
 }

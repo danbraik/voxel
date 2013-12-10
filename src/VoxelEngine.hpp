@@ -14,6 +14,10 @@ class VoxelEngine
 	public:
 		VoxelEngine();
 		
+		//test
+		ChunkId getChunkId(const ChunkCoordinate & cpos);
+		void needRebuild(const ChunkId & chunkId);
+		
 		ChunkManager & getChunkManager();
 		BlockList & getBlockList();
 		

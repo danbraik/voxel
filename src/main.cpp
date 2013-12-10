@@ -99,7 +99,7 @@ int main(int argc, char ** argv) {
 	
 	//avoid event when move cursor
 	bool mouseMoved = true;
-	sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), window);
+	sf::Mouse::setPosition(sf::Vector2i(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
     
 	long loop = 0;
 	// run the main loop
@@ -223,16 +223,15 @@ int main(int argc, char ** argv) {
 					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
 					
 					if (voxel.raycast(src,dir,sel,next)) {
-						cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+						//cout << "Block (add) "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
 						Block & block = getNewBlock(currentBlock);
 						voxel.setBlock(sel+next, block);
 						
-						if (currentBlock==POWER)
-							signalManager.addPower(block, sel+next);
-						else if (currentBlock==WIRE_RED||
-								 currentBlock==WIRE_GREEN||
-								 currentBlock==WIRE_UNIV)
-							signalManager.addWire(block , sel+next);
+						if (currentBlock==POWER||currentBlock==WIRE_RED||
+							currentBlock==WIRE_GREEN||
+						    currentBlock==WIRE_UNIV)
+							signalManager.addSignalable(block, sel+next);
+						
 					}
 					
 					
@@ -254,24 +253,19 @@ int main(int argc, char ** argv) {
 				
 					
 					if (voxel.raycast(src,dir,sel,next)) {
-						const Block & block = voxel.getBlock(sel);
-//						if (type == ElectricManager::Block.Power)
-//							electricManager.rmPower(sel);
-//						else if (type == ElectricManager::Block.WireOn)
-//							electricManager.rmWireOn(sel);
-						
+						Block & block = voxel.getBlock(sel);
 						voxel.setBlock(sel, BlockList::NO_BLOCK);
-						cout << "Block "<< sel.x <<" "<<sel.y<<" "<<sel.z<<endl;
+						signalManager.rmSignalable(block, sel);
 					}
 				} 	
             }
         }
 		
 		
-		//signalManager.update();
+		if (loop % 20 == 0)
+			signalManager.update();
 		
-		//if (loop % 50 == 0)
-			voxel.update();
+		voxel.update();
 		
 		camera.animate(10);
 		

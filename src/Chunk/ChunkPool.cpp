@@ -5,7 +5,7 @@
 
 #define MAX_TOTAL_CHUNKS 5000 // not used
 #define INIT_CHUNKS 1
-#define DEBUG_POOL
+//#define DEBUG_POOL
 
 ChunkPool::ChunkPool() :
 	mFreeChunks(),

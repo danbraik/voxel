@@ -42,6 +42,10 @@ class ChunkManager
 		void visible(const sf::Vector3i & absBkPos);
 		void resetChunk(const sf::Vector3i & absBkPos);
 		
+		ChunkId getChunkId(const ChunkCoordinate & cpos);
+		void needRebuild(const ChunkId &chunkId);
+		
+		
 		
 		const Block & getBlock(const BlockCoordinate & absoluteBlockPosition) const;
 		Block & getBlock(const BlockCoordinate & absoluteBlockPosition);

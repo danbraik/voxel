@@ -11,11 +11,19 @@ namespace Signal {
 		public:
 			Power();
 			
-			virtual void welcomeToWorld(SignalableBlock *neid[]);
+			virtual bool isAcceptable(SignalableBlock *him) const {return true;}
 			
-			void update();
+			virtual void iAmConnected(SignalManager & manager);
+			
+			virtual bool cycle(SignalManager & manager);
+			
+			
 			
 			~Power();
+			
+		private:
+			enum {WILL_POWER, HAS_POWERED};
+			int state;
 	};
 
 }

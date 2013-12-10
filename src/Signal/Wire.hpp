@@ -24,9 +24,10 @@ namespace Signal {
 						  const Block &top, 
 						  const Block &bottom) const;
 			
-			virtual void welcomeToWorld(SignalableBlock *nei[]);
+			virtual bool isAcceptable(SignalableBlock *him) const;
 			
-			virtual void send(int from);
+			
+			
 		
 			virtual ~Wire();
 			

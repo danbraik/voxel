@@ -18,6 +18,9 @@ class Chunk3dContainer
 	public:
 		Chunk3dContainer();
 		
+		//test
+		void forceRebuild();
+		
 		Chunk * create(const ChunkCoordinate & position);
 		
 		// Get Chunk and Test existance at same time
