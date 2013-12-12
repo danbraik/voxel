@@ -1,6 +1,6 @@
 #include "Wire.hpp"
 
-
+#include "SignalManager.hpp"
 #include "../VectorTools.hpp"
 
 using namespace VectorTools;
@@ -45,7 +45,7 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 			r = .4; g =0.4 ; b =.4 ;
 			break;
 	}
-	if (!mSignals.empty()) {
+	if (hasSignal()) {
 		r*=2.5;g*=2.5;b*=2.5;
 	}
 	const SignalableBlock * wr = dynamic_cast<const SignalableBlock*>(&right);
@@ -276,11 +276,34 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 	
 }
 
-bool Wire::isAcceptable(SignalableBlock *him) const
+bool Wire::isAcceptable(SignalableBlock *him, int slot) const
 {
 	return  mColor == WHITE ||
 			him->getColor() == mColor || 
 			him->getColor() == WHITE;
+}
+
+bool Wire::cycle(SignalManager &manager)
+{
+	for(int in = 0; in < MAX_SLOTS; ++in) {
+	
+		if (isOn(in)) {
+			for(OutSlot out = 0;out < MAX_SLOTS; ++out)
+				if(in!=out)
+					setOn(out);
+		}
+	
+	}
+		
+	return true;
+}
+
+bool Wire::hasSignal() const
+{
+	for(int i =0;i<MAX_SLOTS;++i)
+		if (mInSignals[i] == true)
+			return true;
+	return false;
 }
 
 

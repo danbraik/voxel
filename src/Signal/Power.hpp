@@ -11,7 +11,7 @@ namespace Signal {
 		public:
 			Power();
 			
-			virtual bool isAcceptable(SignalableBlock *him) const {return true;}
+			virtual bool isAcceptable(SignalableBlock *him, int slot) const {return true;}
 			
 			virtual void iAmConnected(SignalManager & manager);
 			

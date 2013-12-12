@@ -4,12 +4,16 @@
 
 using namespace Signal;
 
-#define COUT std::cout<<this<<
+#define COUT std::cout<<this<<" "<<
 #define END <<std::endl
 
 
-SignalableBlock::SignalableBlock() : mNeig()
+SignalableBlock::SignalableBlock() : mSockets(), mInSignals(), mNeedUpdate(true)
 {
+	for(int i=0;i<MAX_SLOTS;++i){
+		mInSignals[i]=false;
+		mOutSignals[i]=false;
+	}
 }
 
 
@@ -20,19 +24,19 @@ inline int convertSlot(int slot) {
 
 
 
-void SignalableBlock::welcomeToWorld(SignalManager & manager, std::vector<PairFromNei> & nei)
+void SignalableBlock::welcomeToWorld(SignalManager & manager, std::vector<Socket> & nei)
 {
 	COUT " borned" END;
 	
-	for(std::vector<PairFromNei>::iterator it = nei.begin();
-		it != nei.end(); ++it) 
-	 {
-		PairFromNei & spair = *it;
-		if (isAcceptable(spair.nei)) {
-			spair.remoteSlot = convertSlot(spair.localSlot);
-			if(spair.nei->helloIwantToConnect(manager, this, spair.remoteSlot)) {
-				mNeig.push_back(spair);
-				COUT "     co to " << spair.nei END;
+	for(std::vector<Socket>::iterator it = nei.begin();
+		it != nei.end(); ++it) {
+		
+		Socket & spair = *it;
+		if (isAcceptable(spair.node, spair.lslot)) {
+			spair.rslot = convertSlot(spair.lslot);
+			if(spair.node->helloIwantToConnect(manager, this, spair.rslot)) {
+				mSockets.push_back(spair);
+				COUT "     co to " << spair.node END;
 			}
 		}
 	}
@@ -48,36 +52,22 @@ bool SignalableBlock::helloIwantToConnect(SignalManager &manager,SignalableBlock
 	if (localSlot >= MAX_SLOTS)
 		return false;
 	// test if slot is taken
-	for(PairFromNeiList::const_iterator it = mNeig.begin();
-		it != mNeig.end(); ++it)
-		if ((*it).localSlot == localSlot){
-			std::cerr << "Slot already taken : "<<localSlot<<std::endl;
-			return false;
-		}
+	if (getSocket(localSlot) != 0) {
+		std::cerr << "Slot already taken : "<<localSlot<<std::endl;
+		return false;
+	}
 	
-	if (isAcceptable(me)) {// strategy part of the algo
+	if (isAcceptable(me, localSlot)) {// strategy part of the algo
 		// acceptability depends on real type
 		
-		PairFromNei pair;
-		pair.localSlot = localSlot;
-		pair.remoteSlot = convertSlot(localSlot);
-		pair.nei = me;
-		mNeig.push_back(pair);
+		Socket sock(localSlot, convertSlot(localSlot), me);
 		
-		// send signals
-		for (SignalList::const_iterator it=mSignals.begin();
-		it != mSignals.end(); ++it) {
-			SignalW s;
-			s.id = it->id;
-			s.force = it->force-1;
-			
-			if (mNeig.size() <= 2)
-				me->notify(pair.remoteSlot, s);
-			else {
-				//s.id += pair.localSlot;
-				me->notify(pair.remoteSlot, s);
-			}
-		}
+		mSockets.push_back(sock);
+		
+		// send current signal
+		sock.node->notify(sock.rslot, mOutSignals[sock.lslot]);
+		manager.addToUpdate(sock.node);
+		
 		return true;
 	}
 	return false;
@@ -85,168 +75,148 @@ bool SignalableBlock::helloIwantToConnect(SignalManager &manager,SignalableBlock
 
 void SignalableBlock::sayByeToWorld(SignalManager &manager)
 {
-	// send no more signal
-	// disconnect
-	for(PairFromNeiList::iterator it=mNeig.begin();
-		it!=mNeig.end();++it) {
-		
-		PairFromNei & pairNei = *it;
-		
-//		for(SignalList::iterator its = mSignals.begin();
-//			its!=mSignals.end(); ++its) {
-			
-//			SignalW s = *its;
-//			s.id = s.id + pairNei.localSlot;
-//			s.force = 0;
-			
-//			if (s.slotFrom != pairNei.localSlot) {
-//				pairNei.nei->notify(pairNei.remoteSlot, s);
-//			}
-//		}
-		
-		
-		pairNei.nei->byeIwantTodisconnect(this);
-		manager.addToUpdate(pairNei.nei);
-	}
 	COUT " quit the world" END;
+	
+	
+	// disconnect
+	for(SocketList::iterator it=mSockets.begin();
+		it!=mSockets.end();++it) {
+		
+		Socket & pairNei = *it;
+		
+		COUT " deco from " << pairNei.node END;
+		
+		pairNei.node->byeIwantTodisconnect(pairNei.rslot, this);
+		manager.addToUpdate(pairNei.node);
+	}
+	
 	
 	iAmGone(manager);
 }
 
-void SignalableBlock::byeIwantTodisconnect(SignalableBlock *me)
+void SignalableBlock::byeIwantTodisconnect(InSlot lslot, SignalableBlock *me)
 {
-	int localSlot = -1;
-	for(PairFromNeiList::iterator it=mNeig.begin();
-		it!=mNeig.end();) {
+	Socket * s = getSocket(lslot);
+	if (!s || s->node != me)
+		return;
 		
-		PairFromNei pair = *it;
+	mNeedUpdate = true;
+	
+	mInSignals[lslot] = false;
+	
+	// prevent Use after free
+	s = 0;
+	
+	for(SocketList::iterator it=mSockets.begin();
+		it != mSockets.end();++it) {
 		
-		if (pair.nei == me) {
-			it = mNeig.erase(it);
-			localSlot = pair.localSlot;
-			
-			
-			
+		Socket & sock = *it;
+		if (sock.lslot == lslot && sock.node == me) {
+			it = mSockets.erase(it);
 			break;
 		}
-		else
-			++it;
-	}
-	if (localSlot < 0)
-		return;
-	
-	for (SignalList::iterator it=mSignals.begin();
-		 it != mSignals.end();++it) {
-		
-		SignalW s = *it;
-		
-		if (s.slotFrom == localSlot) {
-			it = mSignals.erase(it); --it;
-			
-			// send no more sign
-			for(PairFromNeiList::iterator itp=mNeig.begin();
-				itp!=mNeig.end();++itp) {
-				PairFromNei pair = *itp;
-				
-				s.force = 0;
-				pair.nei->notify(pair.remoteSlot, s);
-				
-			}
-		}
-		
 	}
 }
 
 
 
-void SignalableBlock::notify(int slot, SignalW signal)
+
+void SignalableBlock::notify(InSlot slot, bool signal)
 {
+	COUT " notified from " << slot << " = " << signal END;
 	
-	std::cout << this << " notified        (" << signal.id << ", "<<signal.force
-			  << ")" << std::endl;
+	mInSignals[slot] = signal;
 	
-	PairSlotSignalW pss;
-	pss.localSlot = slot;
-	pss.signal = signal;
-	pss.signal.slotFrom = slot;
-	mToTreat.push(pss);
-		
+	mNeedUpdate = true;
 }
 
-void SignalableBlock::sendToNeighboursExceptOne(int exceptSlot, const SignalW &signal) const
+
+
+
+bool SignalableBlock::isOn(InSlot slot) const
 {
+	return mInSignals[slot];
 }
+
+bool SignalableBlock::signal(InSlot slot) const
+{
+	return mInSignals[slot];
+}
+
+
+
+
+void SignalableBlock::setState(OutSlot slot, bool state)
+{
+	mOutSignals[slot] = state;
+}
+
+
+void SignalableBlock::setOff(OutSlot slot)
+{
+	setState(slot, false);
+}
+
+Socket * SignalableBlock::getSocket(LSlot lslot)
+{
+	for(SocketList::iterator it=mSockets.begin();
+		it!=mSockets.end();++it) {
+		
+		Socket sock = *it;
+		
+		if (sock.lslot == lslot)
+			return &(*it);
+	}
+	
+	return 0;
+}
+
+
+
+void SignalableBlock::setOn(OutSlot slot)
+{
+	setState(slot, true);
+}
+
 
 
 
 
 bool SignalableBlock::update(SignalManager & manager)
 {
-	while (!mToTreat.empty()) {
+//	if (!mNeedUpdate)
+//		return false;
 	
-		PairSlotSignalW pss = mToTreat.front();
-		const int & slot = pss.localSlot;
-		SignalW & signal = pss.signal;
-		
-		if (signal.force == 0) {// have to delete
-			for (SignalList::iterator it = mSignals.begin();
-				 it != mSignals.end();) {
-				if (/*(*it).id == signal.id &&*/ it->slotFrom == slot) // test origin
-					it = mSignals.erase(it);
-				else
-					++it;
-			}
-			
-		} else {// test if already have?
-			mSignals.push_back(signal);
-			signal.force--;
-		}
-		
-		//notify others
-		switch(mNeig.size()) {
-			case 0:
-			case 1:
-				if (signal.force == 0) {
-					PairFromNei & pair = mNeig.front();
-					if (pair.localSlot != signal.slotFrom) {
-						pair.nei->notify(pair.remoteSlot, signal);
-						manager.addToUpdate(pair.nei);
-					}
-				}
-				break;
-			case 2:
-				for(PairFromNeiList::const_iterator it=mNeig.begin();
-					it!=mNeig.end();++it) {
-					const PairFromNei & pair = *it;
-					if (pair.localSlot != slot) {
-						pair.nei->notify(pair.remoteSlot, signal);
-						manager.addToUpdate(pair.nei);
-						break;
-					}
-				}
-				break;
-			default:{
-				for(PairFromNeiList::const_iterator it=mNeig.begin();
-					it!=mNeig.end();++it) {
-					const PairFromNei & pair = *it;
-					
-					if (pair.localSlot != slot) {
-						SignalW si;
-						si.id = signal.id;// + pair.localSlot;
-						si.force = signal.force;
-						si.slotFrom = pair.localSlot;
-					
-						pair.nei->notify(pair.remoteSlot, si);// bug : collision id?
-						manager.addToUpdate(pair.nei);
-					}
-				}
-			}
-		}
-		
-		mToTreat.pop();
+	COUT "update" END;
+	
+	bool mOldOutSignals[MAX_SLOTS];
+	for(int i=0;i<MAX_SLOTS;++i) {
+		mOldOutSignals[i] = mOutSignals[i];
+		mOutSignals[i] = false;
+		COUT "IN slot(" << i << ") = " << mInSignals[i] END;
 	}
 	
-	return cycle(manager);
+	bool retcycle = cycle(manager);
+	
+	
+	for(int i=0;i<MAX_SLOTS;++i) {
+		COUT "OUT slot(" << i << ") = " << mOldOutSignals[i] << " -> " <<  mOutSignals[i] END;
+	}
+	
+	for(int i=0;i<MAX_SLOTS;++i) {
+		if (mOldOutSignals[i] != mOutSignals[i]) { // new output
+			Socket * s = getSocket(i);
+			if (s) {
+				s->node->notify(s->rslot, mOutSignals[i]);
+				manager.addToUpdate(s->node);
+			}
+		}
+	}
+	
+	
+	mNeedUpdate = false;
+	
+	return retcycle;
 }
 
 SignalableBlock::~SignalableBlock()
@@ -264,5 +234,9 @@ void SignalableBlock::iAmGone(SignalManager &manager)
 bool SignalableBlock::cycle(SignalManager &manager)
 {
 }
+
+
+
+
 
 

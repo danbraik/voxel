@@ -10,13 +10,13 @@ SignalManager::SignalManager(VoxelEngine & voxel) : mVoxel(voxel)
 	
 }
 
-bool add(PairFromNei & pair, int localSlot, SignalableBlock * block) {
+bool add(Socket & pair, int localSlot, SignalableBlock * block) {
 	if (block == 0) {
-		pair.nei = 0;
+		pair.node = 0;
 		return false;
 	}
-	pair.localSlot = localSlot;
-	pair.nei = block;
+	pair.lslot = localSlot;
+	pair.node = block;
 	return true;
 }
 
@@ -26,9 +26,9 @@ void SignalManager::addSignalable(Block & block, const BlockCoordinate &bpos)
 	if(!sblock)
 		return;
 	
-	std::vector<PairFromNei> pairvec;
+	std::vector<Socket> pairvec;
 	
-	PairFromNei pair;
+	Socket pair;
 	
 	if (add(pair, SignalableBlock::X, dynamic_cast<SignalableBlock*>(&(mVoxel.getBlock(bpos+EXi)))))
 		pairvec.push_back(pair);
@@ -46,6 +46,11 @@ void SignalManager::addSignalable(Block & block, const BlockCoordinate &bpos)
 	sblock->welcomeToWorld(*this, pairvec);
 	
 	mToUpdate.push(sblock);
+	
+	for(std::vector<Socket>::iterator it = pairvec.begin();
+		it != pairvec.end();++it)
+		mToUpdate.push(it->node);
+	
 }
 
 void SignalManager::rmSignalable(Block &block, const BlockCoordinate &bpos)
@@ -77,7 +82,17 @@ void SignalManager::update()
 	}
 }
 
+
+
 void SignalManager::addToUpdate(SignalableBlock *block)
 {
 	mToUpdate.push(block);
+}
+
+void SignalManager::addToUpdate(Block & block)
+{
+	SignalableBlock * sb =
+			dynamic_cast<SignalableBlock*>(&block);
+	if (sb)
+		addToUpdate(sb);
 }

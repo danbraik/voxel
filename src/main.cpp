@@ -148,10 +148,16 @@ int main(int argc, char ** argv) {
 					worldGenerator.makeBoard(bpos);
 					
                 } else if (event.key.code == sf::Keyboard::U) {
-					const Vector3D & tpos = camera.getTargetPosition();
-					BlockCoordinate bpos( tpos.X, tpos.Y,tpos.Z);
-					//std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
-					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
+					
+					const Vector3D & pos = camera.getPosition();
+					const Vector3D & forw = camera.getForward();
+					
+					sf::Vector3i sel, next; 
+					sf::Vector3f src(pos.X, pos.Y, pos.Z), dir(forw.X, forw.Y, forw.Z);
+					
+					if (voxel.raycast(src,dir,sel,next)) {
+						signalManager.addToUpdate(voxel.getBlock(sel));
+					}
 					
                 } else if (event.key.code == sf::Keyboard::I) {
 					const Vector3D & tpos = camera.getTargetPosition();
@@ -206,16 +212,7 @@ int main(int argc, char ** argv) {
             }
             else if (event.type == sf::Event::MouseButtonReleased) {
 				if (event.mouseButton.button == sf::Mouse::Left) {
-					
-//					const Vector3D & tpos = camera.getTargetPosition();
-//					sf::Vector3i bpos( tpos.X / Block::SIZE,
-//									   tpos.Y / Block::SIZE,
-//									   tpos.Z / Block::SIZE);
-//					std::cout << tpos.X << " " << tpos.Y<<" "<<tpos.Z<<endl;
-					//cout << bpos.x <<" "<<bpos.y<<" "<<bpos.z<<endl;
-//					manager.setBlockType(bpos, Block::Dirt);
-					
-					
+			
 					const Vector3D & pos = camera.getPosition();
 					const Vector3D & forw = camera.getForward();
 					

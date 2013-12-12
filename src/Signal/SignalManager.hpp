@@ -22,6 +22,7 @@ namespace Signal {
 			
 			void update();
 			
+			void addToUpdate(Block &block);
 			void addToUpdate(SignalableBlock * block);
 			
 		private:

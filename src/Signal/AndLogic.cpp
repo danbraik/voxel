@@ -1,7 +1,11 @@
 #include "AndLogic.hpp"
+#include "SignalManager.hpp"
 #include "../VectorTools.hpp"
+
 using namespace VectorTools;
 using namespace Signal;
+
+
 
 AndLogic::AndLogic()
 {
@@ -410,6 +414,13 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.666666));	
 }
 
-bool AndLogic::isAcceptable(SignalableBlock *him) const
+bool AndLogic::isAcceptable(SignalableBlock *him, int slot) const
 {
+	return slot == 4 || slot == 1 || slot == 0;
+}
+
+bool AndLogic::cycle(SignalManager &manager)
+{
+	if (isOn(4) && isOn(1))
+		setOn(0);
 }

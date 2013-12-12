@@ -24,10 +24,11 @@ namespace Signal {
 						  const Block &top, 
 						  const Block &bottom) const;
 			
-			virtual bool isAcceptable(SignalableBlock *him) const;
+			virtual bool isAcceptable(SignalableBlock *him, int slot) const;
 			
+			virtual bool cycle(SignalManager &manager);
 			
-			
+			bool hasSignal() const ;
 		
 			virtual ~Wire();
 			
