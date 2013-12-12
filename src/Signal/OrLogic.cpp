@@ -1,4 +1,4 @@
-#include "AndLogic.hpp"
+#include "OrLogic.hpp"
 #include "SignalManager.hpp"
 #include "../VectorTools.hpp"
 
@@ -7,28 +7,28 @@ using namespace Signal;
 
 
 
-AndLogic::AndLogic()
+OrLogic::OrLogic()
 {
 }
 
 
-void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const Block &right, const Block &behind, const Block &left, const Block &front, const Block &top, const Block &bottom) const
+void OrLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const Block &right, const Block &behind, const Block &left, const Block &front, const Block &top, const Block &bottom) const
 {
 	float r,g,b,a;
 	r=g=b=a=1.;
 	
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.899999,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.899999,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.899999,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.666667,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.100000));
@@ -49,9 +49,9 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.799999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.799999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.100000));
@@ -65,12 +65,12 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.666667,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.666667,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.899999));
@@ -95,18 +95,18 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.899999,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.899999,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.899999,0.333333));
@@ -143,17 +143,17 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.799999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.666667,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.799999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333333,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.666667,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.799999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333333,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.333333,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.666667,0.899999));
@@ -165,7 +165,7 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.333333,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.666666));
@@ -174,7 +174,7 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.666667,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.899999,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.899999,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.899999,0.899999));
@@ -183,26 +183,26 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.799999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.799999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.100000));
@@ -217,12 +217,12 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.799999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.799999,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333333,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.100000));
@@ -234,9 +234,9 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.666666));
@@ -247,9 +247,9 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333333,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.100000,0.799999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.333333,0.899999));
@@ -259,16 +259,16 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.100000,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.666667,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.333333,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.799999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.799999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.333333,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.899999,0.666667,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.666667,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.666666));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.333333,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.899999,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.899999,0.100000));
@@ -313,8 +313,8 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.899999,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.666666));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.899999));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.899999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.799999));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.799999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.899999));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.899999,0.666666));
@@ -330,17 +330,17 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.899999,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.666667,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.899999,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.333333));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.899999,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
+	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.300000,0.666667,0.100000));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.000000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.000000,0.666666));
 	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.000000,0.333333));
@@ -416,14 +416,14 @@ void AndLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const 
 	
 }
 
-bool AndLogic::isAcceptable(SignalableBlock *him, int slot) const
+bool OrLogic::isAcceptable(SignalableBlock *him, int slot) const
 {
 	return slot == 4 || slot == 1 || slot == 0;
 }
 
-bool AndLogic::cycle(SignalManager &manager)
+bool OrLogic::cycle(SignalManager &manager)
 {
-	set(0, isOn(4) && isOn(1));
+	set(0, isOn(4) || isOn(1));
 
 
 	return false;	

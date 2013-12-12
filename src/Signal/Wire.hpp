@@ -36,6 +36,7 @@ namespace Signal {
 			bool blockIsOk(const SignalableBlock * sb) const;
 		private:
 			int mColor;
+			bool mOldHasSignal;
 	};
 	
 

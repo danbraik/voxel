@@ -21,23 +21,35 @@ namespace Signal {
 	typedef int RSlot; // remote
 	
 	struct Socket {
-			OutSlot lslot;
+			bool isValid;
 			
+			OutSlot lslot;
 			InSlot rslot;
 			SignalableBlock * node;
 			
 			// local slot,
 			// remote slot
 			Socket(OutSlot lslot, InSlot rslot, SignalableBlock * node) {
+				this->isValid = true;
 				this->lslot = lslot;
 				this->rslot = rslot;
 				this->node = node;
 			}
 			
 			Socket() {
+				this->isValid = false;
 				this->lslot = -1;
 				this->rslot = -1;
 				this->node = 0;
+			}
+			
+			// local slot,
+			// remote slot
+			void reset(OutSlot lslot, InSlot rslot, SignalableBlock * node) {
+				this->isValid = true;
+				this->lslot = lslot;
+				this->rslot = rslot;
+				this->node = node;
 			}
 	};
 	
@@ -91,14 +103,14 @@ namespace Signal {
 			bool isOn(InSlot slot) const;
 			bool signal(InSlot slot) const;
 			
+			void set(OutSlot slot, bool state);
 			void setOn(OutSlot slot);
 			void setOff(OutSlot slot);
 			
 			Socket * getSocket(LSlot lslot);
+			bool hasNeighbour(LSlot lslot) const;
 			
-			typedef std::list<Socket> SocketList;
-			
-			SocketList mSockets;
+			Socket mSockets[MAX_SLOTS];
 			
 			bool mInSignals[MAX_SLOTS];
 			bool mOutSignals[MAX_SLOTS];
@@ -106,7 +118,7 @@ namespace Signal {
 			bool mNeedUpdate;
 		
 		private:
-			void setState(OutSlot slot, bool state);
+			
 	};
 
 	

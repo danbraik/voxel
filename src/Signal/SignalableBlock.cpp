@@ -35,11 +35,16 @@ void SignalableBlock::welcomeToWorld(SignalManager & manager, std::vector<Socket
 		if (isAcceptable(spair.node, spair.lslot)) {
 			spair.rslot = convertSlot(spair.lslot);
 			if(spair.node->helloIwantToConnect(manager, this, spair.rslot)) {
-				mSockets.push_back(spair);
+				mSockets[spair.lslot].reset(spair.lslot, spair.rslot, spair.node);
+				
 				COUT "     co to " << spair.node END;
 			}
 		}
 	}
+	
+	COUT "   co s" END;
+	for(int i=0;i<MAX_SLOTS;++i)
+		COUT "    [" <<i<<"] = "<<mSockets[i].isValid END;
 	
 	iAmConnected(manager);
 }
@@ -60,13 +65,11 @@ bool SignalableBlock::helloIwantToConnect(SignalManager &manager,SignalableBlock
 	if (isAcceptable(me, localSlot)) {// strategy part of the algo
 		// acceptability depends on real type
 		
-		Socket sock(localSlot, convertSlot(localSlot), me);
-		
-		mSockets.push_back(sock);
+		mSockets[localSlot].reset(localSlot, convertSlot(localSlot), me);
 		
 		// send current signal
-		sock.node->notify(sock.rslot, mOutSignals[sock.lslot]);
-		manager.addToUpdate(sock.node);
+		me->notify(mSockets[localSlot].rslot, mOutSignals[localSlot]);
+		manager.addToUpdate(me);
 		
 		return true;
 	}
@@ -79,15 +82,15 @@ void SignalableBlock::sayByeToWorld(SignalManager &manager)
 	
 	
 	// disconnect
-	for(SocketList::iterator it=mSockets.begin();
-		it!=mSockets.end();++it) {
-		
-		Socket & pairNei = *it;
-		
-		COUT " deco from " << pairNei.node END;
-		
-		pairNei.node->byeIwantTodisconnect(pairNei.rslot, this);
-		manager.addToUpdate(pairNei.node);
+	for(int i=0;i<MAX_SLOTS;++i) {
+		if (mSockets[i].isValid) {
+			Socket & pairNei = mSockets[i];
+			
+			COUT " deco from " << pairNei.node END;
+			
+			pairNei.node->byeIwantTodisconnect(pairNei.rslot, this);
+			manager.addToUpdate(pairNei.node);
+		}
 	}
 	
 	
@@ -96,26 +99,22 @@ void SignalableBlock::sayByeToWorld(SignalManager &manager)
 
 void SignalableBlock::byeIwantTodisconnect(InSlot lslot, SignalableBlock *me)
 {
+	mInSignals[lslot] = false;
+	
 	Socket * s = getSocket(lslot);
-	if (!s || s->node != me)
+	if (!s || s->node != me) {
+		std::cerr << "Error from disconnect" << std::endl;
 		return;
+	}
 		
 	mNeedUpdate = true;
 	
-	mInSignals[lslot] = false;
+	
 	
 	// prevent Use after free
 	s = 0;
 	
-	for(SocketList::iterator it=mSockets.begin();
-		it != mSockets.end();++it) {
-		
-		Socket & sock = *it;
-		if (sock.lslot == lslot && sock.node == me) {
-			it = mSockets.erase(it);
-			break;
-		}
-	}
+	mSockets[lslot].isValid = false;
 }
 
 
@@ -146,7 +145,7 @@ bool SignalableBlock::signal(InSlot slot) const
 
 
 
-void SignalableBlock::setState(OutSlot slot, bool state)
+void SignalableBlock::set(OutSlot slot, bool state)
 {
 	mOutSignals[slot] = state;
 }
@@ -154,28 +153,26 @@ void SignalableBlock::setState(OutSlot slot, bool state)
 
 void SignalableBlock::setOff(OutSlot slot)
 {
-	setState(slot, false);
+	set(slot, false);
 }
 
 Socket * SignalableBlock::getSocket(LSlot lslot)
 {
-	for(SocketList::iterator it=mSockets.begin();
-		it!=mSockets.end();++it) {
-		
-		Socket sock = *it;
-		
-		if (sock.lslot == lslot)
-			return &(*it);
-	}
-	
+	if (mSockets[lslot].isValid)
+		return &mSockets[lslot];
 	return 0;
+}
+
+bool SignalableBlock::hasNeighbour(LSlot lslot) const
+{
+	return mSockets[lslot].isValid;
 }
 
 
 
 void SignalableBlock::setOn(OutSlot slot)
 {
-	setState(slot, true);
+	set(slot, true);
 }
 
 
@@ -206,7 +203,7 @@ bool SignalableBlock::update(SignalManager & manager)
 	for(int i=0;i<MAX_SLOTS;++i) {
 		if (mOldOutSignals[i] != mOutSignals[i]) { // new output
 			Socket * s = getSocket(i);
-			if (s) {
+			if (s && s->isValid) {
 				s->node->notify(s->rslot, mOutSignals[i]);
 				manager.addToUpdate(s->node);
 			}

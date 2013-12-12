@@ -8,12 +8,6 @@ Power::Power() : SignalableBlock(), SimpleBlock(1.,1.,1.)
 
 }
 
-void Power::iAmConnected(SignalManager & manager)
-{
-	
-}
-
-
 
 bool Power::cycle(SignalManager & manager)
 {

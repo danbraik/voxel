@@ -20,7 +20,8 @@ namespace Signal {
 			void addSignalable(Block &block, const BlockCoordinate &bpos);
 			void rmSignalable(Block &block, const BlockCoordinate &bpos);
 			
-			void update();
+			// @return if there is new updates to compute
+			bool update();
 			
 			void addToUpdate(Block &block);
 			void addToUpdate(SignalableBlock * block);

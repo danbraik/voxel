@@ -12,9 +12,11 @@ SignalManager::SignalManager(VoxelEngine & voxel) : mVoxel(voxel)
 
 bool add(Socket & pair, int localSlot, SignalableBlock * block) {
 	if (block == 0) {
+		pair.isValid = false;
 		pair.node = 0;
 		return false;
 	}
+	pair.isValid = true;
 	pair.lslot = localSlot;
 	pair.node = block;
 	return true;
@@ -63,7 +65,7 @@ void SignalManager::rmSignalable(Block &block, const BlockCoordinate &bpos)
 }
 
 
-void SignalManager::update()
+bool SignalManager::update()
 {
 	SignalableQueue copy = mToUpdate;
 	// clear
@@ -80,6 +82,8 @@ void SignalManager::update()
 		}
 			
 	}
+	
+	return ! mToUpdate.empty();
 }
 
 

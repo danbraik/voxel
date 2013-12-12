@@ -8,7 +8,8 @@ using namespace VectorTools;
 using namespace Signal;
 
 Wire::Wire(int color) : SignalableBlock(),
-	mColor(color)
+	mColor(color),
+	mOldHasSignal(false)
 {
 }
 
@@ -56,7 +57,7 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 	const SignalableBlock * wbo = dynamic_cast<const SignalableBlock*>(&bottom);
 	
 	
-	if (blockIsOk(wr)) {
+	if (/*blockIsOk(wr)*/hasNeighbour(0)) {
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.333333));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.333333));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666667,0.333334,0.333333));
@@ -91,7 +92,7 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 	}
 	
 	
-	if (blockIsOk(wbe)) {
+	if (/*blockIsOk(wbe)*/hasNeighbour(1)) {
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,1.000000,0.333333));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666667,1.000000,0.333333));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666667,0.666667,0.333333));
@@ -131,7 +132,7 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 	
 	
 	
-	if (blockIsOk(wl)) {
+	if (/*blockIsOk(wl)*/hasNeighbour(3)) {
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000001,0.333333,0.333333));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666666,0.333333));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.666667,0.333333));
@@ -168,7 +169,7 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 	}
 	
 	
-	if (blockIsOk(wf)) {
+	if (/*blockIsOk(wf)*/hasNeighbour(4)) {
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666667,0.000000,0.333333));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.000000,0.333333));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333333,0.333333));
@@ -204,7 +205,7 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 				
 	}
 	
-	if (blockIsOk(wt)) {
+	if (/*blockIsOk(wt)*/hasNeighbour(2)) {
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666667,0.666666,0.999999));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666667,0.333333,0.999999));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.666666,0.333333,0.666666));
@@ -240,7 +241,7 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 				
 	}
 	
-	if (blockIsOk(wbo)) {
+	if (/*blockIsOk(wbo)*/hasNeighbour(5)) {
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.666667,0.000000));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333334,0.333334,0.000000));
 		addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.333333,0.333334,0.333333));
@@ -276,6 +277,8 @@ void Wire::build(MeshVertexVector &vertices, const sf::Vector3f &pos,
 	
 }
 
+
+
 bool Wire::isAcceptable(SignalableBlock *him, int slot) const
 {
 	return  mColor == WHITE ||
@@ -289,13 +292,18 @@ bool Wire::cycle(SignalManager &manager)
 	
 		if (isOn(in)) {
 			for(OutSlot out = 0;out < MAX_SLOTS; ++out)
-				if(in!=out)
+				if(in!=out && !isOn(out))
 					setOn(out);
 		}
 	
 	}
+	
+	if (mOldHasSignal != hasSignal()) {
+		mOldHasSignal = hasSignal();
+		return true;
+	}
 		
-	return true;
+	return false;
 }
 
 bool Wire::hasSignal() const

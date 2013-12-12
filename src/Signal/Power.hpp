@@ -13,11 +13,7 @@ namespace Signal {
 			
 			virtual bool isAcceptable(SignalableBlock *him, int slot) const {return true;}
 			
-			virtual void iAmConnected(SignalManager & manager);
-			
 			virtual bool cycle(SignalManager & manager);
-			
-			
 			
 			~Power();
 			

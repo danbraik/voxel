@@ -14,6 +14,8 @@
 #include "Signal/Wire.hpp"
 #include "Signal/SignalManager.hpp"
 #include "Signal/AndLogic.hpp"
+#include "Signal/OrLogic.hpp"
+#include "Signal/NotLogic.hpp"
 
 using namespace std;
 
@@ -25,6 +27,8 @@ using namespace std;
 #define WIRE_GREEN "wire_green"
 #define POWER "power"
 #define AND "and"
+#define OR "or"
+#define NOT "not"
 
 SimpleBlock ground, dirt(.0,1.,.0);
 
@@ -46,6 +50,10 @@ Block & getNewBlock(const std::string & classname) {
 		return *(new Signal::Power());
 	if (classname == AND)
 		return *(new Signal::AndLogic());
+	if (classname == OR)
+		return *(new Signal::OrLogic());
+	if (classname == NOT)
+		return *(new Signal::NotLogic());
 	
 	return BlockList::NO_BLOCK;
 }
@@ -188,6 +196,10 @@ int main(int argc, char ** argv) {
 					currentBlock = POWER;
 				} else if (event.key.code == sf::Keyboard::Numpad5) {
 					currentBlock = AND;
+				} else if (event.key.code == sf::Keyboard::Numpad6) {
+					currentBlock = OR;
+				} else if (event.key.code == sf::Keyboard::Numpad7) {
+					currentBlock = NOT;
 				}
 				
 				
@@ -224,11 +236,7 @@ int main(int argc, char ** argv) {
 						Block & block = getNewBlock(currentBlock);
 						voxel.setBlock(sel+next, block);
 						
-						if (currentBlock==POWER||currentBlock==WIRE_RED||
-							currentBlock==WIRE_GREEN||
-						    currentBlock==WIRE_UNIV)
-							signalManager.addSignalable(block, sel+next);
-						
+						signalManager.addSignalable(block, sel+next);
 					}
 					
 					
@@ -260,7 +268,9 @@ int main(int argc, char ** argv) {
 		
 		
 		if (loop % 20 == 0)
-			signalManager.update();
+		for(int a=0;a<100;++a)
+			if (signalManager.update() == false)
+				break;
 		
 		voxel.update();
 		
