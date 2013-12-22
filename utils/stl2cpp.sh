@@ -2,5 +2,6 @@
 
 # Convert from STL format to Cpp code
 set -x
-grep 'vertex' | sed -r 's/([0-9]) /\1,/g' | sed -r 's/vertex/addVertex\(vertices, EXf, r, g, b, a, pos + sf::Vector3f(/' | sed -r 's/$/\)\);/' | xclip -selection c
+
+./exe_stl2cpp/stl2cpp "$1" | xclip -selection c
 

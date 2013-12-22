@@ -267,10 +267,11 @@ int main(int argc, char ** argv) {
         }
 		
 		
-		if (loop % 20 == 0)
-		for(int a=0;a<100;++a)
-			if (signalManager.update() == false)
-				break;
+		//if (loop % 20 == 0)
+		//for(int a=0;a<100;++a)
+			//if (
+		signalManager.update();// == false)
+				//break;
 		
 		voxel.update();
 		

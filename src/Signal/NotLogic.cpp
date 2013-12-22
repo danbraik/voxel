@@ -15,320 +15,424 @@ NotLogic::NotLogic()
 void NotLogic::build(MeshVertexVector &vertices, const sf::Vector3f &pos, const Block &right, const Block &behind, const Block &left, const Block &front, const Block &top, const Block &bottom) const
 {
 	float r,g,b,a;
-	r=g=b=a=1.;
+	r=g=b=a=.7;
 	
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.979200));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.665559,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.568577,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.865559,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.768577,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.631423,0.334441,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.534441,0.431423,0.820800));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.100000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.200000,1.000000,0.900000));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 1.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.900000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.666667));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.333333,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.000000,0.666667,0.333333));
-	addVertex(vertices, EXf, r, g, b, a, pos + sf::Vector3f( 0.100000,0.666667,0.333333));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01,  7.07107E-01, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  6.65559E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01,  7.07107E-01, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  6.65559E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01,  7.07107E-01, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  6.65559E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f( 7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  3.34441E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  3.34441E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  3.34441E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f(-7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  3.34441E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  3.34441E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f(-7.07107E-01, -7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f(-7.07107E-01, -7.07107E-01, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f(-7.07107E-01, -7.07107E-01, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-7.07107E-01, -7.07107E-01, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  3.34441E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00, -0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  6.65559E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  3.34441E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  6.65559E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  6.65559E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  6.65559E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f(-7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f(-7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  9.79200E-01));
+	
+	addVertex(vertices, sf::Vector3f(-7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  9.79200E-01));
+	addVertex(vertices, sf::Vector3f(-7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-7.07107E-01,  7.07107E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  6.65559E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  5.68577E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  6.65559E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  5.68577E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 8.65559E-01,  4.31423E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 7.68577E-01,  3.34441E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 6.31423E-01,  3.34441E-01,  8.20800E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 5.34441E-01,  4.31423E-01,  8.20800E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  1.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  1.00000E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00,  1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  1.00000E+00,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01, -9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  0.00000E+00,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  0.00000E+00,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  9.00000E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 4.29933E-01,  9.02861E-01,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 2.00000E-01,  1.00000E+00,  9.00000E-01));
+	
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E+00,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 9.00000E-01,  3.33333E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f(-1.00000E+00,  0.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  6.66667E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  6.66667E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -1.00000E+00,  0.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00, -0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  3.33333E-01));
+	
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  3.33333E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 0.00000E+00,  6.66667E-01,  3.33333E-01));
+	addVertex(vertices, sf::Vector3f( 0.00000E+00,  0.00000E+00, -1.00000E+00), r, g, b, a, pos + sf::Vector3f( 1.00000E-01,  6.66667E-01,  3.33333E-01));
+	
 	
 	
 }
