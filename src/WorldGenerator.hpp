@@ -13,6 +13,7 @@ class WorldGenerator
 		void init();
 		
 		void makeBoard(const BlockCoordinate &boardPos);
+        void makeIsland(const BlockCoordinate &boardPos);
 		
 		
 	private:
