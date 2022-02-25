@@ -116,11 +116,11 @@ class ChunkManager
 		friend class LocalChunkSystem;
 		friend class ChunkPool;
 		
-		typedef __gnu_cxx::hash_map<const sf::Vector3i, Chunk*, HashConfiguration> ChunkMap;
+		//typedef __gnu_cxx::hash_map<const sf::Vector3i, Chunk*, HashConfiguration> ChunkMap;
 		typedef __gnu_cxx::hash_set<Chunk*, HashChunkPtr> ChunkSet;
-		typedef std::list<sf::Vector3i> Vec3iList;
+		//typedef std::list<sf::Vector3i> Vec3iList;
 		typedef __gnu_cxx::hash_set<sf::Vector3i, HashConfiguration> PositionSet;
-		typedef std::list<Chunk*> ChunkList;
+		//typedef std::list<Chunk*> ChunkList;
 		
 		// Dictionnary of blocks
 		const BlockList & mList;
