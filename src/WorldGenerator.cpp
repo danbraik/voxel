@@ -28,6 +28,19 @@ void WorldGenerator::init()
 	makeBoard(BlockCoordinate(0,0,0));
 	makeIsland(BlockCoordinate(Chunk::SIZE, 0,0));
     makeIsland(BlockCoordinate(Chunk::SIZE, Chunk::SIZE,0));
+    
+    makeIsland(BlockCoordinate(Chunk::SIZE*3, Chunk::SIZE,0));
+    makeIsland(BlockCoordinate(Chunk::SIZE*4, 0,0));
+    
+    makeIsland(BlockCoordinate(Chunk::SIZE*3, Chunk::SIZE*4,0));
+    makeIsland(BlockCoordinate(Chunk::SIZE*2, Chunk::SIZE*6,0));
+    
+    for (int x=0;x<4;++x) {
+		for (int y=0;y<4;++y) {
+            makeIsland(BlockCoordinate(Chunk::SIZE*x, Chunk::SIZE*y,0));
+        }
+    }
+    
 	// makeIsland(BlockCoordinate(Chunk::SIZE << 2,0,0));
 	// makeIsland(BlockCoordinate(Chunk::SIZE << 3,0,0));
 	// makeIsland(BlockCoordinate(Chunk::SIZE << 4,0,0));

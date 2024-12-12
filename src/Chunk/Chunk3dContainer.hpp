@@ -8,6 +8,7 @@
 
 #include "Chunk.hpp"
 #include "ChunkPool.hpp"
+#include "octree/octree.h"
 
 class Chunk;
 
@@ -39,7 +40,9 @@ class Chunk3dContainer
 									HashChunkCoordinate> ChunkMap;
 		
 		// Chunk map : (ChunkCoordinate) -> (Chunk)
-		ChunkMap mAllChunks;
+		//ChunkMap mAllChunks;
+        
+        Octree<Chunk*> mAllChunks;
 		
 		// Memory manager for Chunk
 		ChunkPool mPool;
